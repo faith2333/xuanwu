@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	pb "xuanwu/api/cicd/v1"
+	pb "github/faith2333/xuanwu/api/cicd/v1"
 )
 
 type CICDService struct {

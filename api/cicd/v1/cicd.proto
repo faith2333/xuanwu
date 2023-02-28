@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.cicd.v1;
 
-option go_package = "xuanwu/api/cicd/v1;v1";
+option go_package = "github.com/faith2333/xuanwu/api/cicd/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.cicd.v1";
 
