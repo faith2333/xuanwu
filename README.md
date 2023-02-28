@@ -8,5 +8,4 @@ Make online system develop, test, delivery and monitoring easily.
 
 ![xuanwu](./static/image/xuanwu.jpg)
 
-## Project Init
 
