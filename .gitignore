@@ -1,8 +1,12 @@
+<<<<<<< HEAD
+=======
 # Reference https://github.com/github/gitignore/blob/master/Go.gitignore
+>>>>>>> master
 # Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
+*.so
 *.dylib
 
 # Test binary, built with `go test -c`
@@ -20,7 +24,6 @@ go.work
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
-*.so
 
 # OS General
 Thumbs.db
