@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.cicd.v1;
+
+option go_package = "xuanwu/api/cicd/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cicd.v1";
+
+service Template {
+	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply);
+	rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateReply);
+	rpc DeleteTemplate (DeleteTemplateRequest) returns (DeleteTemplateReply);
+	rpc GetTemplate (GetTemplateRequest) returns (GetTemplateReply);
+	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateReply);
+}
+
+message CreateTemplateRequest {}
+message CreateTemplateReply {}
+
+message UpdateTemplateRequest {}
+message UpdateTemplateReply {}
+
+message DeleteTemplateRequest {}
+message DeleteTemplateReply {}
+
+message GetTemplateRequest {}
+message GetTemplateReply {}
+
+message ListTemplateRequest {}
+message ListTemplateReply {}
