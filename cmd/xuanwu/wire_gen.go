@@ -8,9 +8,8 @@ package main
 
 import (
 
-	"xuanwu/internal/conf"
-	"xuanwu/internal/data"
-	"xuanwu/internal/server"
+	"github/faith2333/xuanwu/internal/conf"
+	"github/faith2333/xuanwu/internal/server"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -20,14 +19,14 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
-	if err != nil {
-		return nil, nil, err
-	}
+	//dataData, cleanup, err := data.NewData(confData, logger)
+	//if err != nil {
+	//	return nil, nil, err
+	//}
 	grpcServer := server.NewGRPCServer(confServer, logger)
 	httpServer := server.NewHTTPServer(confServer, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
+		//cleanup()
 	}, nil
 }

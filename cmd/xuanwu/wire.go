@@ -6,11 +6,11 @@
 package main
 
 import (
-	"xuanwu/internal/biz"
-	"xuanwu/internal/conf"
-	"xuanwu/internal/data"
-	"xuanwu/internal/server"
-	"xuanwu/internal/service"
+	"github/faith2333/xuanwu/internal/biz"
+	"github/faith2333/xuanwu/internal/conf"
+	"github/faith2333/xuanwu/internal/data"
+	"github/faith2333/xuanwu/internal/server"
+	"github/faith2333/xuanwu/internal/service"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"

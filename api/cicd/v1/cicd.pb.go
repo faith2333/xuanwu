@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.21.12
-// source: cicd/v1/template.proto
+// source: cicd/v1/cicd.proto
 
 package v1
 
@@ -29,7 +29,7 @@ type CreateTemplateRequest struct {
 func (x *CreateTemplateRequest) Reset() {
 	*x = CreateTemplateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[0]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -42,7 +42,7 @@ func (x *CreateTemplateRequest) String() string {
 func (*CreateTemplateRequest) ProtoMessage() {}
 
 func (x *CreateTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[0]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *CreateTemplateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTemplateRequest.ProtoReflect.Descriptor instead.
 func (*CreateTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{0}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{0}
 }
 
 type CreateTemplateReply struct {
@@ -67,7 +67,7 @@ type CreateTemplateReply struct {
 func (x *CreateTemplateReply) Reset() {
 	*x = CreateTemplateReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[1]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -80,7 +80,7 @@ func (x *CreateTemplateReply) String() string {
 func (*CreateTemplateReply) ProtoMessage() {}
 
 func (x *CreateTemplateReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[1]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -93,7 +93,7 @@ func (x *CreateTemplateReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTemplateReply.ProtoReflect.Descriptor instead.
 func (*CreateTemplateReply) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{1}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{1}
 }
 
 type UpdateTemplateRequest struct {
@@ -105,7 +105,7 @@ type UpdateTemplateRequest struct {
 func (x *UpdateTemplateRequest) Reset() {
 	*x = UpdateTemplateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[2]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -118,7 +118,7 @@ func (x *UpdateTemplateRequest) String() string {
 func (*UpdateTemplateRequest) ProtoMessage() {}
 
 func (x *UpdateTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[2]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -131,7 +131,7 @@ func (x *UpdateTemplateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTemplateRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{2}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{2}
 }
 
 type UpdateTemplateReply struct {
@@ -143,7 +143,7 @@ type UpdateTemplateReply struct {
 func (x *UpdateTemplateReply) Reset() {
 	*x = UpdateTemplateReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[3]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -156,7 +156,7 @@ func (x *UpdateTemplateReply) String() string {
 func (*UpdateTemplateReply) ProtoMessage() {}
 
 func (x *UpdateTemplateReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[3]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -169,7 +169,7 @@ func (x *UpdateTemplateReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTemplateReply.ProtoReflect.Descriptor instead.
 func (*UpdateTemplateReply) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{3}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{3}
 }
 
 type DeleteTemplateRequest struct {
@@ -181,7 +181,7 @@ type DeleteTemplateRequest struct {
 func (x *DeleteTemplateRequest) Reset() {
 	*x = DeleteTemplateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[4]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -194,7 +194,7 @@ func (x *DeleteTemplateRequest) String() string {
 func (*DeleteTemplateRequest) ProtoMessage() {}
 
 func (x *DeleteTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[4]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -207,7 +207,7 @@ func (x *DeleteTemplateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTemplateRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{4}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{4}
 }
 
 type DeleteTemplateReply struct {
@@ -219,7 +219,7 @@ type DeleteTemplateReply struct {
 func (x *DeleteTemplateReply) Reset() {
 	*x = DeleteTemplateReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[5]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -232,7 +232,7 @@ func (x *DeleteTemplateReply) String() string {
 func (*DeleteTemplateReply) ProtoMessage() {}
 
 func (x *DeleteTemplateReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[5]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -245,7 +245,7 @@ func (x *DeleteTemplateReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTemplateReply.ProtoReflect.Descriptor instead.
 func (*DeleteTemplateReply) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{5}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{5}
 }
 
 type GetTemplateRequest struct {
@@ -257,7 +257,7 @@ type GetTemplateRequest struct {
 func (x *GetTemplateRequest) Reset() {
 	*x = GetTemplateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[6]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -270,7 +270,7 @@ func (x *GetTemplateRequest) String() string {
 func (*GetTemplateRequest) ProtoMessage() {}
 
 func (x *GetTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[6]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -283,7 +283,7 @@ func (x *GetTemplateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTemplateRequest.ProtoReflect.Descriptor instead.
 func (*GetTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{6}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{6}
 }
 
 type GetTemplateReply struct {
@@ -295,7 +295,7 @@ type GetTemplateReply struct {
 func (x *GetTemplateReply) Reset() {
 	*x = GetTemplateReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[7]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -308,7 +308,7 @@ func (x *GetTemplateReply) String() string {
 func (*GetTemplateReply) ProtoMessage() {}
 
 func (x *GetTemplateReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[7]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -321,7 +321,7 @@ func (x *GetTemplateReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTemplateReply.ProtoReflect.Descriptor instead.
 func (*GetTemplateReply) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{7}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{7}
 }
 
 type ListTemplateRequest struct {
@@ -333,7 +333,7 @@ type ListTemplateRequest struct {
 func (x *ListTemplateRequest) Reset() {
 	*x = ListTemplateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[8]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -346,7 +346,7 @@ func (x *ListTemplateRequest) String() string {
 func (*ListTemplateRequest) ProtoMessage() {}
 
 func (x *ListTemplateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[8]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +359,7 @@ func (x *ListTemplateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTemplateRequest.ProtoReflect.Descriptor instead.
 func (*ListTemplateRequest) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{8}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{8}
 }
 
 type ListTemplateReply struct {
@@ -371,7 +371,7 @@ type ListTemplateReply struct {
 func (x *ListTemplateReply) Reset() {
 	*x = ListTemplateReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cicd_v1_template_proto_msgTypes[9]
+		mi := &file_cicd_v1_cicd_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -384,7 +384,7 @@ func (x *ListTemplateReply) String() string {
 func (*ListTemplateReply) ProtoMessage() {}
 
 func (x *ListTemplateReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cicd_v1_template_proto_msgTypes[9]
+	mi := &file_cicd_v1_cicd_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -397,76 +397,75 @@ func (x *ListTemplateReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTemplateReply.ProtoReflect.Descriptor instead.
 func (*ListTemplateReply) Descriptor() ([]byte, []int) {
-	return file_cicd_v1_template_proto_rawDescGZIP(), []int{9}
+	return file_cicd_v1_cicd_proto_rawDescGZIP(), []int{9}
 }
 
-var File_cicd_v1_template_proto protoreflect.FileDescriptor
+var File_cicd_v1_cicd_proto protoreflect.FileDescriptor
 
-var file_cicd_v1_template_proto_rawDesc = []byte{
-	0x0a, 0x16, 0x63, 0x69, 0x63, 0x64, 0x2f, 0x76, 0x31, 0x2f, 0x74, 0x65, 0x6d, 0x70, 0x6c, 0x61,
-	0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0b, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69,
-	0x63, 0x64, 0x2e, 0x76, 0x31, 0x22, 0x17, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
-	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15,
-	0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54,
-	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15,
-	0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x17, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54,
-	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15,
-	0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x14, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x54, 0x65, 0x6d, 0x70,
-	0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x12, 0x0a, 0x10, 0x47,
-	0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
-	0x15, 0x0a, 0x13, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65,
-	0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x32, 0xb3, 0x03, 0x0a, 0x08,
-	0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x56, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
-	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x12, 0x56, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
+var file_cicd_v1_cicd_proto_rawDesc = []byte{
+	0x0a, 0x12, 0x63, 0x69, 0x63, 0x64, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0b, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76,
+	0x31, 0x22, 0x17, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x22, 0x17, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x22, 0x17, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x22, 0x14, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x12, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x54, 0x65,
+	0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x15, 0x0a, 0x13, 0x4c,
+	0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x22, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x32, 0xaf, 0x03, 0x0a, 0x04, 0x43, 0x49, 0x43, 0x44,
+	0x12, 0x56, 0x0a, 0x0e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
 	0x74, 0x65, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31,
-	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63,
-	0x64, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x56, 0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65,
+	0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x56, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61,
 	0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54,
+	0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54,
 	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c,
-	0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x12, 0x4d, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12,
-	0x1f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65,
-	0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47,
-	0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12,
-	0x50, 0x0a, 0x0c, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12,
-	0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69,
-	0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e,
-	0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c,
-	0x79, 0x42, 0x26, 0x0a, 0x0b, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31,
-	0x50, 0x01, 0x5a, 0x15, 0x78, 0x75, 0x61, 0x6e, 0x77, 0x75, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63,
-	0x69, 0x63, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79,
+	0x12, 0x56, 0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
+	0x74, 0x65, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69, 0x63,
+	0x64, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x65, 0x6d, 0x70, 0x6c,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x4d, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54,
+	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69,
+	0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63,
+	0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x50, 0x0a, 0x0c, 0x4c, 0x69, 0x73, 0x74, 0x54,
+	0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x63, 0x69,
+	0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x6d, 0x70,
+	0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x42, 0x26, 0x0a, 0x0b, 0x61, 0x70, 0x69,
+	0x2e, 0x63, 0x69, 0x63, 0x64, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x15, 0x78, 0x75, 0x61, 0x6e,
+	0x77, 0x75, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x69, 0x63, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x76,
+	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_cicd_v1_template_proto_rawDescOnce sync.Once
-	file_cicd_v1_template_proto_rawDescData = file_cicd_v1_template_proto_rawDesc
+	file_cicd_v1_cicd_proto_rawDescOnce sync.Once
+	file_cicd_v1_cicd_proto_rawDescData = file_cicd_v1_cicd_proto_rawDesc
 )
 
-func file_cicd_v1_template_proto_rawDescGZIP() []byte {
-	file_cicd_v1_template_proto_rawDescOnce.Do(func() {
-		file_cicd_v1_template_proto_rawDescData = protoimpl.X.CompressGZIP(file_cicd_v1_template_proto_rawDescData)
+func file_cicd_v1_cicd_proto_rawDescGZIP() []byte {
+	file_cicd_v1_cicd_proto_rawDescOnce.Do(func() {
+		file_cicd_v1_cicd_proto_rawDescData = protoimpl.X.CompressGZIP(file_cicd_v1_cicd_proto_rawDescData)
 	})
-	return file_cicd_v1_template_proto_rawDescData
+	return file_cicd_v1_cicd_proto_rawDescData
 }
 
-var file_cicd_v1_template_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
-var file_cicd_v1_template_proto_goTypes = []interface{}{
+var file_cicd_v1_cicd_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_cicd_v1_cicd_proto_goTypes = []interface{}{
 	(*CreateTemplateRequest)(nil), // 0: api.cicd.v1.CreateTemplateRequest
 	(*CreateTemplateReply)(nil),   // 1: api.cicd.v1.CreateTemplateReply
 	(*UpdateTemplateRequest)(nil), // 2: api.cicd.v1.UpdateTemplateRequest
@@ -478,17 +477,17 @@ var file_cicd_v1_template_proto_goTypes = []interface{}{
 	(*ListTemplateRequest)(nil),   // 8: api.cicd.v1.ListTemplateRequest
 	(*ListTemplateReply)(nil),     // 9: api.cicd.v1.ListTemplateReply
 }
-var file_cicd_v1_template_proto_depIdxs = []int32{
-	0, // 0: api.cicd.v1.Template.CreateTemplate:input_type -> api.cicd.v1.CreateTemplateRequest
-	2, // 1: api.cicd.v1.Template.UpdateTemplate:input_type -> api.cicd.v1.UpdateTemplateRequest
-	4, // 2: api.cicd.v1.Template.DeleteTemplate:input_type -> api.cicd.v1.DeleteTemplateRequest
-	6, // 3: api.cicd.v1.Template.GetTemplate:input_type -> api.cicd.v1.GetTemplateRequest
-	8, // 4: api.cicd.v1.Template.ListTemplate:input_type -> api.cicd.v1.ListTemplateRequest
-	1, // 5: api.cicd.v1.Template.CreateTemplate:output_type -> api.cicd.v1.CreateTemplateReply
-	3, // 6: api.cicd.v1.Template.UpdateTemplate:output_type -> api.cicd.v1.UpdateTemplateReply
-	5, // 7: api.cicd.v1.Template.DeleteTemplate:output_type -> api.cicd.v1.DeleteTemplateReply
-	7, // 8: api.cicd.v1.Template.GetTemplate:output_type -> api.cicd.v1.GetTemplateReply
-	9, // 9: api.cicd.v1.Template.ListTemplate:output_type -> api.cicd.v1.ListTemplateReply
+var file_cicd_v1_cicd_proto_depIdxs = []int32{
+	0, // 0: api.cicd.v1.CICD.CreateTemplate:input_type -> api.cicd.v1.CreateTemplateRequest
+	2, // 1: api.cicd.v1.CICD.UpdateTemplate:input_type -> api.cicd.v1.UpdateTemplateRequest
+	4, // 2: api.cicd.v1.CICD.DeleteTemplate:input_type -> api.cicd.v1.DeleteTemplateRequest
+	6, // 3: api.cicd.v1.CICD.GetTemplate:input_type -> api.cicd.v1.GetTemplateRequest
+	8, // 4: api.cicd.v1.CICD.ListTemplate:input_type -> api.cicd.v1.ListTemplateRequest
+	1, // 5: api.cicd.v1.CICD.CreateTemplate:output_type -> api.cicd.v1.CreateTemplateReply
+	3, // 6: api.cicd.v1.CICD.UpdateTemplate:output_type -> api.cicd.v1.UpdateTemplateReply
+	5, // 7: api.cicd.v1.CICD.DeleteTemplate:output_type -> api.cicd.v1.DeleteTemplateReply
+	7, // 8: api.cicd.v1.CICD.GetTemplate:output_type -> api.cicd.v1.GetTemplateReply
+	9, // 9: api.cicd.v1.CICD.ListTemplate:output_type -> api.cicd.v1.ListTemplateReply
 	5, // [5:10] is the sub-list for method output_type
 	0, // [0:5] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -496,13 +495,13 @@ var file_cicd_v1_template_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_cicd_v1_template_proto_init() }
-func file_cicd_v1_template_proto_init() {
-	if File_cicd_v1_template_proto != nil {
+func init() { file_cicd_v1_cicd_proto_init() }
+func file_cicd_v1_cicd_proto_init() {
+	if File_cicd_v1_cicd_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_cicd_v1_template_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateTemplateRequest); i {
 			case 0:
 				return &v.state
@@ -514,7 +513,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateTemplateReply); i {
 			case 0:
 				return &v.state
@@ -526,7 +525,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateTemplateRequest); i {
 			case 0:
 				return &v.state
@@ -538,7 +537,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateTemplateReply); i {
 			case 0:
 				return &v.state
@@ -550,7 +549,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteTemplateRequest); i {
 			case 0:
 				return &v.state
@@ -562,7 +561,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteTemplateReply); i {
 			case 0:
 				return &v.state
@@ -574,7 +573,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTemplateRequest); i {
 			case 0:
 				return &v.state
@@ -586,7 +585,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetTemplateReply); i {
 			case 0:
 				return &v.state
@@ -598,7 +597,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListTemplateRequest); i {
 			case 0:
 				return &v.state
@@ -610,7 +609,7 @@ func file_cicd_v1_template_proto_init() {
 				return nil
 			}
 		}
-		file_cicd_v1_template_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_cicd_v1_cicd_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListTemplateReply); i {
 			case 0:
 				return &v.state
@@ -627,18 +626,18 @@ func file_cicd_v1_template_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_cicd_v1_template_proto_rawDesc,
+			RawDescriptor: file_cicd_v1_cicd_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_cicd_v1_template_proto_goTypes,
-		DependencyIndexes: file_cicd_v1_template_proto_depIdxs,
-		MessageInfos:      file_cicd_v1_template_proto_msgTypes,
+		GoTypes:           file_cicd_v1_cicd_proto_goTypes,
+		DependencyIndexes: file_cicd_v1_cicd_proto_depIdxs,
+		MessageInfos:      file_cicd_v1_cicd_proto_msgTypes,
 	}.Build()
-	File_cicd_v1_template_proto = out.File
-	file_cicd_v1_template_proto_rawDesc = nil
-	file_cicd_v1_template_proto_goTypes = nil
-	file_cicd_v1_template_proto_depIdxs = nil
+	File_cicd_v1_cicd_proto = out.File
+	file_cicd_v1_cicd_proto_rawDesc = nil
+	file_cicd_v1_cicd_proto_goTypes = nil
+	file_cicd_v1_cicd_proto_depIdxs = nil
 }
