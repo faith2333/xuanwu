@@ -7,6 +7,13 @@ import (
 	"os"
 )
 
+const (
+	LogLevelDebug = "debug"
+	LogLevelInfo  = "info"
+	LogLevelWarn  = "warn"
+	LogLevelError = "error"
+)
+
 var _ log.Logger = (*Logger)(nil)
 
 type Logger struct {
@@ -81,7 +88,23 @@ func (l *Logger) Log(level log.Level, keyvals ...interface{}) (err error) {
 
 type Option func(log *logrus.Logger)
 
-func Level(level logrus.Level) Option {
+// Level Specify log level for logger, default to Info level.
+func Level(levelStr string) Option {
+	var level logrus.Level
+
+	switch levelStr {
+	case LogLevelDebug:
+		level = logrus.DebugLevel
+	case LogLevelInfo:
+		level = logrus.InfoLevel
+	case LogLevelWarn:
+		level = logrus.WarnLevel
+	case LogLevelError:
+		level = logrus.ErrorLevel
+	default:
+		level = logrus.InfoLevel
+	}
+
 	return func(log *logrus.Logger) {
 		log.Level = level
 	}

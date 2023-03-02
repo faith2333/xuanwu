@@ -1,13 +1,14 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "xuanwu/internal/conf;conf";
+option go_package = "github.com/faith2333/xuanwu/internal/conf;conf";
 
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
   Server server = 1;
   Data data = 2;
+  Log log = 3;
 }
 
 message Server {
@@ -38,4 +39,8 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
+}
+
+message Log {
+  string level = 1;
 }
