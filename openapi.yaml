@@ -3,8 +3,35 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: CICD API
     version: 0.0.1
-paths: {}
+paths:
+    /cicd/template/create:
+        post:
+            tags:
+                - CICD
+            description: Template service for CICD
+            operationId: CICD_CreateTemplate
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.cicd.v1.CreateTemplateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cicd.v1.CreateTemplateReply'
 components:
-    schemas: {}
+    schemas:
+        api.cicd.v1.CreateTemplateReply:
+            type: object
+            properties: {}
+        api.cicd.v1.CreateTemplateRequest:
+            type: object
+            properties: {}
+tags:
+    - name: CICD
