@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github/faith2333/xuanwu/pkg/middreware/xlogger"
 	"os"
 
 	"github/faith2333/xuanwu/internal/conf"
@@ -49,7 +50,7 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
+	logger := log.With(xlogger.NewLogger(),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", id,
