@@ -3,6 +3,8 @@ syntax = "proto3";
 package api.cicd.v1;
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "cicd/v1/template.proto";
 
 option go_package = "github.com/faith2333/xuanwu/api/cicd/v1;v1";
 option java_multiple_files = true;
@@ -10,22 +12,27 @@ option java_package = "api.cicd.v1";
 
 service CICD {
 	// Template service for CICD
-	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply) {
+	rpc CreateTemplate (CreateTemplateRequest) returns (Template) {
 		option (google.api.http) = {
-			post: "/cicd/template/create",
+			post: "/v1/cicd/template/create",
 			body: "*",
 		};
 	};
 	rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateReply);
 	rpc DeleteTemplate (DeleteTemplateRequest) returns (DeleteTemplateReply);
-	rpc GetTemplate (GetTemplateRequest) returns (GetTemplateReply);
+	rpc GetTemplate (GetTemplateRequest) returns (Template) {
+		option (google.api.http) = {
+			get: "/v1/cicd/template",
+		};
+	};
 	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateReply);
 }
 
 message CreateTemplateRequest {
-	string name = 1;
+	string name = 2 [(validate.rules).string = {min_len: 4, max_len: 10}];
+	string code = 3;
+	string source = 4 [(validate.rules).string = {min_len: 20}];
 }
-message CreateTemplateReply {}
 
 message UpdateTemplateRequest {}
 message UpdateTemplateReply {}
@@ -33,8 +40,11 @@ message UpdateTemplateReply {}
 message DeleteTemplateRequest {}
 message DeleteTemplateReply {}
 
-message GetTemplateRequest {}
-message GetTemplateReply {}
+message GetTemplateRequest {
+	int64 id = 1;
+	string name = 2 [(validate.rules).string = {min_len:4, max_len:10}];
+	string code = 3;
+}
 
 message ListTemplateRequest {}
 message ListTemplateReply {}

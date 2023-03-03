@@ -23,10 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CICDClient interface {
 	// Template service for CICD
-	CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateReply, error)
+	CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...grpc.CallOption) (*Template, error)
 	UpdateTemplate(ctx context.Context, in *UpdateTemplateRequest, opts ...grpc.CallOption) (*UpdateTemplateReply, error)
 	DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest, opts ...grpc.CallOption) (*DeleteTemplateReply, error)
-	GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*GetTemplateReply, error)
+	GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*Template, error)
 	ListTemplate(ctx context.Context, in *ListTemplateRequest, opts ...grpc.CallOption) (*ListTemplateReply, error)
 }
 
@@ -38,8 +38,8 @@ func NewCICDClient(cc grpc.ClientConnInterface) CICDClient {
 	return &cICDClient{cc}
 }
 
-func (c *cICDClient) CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...grpc.CallOption) (*CreateTemplateReply, error) {
-	out := new(CreateTemplateReply)
+func (c *cICDClient) CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...grpc.CallOption) (*Template, error) {
+	out := new(Template)
 	err := c.cc.Invoke(ctx, "/api.cicd.v1.CICD/CreateTemplate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func (c *cICDClient) DeleteTemplate(ctx context.Context, in *DeleteTemplateReque
 	return out, nil
 }
 
-func (c *cICDClient) GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*GetTemplateReply, error) {
-	out := new(GetTemplateReply)
+func (c *cICDClient) GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...grpc.CallOption) (*Template, error) {
+	out := new(Template)
 	err := c.cc.Invoke(ctx, "/api.cicd.v1.CICD/GetTemplate", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,10 +88,10 @@ func (c *cICDClient) ListTemplate(ctx context.Context, in *ListTemplateRequest, 
 // for forward compatibility
 type CICDServer interface {
 	// Template service for CICD
-	CreateTemplate(context.Context, *CreateTemplateRequest) (*CreateTemplateReply, error)
+	CreateTemplate(context.Context, *CreateTemplateRequest) (*Template, error)
 	UpdateTemplate(context.Context, *UpdateTemplateRequest) (*UpdateTemplateReply, error)
 	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*DeleteTemplateReply, error)
-	GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateReply, error)
+	GetTemplate(context.Context, *GetTemplateRequest) (*Template, error)
 	ListTemplate(context.Context, *ListTemplateRequest) (*ListTemplateReply, error)
 	mustEmbedUnimplementedCICDServer()
 }
@@ -100,7 +100,7 @@ type CICDServer interface {
 type UnimplementedCICDServer struct {
 }
 
-func (UnimplementedCICDServer) CreateTemplate(context.Context, *CreateTemplateRequest) (*CreateTemplateReply, error) {
+func (UnimplementedCICDServer) CreateTemplate(context.Context, *CreateTemplateRequest) (*Template, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTemplate not implemented")
 }
 func (UnimplementedCICDServer) UpdateTemplate(context.Context, *UpdateTemplateRequest) (*UpdateTemplateReply, error) {
@@ -109,7 +109,7 @@ func (UnimplementedCICDServer) UpdateTemplate(context.Context, *UpdateTemplateRe
 func (UnimplementedCICDServer) DeleteTemplate(context.Context, *DeleteTemplateRequest) (*DeleteTemplateReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTemplate not implemented")
 }
-func (UnimplementedCICDServer) GetTemplate(context.Context, *GetTemplateRequest) (*GetTemplateReply, error) {
+func (UnimplementedCICDServer) GetTemplate(context.Context, *GetTemplateRequest) (*Template, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTemplate not implemented")
 }
 func (UnimplementedCICDServer) ListTemplate(context.Context, *ListTemplateRequest) (*ListTemplateReply, error) {

@@ -20,15 +20,18 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationCICDCreateTemplate = "/api.cicd.v1.CICD/CreateTemplate"
+const OperationCICDGetTemplate = "/api.cicd.v1.CICD/GetTemplate"
 
 type CICDHTTPServer interface {
 	// CreateTemplate Template service for CICD
-	CreateTemplate(context.Context, *CreateTemplateRequest) (*CreateTemplateReply, error)
+	CreateTemplate(context.Context, *CreateTemplateRequest) (*Template, error)
+	GetTemplate(context.Context, *GetTemplateRequest) (*Template, error)
 }
 
 func RegisterCICDHTTPServer(s *http.Server, srv CICDHTTPServer) {
 	r := s.Route("/")
-	r.POST("/cicd/template/create", _CICD_CreateTemplate0_HTTP_Handler(srv))
+	r.POST("/v1/cicd/template/create", _CICD_CreateTemplate0_HTTP_Handler(srv))
+	r.GET("/v1/cicd/template", _CICD_GetTemplate0_HTTP_Handler(srv))
 }
 
 func _CICD_CreateTemplate0_HTTP_Handler(srv CICDHTTPServer) func(ctx http.Context) error {
@@ -45,13 +48,33 @@ func _CICD_CreateTemplate0_HTTP_Handler(srv CICDHTTPServer) func(ctx http.Contex
 		if err != nil {
 			return err
 		}
-		reply := out.(*CreateTemplateReply)
+		reply := out.(*Template)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _CICD_GetTemplate0_HTTP_Handler(srv CICDHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetTemplateRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationCICDGetTemplate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetTemplate(ctx, req.(*GetTemplateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*Template)
 		return ctx.Result(200, reply)
 	}
 }
 
 type CICDHTTPClient interface {
-	CreateTemplate(ctx context.Context, req *CreateTemplateRequest, opts ...http.CallOption) (rsp *CreateTemplateReply, err error)
+	CreateTemplate(ctx context.Context, req *CreateTemplateRequest, opts ...http.CallOption) (rsp *Template, err error)
+	GetTemplate(ctx context.Context, req *GetTemplateRequest, opts ...http.CallOption) (rsp *Template, err error)
 }
 
 type CICDHTTPClientImpl struct {
@@ -62,13 +85,26 @@ func NewCICDHTTPClient(client *http.Client) CICDHTTPClient {
 	return &CICDHTTPClientImpl{client}
 }
 
-func (c *CICDHTTPClientImpl) CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...http.CallOption) (*CreateTemplateReply, error) {
-	var out CreateTemplateReply
-	pattern := "/cicd/template/create"
+func (c *CICDHTTPClientImpl) CreateTemplate(ctx context.Context, in *CreateTemplateRequest, opts ...http.CallOption) (*Template, error) {
+	var out Template
+	pattern := "/v1/cicd/template/create"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationCICDCreateTemplate))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *CICDHTTPClientImpl) GetTemplate(ctx context.Context, in *GetTemplateRequest, opts ...http.CallOption) (*Template, error) {
+	var out Template
+	pattern := "/v1/cicd/template"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationCICDGetTemplate))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

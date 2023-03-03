@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github/faith2333/xuanwu/internal/conf"
 	"github/faith2333/xuanwu/internal/server"
+	"github/faith2333/xuanwu/internal/service/cicd"
 )
 
 import (
@@ -21,8 +22,9 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	grpcServer := server.NewGRPCServer(confServer, logger)
-	httpServer := server.NewHTTPServer(confServer, logger)
+	cicdService := service.NewCICDService()
+	grpcServer := server.NewGRPCServer(confServer, cicdService, logger)
+	httpServer := server.NewHTTPServer(confServer, cicdService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 	}, nil
