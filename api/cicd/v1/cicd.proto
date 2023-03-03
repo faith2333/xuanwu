@@ -2,13 +2,20 @@ syntax = "proto3";
 
 package api.cicd.v1;
 
+import "google/api/annotations.proto";
+
 option go_package = "github.com/faith2333/xuanwu/api/cicd/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.cicd.v1";
 
 service CICD {
 	// Template service for CICD
-	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply);
+	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply) {
+		option (google.api.http) = {
+			post: "/cicd/template/create",
+			body: "*",
+		};
+	};
 	rpc UpdateTemplate (UpdateTemplateRequest) returns (UpdateTemplateReply);
 	rpc DeleteTemplate (DeleteTemplateRequest) returns (DeleteTemplateReply);
 	rpc GetTemplate (GetTemplateRequest) returns (GetTemplateReply);
