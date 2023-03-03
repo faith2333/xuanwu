@@ -1,7 +1,10 @@
 package data
 
 import (
+	"fmt"
 	"github/faith2333/xuanwu/internal/conf"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -13,8 +16,8 @@ var ProviderSet = wire.NewSet(NewData)
 
 // Data .
 type Data struct {
-	log         *log.Helper
-	mysqlClient *gorm.DB
+	log *log.Helper
+	db  *gorm.DB
 }
 
 // NewData .
@@ -23,5 +26,24 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		log.NewHelper(logger).Info("closing the data resources")
 	}
 
-	return &Data{}, cleanup, nil
+	data := new(Data)
+	var err error
+
+	data.db, err = newDB(c)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return data, cleanup, nil
+}
+
+func newDB(c *conf.Data) (db *gorm.DB, err error) {
+	switch c.Database.Driver {
+	case "mysql":
+		return gorm.Open(mysql.Open(c.Database.Source))
+	case "postgres":
+		return gorm.Open(postgres.Open(c.Database.Source))
+	default:
+		return nil, fmt.Errorf("Database Driver %s not supported ", c.Database.Driver)
+	}
 }
