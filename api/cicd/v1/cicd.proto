@@ -22,7 +22,9 @@ service CICD {
 	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateReply);
 }
 
-message CreateTemplateRequest {}
+message CreateTemplateRequest {
+	string name = 1;
+}
 message CreateTemplateReply {}
 
 message UpdateTemplateRequest {}

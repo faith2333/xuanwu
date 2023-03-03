@@ -32,6 +32,8 @@ components:
             properties: {}
         api.cicd.v1.CreateTemplateRequest:
             type: object
-            properties: {}
+            properties:
+                name:
+                    type: string
 tags:
     - name: CICD
