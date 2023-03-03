@@ -22,13 +22,15 @@ type Data struct {
 
 // NewData .
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
+	data := &Data{
+		log: log.NewHelper(logger),
+	}
+
 	cleanup := func() {
 		log.NewHelper(logger).Info("closing the data resources")
 	}
 
-	data := new(Data)
 	var err error
-
 	data.db, err = newDB(c)
 	if err != nil {
 		return nil, nil, err
