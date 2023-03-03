@@ -19,7 +19,7 @@ I will try my best to complete it as soon as possible.
 ## Project Introduction
 ***
 
-**Infrastructure Framework:** The project is base on [kratos](https://go-kratos.dev/) a microservice framework designed by bilibili group. it helps me so much.
+**Infrastructure Framework:** This project is base on [kratos](https://go-kratos.dev/) a microservice framework designed by bilibili group. it helps me so much.
 
 **Database ORM Model:** XuanWu use [gorm](https://gorm.io/) as ORM model.
 
