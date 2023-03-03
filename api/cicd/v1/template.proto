@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package api.cicd.v1;
+
+import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/faith2333/xuanwu/api/cicd/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cicd.v1";
+
+message Template {
+  int64 id = 1;
+  string name = 2 [(validate.rules).string = {min_len:4, max_len:10}];
+  string code = 3;
+  string source = 4 [(validate.rules).string.min_len = 20];
+  string createUser = 5;
+  string modifyUser = 6;
+  google.protobuf.Timestamp gmtCreate = 7;
+  google.protobuf.Timestamp gmtModify = 8;
+}

@@ -6,7 +6,33 @@ info:
     title: CICD API
     version: 0.0.1
 paths:
-    /cicd/template/create:
+    /v1/cicd/template:
+        get:
+            tags:
+                - CICD
+            operationId: CICD_GetTemplate
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: code
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cicd.v1.Template'
+    /v1/cicd/template/create:
         post:
             tags:
                 - CICD
@@ -24,16 +50,39 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.cicd.v1.CreateTemplateReply'
+                                $ref: '#/components/schemas/api.cicd.v1.Template'
 components:
     schemas:
-        api.cicd.v1.CreateTemplateReply:
-            type: object
-            properties: {}
         api.cicd.v1.CreateTemplateRequest:
             type: object
             properties:
                 name:
                     type: string
+                code:
+                    type: string
+                source:
+                    type: string
+        api.cicd.v1.Template:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                name:
+                    type: string
+                code:
+                    type: string
+                source:
+                    type: string
+                createUser:
+                    type: string
+                modifyUser:
+                    type: string
+                gmtCreate:
+                    type: string
+                    format: date-time
+                gmtModify:
+                    type: string
+                    format: date-time
 tags:
     - name: CICD
