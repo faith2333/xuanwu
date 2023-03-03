@@ -7,6 +7,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/sirupsen/logrus v1.9.0
 	go.uber.org/automaxprocs v1.5.1
+	google.golang.org/genproto v0.0.0-20220524023933-508584e28198
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
 )
@@ -30,6 +31,5 @@ require (
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135 // indirect
-	google.golang.org/genproto v0.0.0-20220524023933-508584e28198 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
