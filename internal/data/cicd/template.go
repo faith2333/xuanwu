@@ -13,6 +13,7 @@ type Template struct {
 }
 
 type TemplateRepo struct {
+	data *base.Data
 }
 
 func (tRepo *TemplateRepo) CreateTemplate(request *cicd.CreateTemplate) (cicd.Template, error) {

@@ -11,12 +11,12 @@ import (
 	"github.com/google/wire"
 	"github/faith2333/xuanwu/internal/biz"
 	"github/faith2333/xuanwu/internal/conf"
-	"github/faith2333/xuanwu/internal/data"
+	"github/faith2333/xuanwu/internal/data/base"
 	"github/faith2333/xuanwu/internal/server"
 	"github/faith2333/xuanwu/internal/service"
 )
 
 // wireApp init kratos application.
 func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+	panic(wire.Build(server.ProviderSet, base.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
 }
