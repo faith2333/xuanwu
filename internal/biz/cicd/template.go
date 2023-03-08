@@ -1,15 +1,18 @@
 package cicd
 
-import pb "github/faith2333/xuanwu/api/cicd/v1"
+import (
+	"context"
+	pb "github/faith2333/xuanwu/api/cicd/v1"
+)
 
 type TemplateRepo interface {
-	CreateTemplate(request *CreateTemplate) (Template, error)
+	CreateTemplate(ctx context.Context, request *CreateTemplate) (*Template, error)
 }
 
 type CreateTemplate struct {
-	pb.CreateTemplateRequest
+	*pb.CreateTemplateRequest
 }
 
 type Template struct {
-	pb.Template
+	*pb.Template
 }
