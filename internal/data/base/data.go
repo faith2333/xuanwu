@@ -3,8 +3,8 @@ package base
 import (
 	"context"
 	"fmt"
-	"github/faith2333/xuanwu/internal/biz"
-	"github/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/biz"
+	"github.com/faith2333/xuanwu/internal/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -1,12 +1,12 @@
 package biz
 
 import (
+	cicdRepo "github.com/faith2333/xuanwu/internal/biz/cicd"
 	"github.com/google/wire"
-	cicdRepo "github/faith2333/xuanwu/internal/biz/cicd"
 )
 
 // ProviderSet is biz providers.
-var ProviderSet = wire.NewSet(NewBiz)
+var ProviderSet = wire.NewSet(NewBiz, cicdRepo.NewRepo)
 
 type Biz struct {
 	CICD *cicdRepo.Repo

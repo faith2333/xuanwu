@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	pb "github/faith2333/xuanwu/api/cicd/v1"
-	"github/faith2333/xuanwu/internal/biz"
-	bizCICD "github/faith2333/xuanwu/internal/biz/cicd"
+	pb "github.com/faith2333/xuanwu/api/cicd/v1"
+	"github.com/faith2333/xuanwu/internal/biz"
+	bizCICD "github.com/faith2333/xuanwu/internal/biz/cicd"
 )
 
 type CICDService struct {

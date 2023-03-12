@@ -1,4 +1,4 @@
-module github/faith2333/xuanwu
+module github.com/faith2333/xuanwu
 
 go 1.17
 

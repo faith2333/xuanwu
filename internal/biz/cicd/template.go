@@ -2,7 +2,7 @@ package cicd
 
 import (
 	"context"
-	pb "github/faith2333/xuanwu/api/cicd/v1"
+	pb "github.com/faith2333/xuanwu/api/cicd/v1"
 )
 
 type TemplateRepo interface {

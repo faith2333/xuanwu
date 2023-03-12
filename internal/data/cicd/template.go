@@ -2,8 +2,8 @@ package cicd
 
 import (
 	"context"
-	"github/faith2333/xuanwu/internal/biz/cicd"
-	"github/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/internal/biz/cicd"
+	"github.com/faith2333/xuanwu/internal/data/base"
 )
 
 type Template struct {
