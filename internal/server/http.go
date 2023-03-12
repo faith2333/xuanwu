@@ -7,11 +7,14 @@ import (
 	cicdPB "github/faith2333/xuanwu/api/cicd/v1"
 	"github/faith2333/xuanwu/internal/conf"
 	cicdSvc "github/faith2333/xuanwu/internal/service/cicd"
+	"github/faith2333/xuanwu/pkg/httpencoder"
 )
 
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server, cicd *cicdSvc.CICDService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
+		http.ErrorEncoder(httpencoder.ErrorEncoder),
+		http.ResponseEncoder(httpencoder.ResponseEncoder),
 		http.Middleware(
 			recovery.Recovery(),
 		),
