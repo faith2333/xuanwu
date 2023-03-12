@@ -2,7 +2,7 @@ package cicd
 
 import (
 	"context"
-	"github.com/faith2333/xuanwu/internal/biz/cicd"
+	bizCICD "github.com/faith2333/xuanwu/internal/biz/cicd"
 	"github.com/faith2333/xuanwu/internal/data/base"
 )
 
@@ -18,7 +18,13 @@ type TemplateRepo struct {
 	data *base.Data
 }
 
-func (tRepo *TemplateRepo) CreateTemplate(ctx context.Context, bizTemplate *cicd.CreateTemplate) (*cicd.Template, error) {
+func NewTemplateRepo(data *base.Data) bizCICD.TemplateRepo {
+	return &TemplateRepo{
+		data: data,
+	}
+}
+
+func (tRepo *TemplateRepo) CreateTemplate(ctx context.Context, bizTemplate *bizCICD.CreateTemplate) (*bizCICD.Template, error) {
 	tDB := &Template{}
 	err := tRepo.Transform(bizTemplate, &tDB)
 	if err != nil {
@@ -30,7 +36,7 @@ func (tRepo *TemplateRepo) CreateTemplate(ctx context.Context, bizTemplate *cicd
 		return nil, err
 	}
 
-	result := &cicd.Template{}
+	result := &bizCICD.Template{}
 	err = tRepo.Transform(tDB, &result)
 	if err != nil {
 		return nil, err

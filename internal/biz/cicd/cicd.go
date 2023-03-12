@@ -4,6 +4,8 @@ type Repo struct {
 	TemplateRepo TemplateRepo
 }
 
-func NewRepo() *Repo {
-	return &Repo{}
+func NewRepo(templateRepo TemplateRepo) *Repo {
+	return &Repo{
+		TemplateRepo: templateRepo,
+	}
 }
