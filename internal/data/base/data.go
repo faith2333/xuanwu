@@ -1,10 +1,10 @@
-package data
+package base
 
 import (
 	"context"
 	"fmt"
-	"github/faith2333/xuanwu/internal/biz"
-	"github/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/biz"
+	"github.com/faith2333/xuanwu/internal/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -49,10 +49,10 @@ func NewTransaction(data *Data) biz.Transaction {
 
 func newDB(c *conf.Data) (db *gorm.DB, err error) {
 	switch c.Database.Driver {
-	case "mysql":
-		return gorm.Open(mysql.Open(c.Database.Source))
 	case "postgres":
 		return gorm.Open(postgres.Open(c.Database.Source))
+	case "mysql":
+		return gorm.Open(mysql.Open(c.Database.Source))
 	default:
 		return nil, fmt.Errorf("Database Driver %s not supported ", c.Database.Driver)
 	}

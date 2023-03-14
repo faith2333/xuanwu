@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"github/faith2333/xuanwu/pkg/middreware/xlogger"
+	"github.com/faith2333/xuanwu/pkg/middreware/xlogger"
 	"os"
 
-	"github/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"

@@ -7,11 +7,15 @@
 package main
 
 import (
+	"github.com/faith2333/xuanwu/internal/biz"
+	cicd2 "github.com/faith2333/xuanwu/internal/biz/cicd"
+	"github.com/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/internal/data/cicd"
+	"github.com/faith2333/xuanwu/internal/server"
+	"github.com/faith2333/xuanwu/internal/service/cicd"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github/faith2333/xuanwu/internal/conf"
-	"github/faith2333/xuanwu/internal/server"
-	"github/faith2333/xuanwu/internal/service/cicd"
 )
 
 import (
@@ -22,10 +26,18 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	cicdService := service.NewCICDService()
+	baseData, cleanup, err := base.NewData(data, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	templateRepo := cicd.NewTemplateRepo(baseData)
+	repo := cicd2.NewRepo(templateRepo)
+	bizBiz := biz.NewBiz(repo)
+	cicdService := service.NewCICDService(bizBiz)
 	grpcServer := server.NewGRPCServer(confServer, cicdService, logger)
 	httpServer := server.NewHTTPServer(confServer, cicdService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
+		cleanup()
 	}, nil
 }

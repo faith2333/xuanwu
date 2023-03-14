@@ -51,8 +51,41 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.cicd.v1.Template'
+    /v1/cicd/template/list:
+        get:
+            tags:
+                - CICD
+            operationId: CICD_ListTemplate
+            parameters:
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: code
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cicd.v1.ListTemplateReply'
 components:
     schemas:
+        api.base.v1.PageInfo:
+            type: object
+            properties:
+                pageIndex:
+                    type: integer
+                    format: int64
+                pageSize:
+                    type: integer
+                    format: int64
+                total:
+                    type: integer
+                    format: int64
         api.cicd.v1.CreateTemplateRequest:
             type: object
             properties:
@@ -62,6 +95,15 @@ components:
                     type: string
                 source:
                     type: string
+        api.cicd.v1.ListTemplateReply:
+            type: object
+            properties:
+                templates:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.cicd.v1.Template'
+                pageInfo:
+                    $ref: '#/components/schemas/api.base.v1.PageInfo'
         api.cicd.v1.Template:
             type: object
             properties:

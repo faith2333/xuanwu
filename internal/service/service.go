@@ -1,8 +1,8 @@
 package service
 
 import (
+	cicd "github.com/faith2333/xuanwu/internal/service/cicd"
 	"github.com/google/wire"
-	cicd "github/faith2333/xuanwu/internal/service/cicd"
 )
 
 // ProviderSet is service providers.

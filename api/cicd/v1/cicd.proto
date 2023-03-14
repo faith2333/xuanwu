@@ -5,6 +5,7 @@ package api.cicd.v1;
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "cicd/v1/template.proto";
+import "base/v1/pageinfo.proto";
 
 option go_package = "github.com/faith2333/xuanwu/api/cicd/v1;v1";
 option java_multiple_files = true;
@@ -25,13 +26,17 @@ service CICD {
 			get: "/v1/cicd/template",
 		};
 	};
-	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateReply);
+	rpc ListTemplate (ListTemplateRequest) returns (ListTemplateReply) {
+		option (google.api.http) = {
+			get: "/v1/cicd/template/list",
+		};
+	};
 }
 
 message CreateTemplateRequest {
-	string name = 2 [(validate.rules).string = {min_len: 4, max_len: 10}];
-	string code = 3;
-	string source = 4 [(validate.rules).string = {min_len: 20}];
+	string name = 1 [(validate.rules).string = {min_len: 4, max_len: 10}];
+	string code = 2;
+	string source = 3 [(validate.rules).string = {min_len: 20}];
 }
 
 message UpdateTemplateRequest {}
@@ -46,5 +51,11 @@ message GetTemplateRequest {
 	string code = 3;
 }
 
-message ListTemplateRequest {}
-message ListTemplateReply {}
+message ListTemplateRequest {
+	string name = 1;
+	string code = 2;
+}
+message ListTemplateReply {
+	repeated Template templates = 1;
+	base.v1.pageInfo pageInfo = 2;
+}
