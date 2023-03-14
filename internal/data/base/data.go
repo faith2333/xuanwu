@@ -6,6 +6,7 @@ import (
 	"github.com/faith2333/xuanwu/internal/biz"
 	"github.com/faith2333/xuanwu/internal/conf"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -48,6 +49,8 @@ func NewTransaction(data *Data) biz.Transaction {
 
 func newDB(c *conf.Data) (db *gorm.DB, err error) {
 	switch c.Database.Driver {
+	case "postgres":
+		return gorm.Open(postgres.Open(c.Database.Source))
 	case "mysql":
 		return gorm.Open(mysql.Open(c.Database.Source))
 	default:
