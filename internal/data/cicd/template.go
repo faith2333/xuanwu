@@ -4,6 +4,7 @@ import (
 	"context"
 	bizCICD "github.com/faith2333/xuanwu/internal/biz/cicd"
 	"github.com/faith2333/xuanwu/internal/data/base"
+	"sync"
 )
 
 type Template struct {
@@ -13,12 +14,24 @@ type Template struct {
 	Source string `json:"source" gorm:"type:text(20000);comment:'source yaml of template'"`
 }
 
+func (Template) TableName() string {
+	return "cicd_templates"
+}
+
+var runOnce = sync.Once{}
+
 type TemplateRepo struct {
 	base.RepoBase
 	data *base.Data
 }
 
 func NewTemplateRepo(data *base.Data) bizCICD.TemplateRepo {
+	runOnce.Do(func() {
+		err := data.DB(context.TODO()).AutoMigrate(&Template{})
+		if err != nil {
+			panic(err)
+		}
+	})
 	return &TemplateRepo{
 		data: data,
 	}
