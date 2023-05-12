@@ -1,6 +1,6 @@
 # *XUANWU*
 
-Make Your *Online System* [**develop**]("https://github.com/faith2333/xuanwu/docs/cicd.md") & **test** & **delivery** & **monitoring** & **alerting** easily.
+Make Your *Online System* **develop** & **test** & **delivery** & **monitoring** & **alerting** easily.
 
 ## Overview
 ***
