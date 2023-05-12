@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package api.base.v1;
+
+option go_package = "github.com/faith2333/xuanwu/api/base/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.base.v1";
+
+message pageInfo {
+  int64 pageIndex = 1;
+  int64 pageSize = 2;
+  int64 total = 3;
+}
