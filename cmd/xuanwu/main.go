@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
