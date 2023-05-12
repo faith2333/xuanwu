@@ -3,37 +3,74 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: User API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
+    /v1/user/signin:
+        post:
             tags:
-                - Greeter
-                - subgroup
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - User
+            description: user sign in
+            operationId: User_SignIn
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.SignInRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+                                $ref: '#/components/schemas/api.user.v1.SignInResponse'
+    /v1/user/signup:
+        post:
+            tags:
+                - User
+            description: user sign up
+            operationId: User_SignUp
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.SignUpRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.EmptyResponse'
 components:
     schemas:
-        helloworld.v1.HelloReply:
+        api.user.v1.EmptyResponse:
+            type: object
+            properties: {}
+        api.user.v1.SignInRequest:
             type: object
             properties:
-                message:
+                username:
                     type: string
-            description: The response message containing the greetings
+                password:
+                    type: string
+        api.user.v1.SignInResponse:
+            type: object
+            properties:
+                jwtToken:
+                    type: string
+        api.user.v1.SignUpRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                phoneNumber:
+                    type: string
 tags:
-    - name: Greeter
+    - name: User

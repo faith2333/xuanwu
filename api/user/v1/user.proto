@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package api.user.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/faith2333/xuanwu/api/user/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.user.v1";
+
+service User {
+  // user sign up
+  rpc SignUp (SignUpRequest) returns (EmptyResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/signup";
+      body: "*";
+    };
+  }
+
+  // user sign in
+  rpc SignIn (SignInRequest) returns (SignInResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/signin";
+      body: "*";
+    };
+  }
+
+}
+
+message SignUpRequest {
+  string username = 1 [(validate.rules).string.min_len = 3];
+  string password = 2 [(validate.rules).string.pattern = "^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$"];
+  string email = 3 [(validate.rules).string.email = true];
+  string phoneNumber = 4[(validate.rules).string.min_len = 11];
+}
+
+message SignInRequest {
+  string username = 1 [(validate.rules).string.min_len = 3];
+  string password = 2 [(validate.rules).string.pattern = "^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$"];
+}
+
+message SignInResponse {
+  string jwtToken = 1;
+}
+
+message EmptyResponse {}
+
