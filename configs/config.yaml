@@ -5,11 +5,18 @@ server:
   grpc:
     addr: 0.0.0.0:9000
     timeout: 1s
+  auth:
+    JwtSecretKey: "6IG7QkvqSFU46eOWcLHUVZYQ"
 data:
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test
+    source: root:root@tcp(127.0.0.1:3306)/xuanwu
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+  etcd:
+    endpoint: 127.0.0.1:2379
+    timeout: 0.2s
+log:
+  level: debug
