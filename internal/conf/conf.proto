@@ -1,13 +1,14 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "xuanwu/internal/conf;conf";
+option go_package = "github.com/faith2333/xuanwu/internal/conf;conf";
 
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
   Server server = 1;
   Data data = 2;
+  Log log = 3;
 }
 
 message Server {
@@ -21,8 +22,12 @@ message Server {
     string addr = 2;
     google.protobuf.Duration timeout = 3;
   }
+  message Auth {
+    string jwtSecretKey = 1;
+  }
   HTTP http = 1;
   GRPC grpc = 2;
+  Auth auth = 3;
 }
 
 message Data {
@@ -36,6 +41,15 @@ message Data {
     google.protobuf.Duration read_timeout = 3;
     google.protobuf.Duration write_timeout = 4;
   }
+  message Etcd {
+    string endpoint = 1;
+    google.protobuf.Duration timeout = 2;
+  }
   Database database = 1;
   Redis redis = 2;
+  Etcd etcd = 3;
+}
+
+message Log {
+  string level = 1;
 }

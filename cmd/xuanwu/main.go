@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+	xlogger "github.com/faith2333/xuanwu/pkg/middleware/logger"
+	"github.com/sirupsen/logrus"
 	"os"
 
-	"xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -49,15 +51,6 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
-		"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
-		"trace.id", tracing.TraceID(),
-		"span.id", tracing.SpanID(),
-	)
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),
@@ -73,6 +66,16 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+
+	logger := log.With(xlogger.NewLogger(xlogger.Level(bc.Log.Level), xlogger.Formatter(&logrus.TextFormatter{})),
+		"ts", log.DefaultTimestamp,
+		"caller", log.DefaultCaller,
+		"service.id", id,
+		"service.name", Name,
+		"service.version", Version,
+		"trace.id", tracing.TraceID(),
+		"span.id", tracing.SpanID(),
+	)
 
 	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
 	if err != nil {
