@@ -10,12 +10,12 @@ import (
 	"time"
 )
 
-type Base struct {
+type Model struct {
 	CreateUser string `json:"createUser" gorm:"type:varchar(16)"`
 	ModifyUser string `json:"modifyUser" gorm:"type:varchar(16)"`
 	GmtCreate  string `json:"gmtCreate" gorm:"type:varchar(64)"`
 	GmtModify  string `json:"gmtModify" gorm:"type:varchar(64)"`
-	Deleted    int64  `json:"deleted"`
+	Deleted    int64  `json:"deleted" gorm:"uniqueIndex:CODE_DELETED"`
 }
 
 type RepoBase struct{}
@@ -39,25 +39,25 @@ func (b RepoBase) StringToPBStruct(source string) (*structpb.Struct, error) {
 	return structpb.NewStruct(vMap)
 }
 
-func (b *Base) getUserFromCtx(ctx context.Context) string {
+func (m *Model) getUserFromCtx(ctx context.Context) string {
 	// todo get user form context, which set up in middleware
 	return "sys"
 }
 
-func (b *Base) BeforeCreate(tx *gorm.DB) (err error) {
+func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
 	now := xtime.StringTime(time.Now())
-	b.GmtCreate = now
-	b.GmtModify = now
-	user := b.getUserFromCtx(tx.Statement.Context)
-	b.CreateUser = user
-	b.ModifyUser = user
-	b.Deleted = 0
+	m.GmtCreate = now
+	m.GmtModify = now
+	user := m.getUserFromCtx(tx.Statement.Context)
+	m.CreateUser = user
+	m.ModifyUser = user
+	m.Deleted = 0
 
 	return
 }
 
-func (b *Base) BeforeUpdate(tx *gorm.DB) (err error) {
-	b.GmtModify = xtime.StringTime(time.Now())
-	b.ModifyUser = b.getUserFromCtx(tx.Statement.Context)
+func (m *Model) BeforeUpdate(tx *gorm.DB) (err error) {
+	m.GmtModify = xtime.StringTime(time.Now())
+	m.ModifyUser = m.getUserFromCtx(tx.Statement.Context)
 	return
 }

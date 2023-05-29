@@ -5,6 +5,6 @@ import (
 )
 
 var AuthenticationWhiteList = map[string]bool{
-	userPB.OperationUserSignUp: true,
-	userPB.OperationUserSignIn: true,
+	userPB.OperationUserServerSignUp: true,
+	userPB.OperationUserServerLogin:  true,
 }

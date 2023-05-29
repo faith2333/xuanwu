@@ -3,20 +3,20 @@
 
 openapi: 3.0.3
 info:
-    title: User API
+    title: UserServer API
     version: 0.0.1
 paths:
-    /v1/user/signin:
+    /v1/user/login:
         post:
             tags:
-                - User
+                - UserServer
             description: user sign in
-            operationId: User_SignIn
+            operationId: UserServer_Login
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.v1.SignInRequest'
+                            $ref: '#/components/schemas/api.user.v1.LoginRequest'
                 required: true
             responses:
                 "200":
@@ -24,13 +24,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.SignInResponse'
+                                $ref: '#/components/schemas/api.user.v1.LoginResponse'
     /v1/user/signup:
         post:
             tags:
-                - User
+                - UserServer
             description: user sign up
-            operationId: User_SignUp
+            operationId: UserServer_SignUp
             requestBody:
                 content:
                     application/json:
@@ -49,14 +49,14 @@ components:
         api.user.v1.EmptyResponse:
             type: object
             properties: {}
-        api.user.v1.SignInRequest:
+        api.user.v1.LoginRequest:
             type: object
             properties:
                 username:
                     type: string
                 password:
                     type: string
-        api.user.v1.SignInResponse:
+        api.user.v1.LoginResponse:
             type: object
             properties:
                 jwtToken:
@@ -72,5 +72,7 @@ components:
                     type: string
                 phoneNumber:
                     type: string
+                extraInfo:
+                    type: object
 tags:
-    - name: User
+    - name: UserServer

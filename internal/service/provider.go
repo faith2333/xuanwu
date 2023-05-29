@@ -1,5 +1,10 @@
 package service
 
-import "github.com/google/wire"
+import (
+	"github.com/faith2333/xuanwu/internal/service/user"
+	"github.com/google/wire"
+)
 
-var ProviderSet = wire.NewSet()
+var ProviderSet = wire.NewSet(
+	user.ProviderSet,
+)

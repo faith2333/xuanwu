@@ -7,29 +7,37 @@
 package main
 
 import (
+	user2 "github.com/faith2333/xuanwu/internal/biz/user"
 	"github.com/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/internal/data/user"
 	"github.com/faith2333/xuanwu/internal/server"
-	"github.com/faith2333/xuanwu/internal/service"
-
+	user3 "github.com/faith2333/xuanwu/internal/service/user"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+)
+
+import (
+	_ "go.uber.org/automaxprocs"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
+func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+	baseData, err := base.NewData(data, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
+	iRepoUser := user.NewRepoUser(baseData)
+	userInterface, err := user2.NewUserFactory(iRepoUser, confServer)
+	if err != nil {
+		return nil, nil, err
+	}
+	serviceUser := user3.NewServiceUser(userInterface)
+	grpcServer := server.NewGRPCServer(confServer, serviceUser, logger)
+	httpServer := server.NewHTTPServer(confServer, serviceUser, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
 	}, nil
 }

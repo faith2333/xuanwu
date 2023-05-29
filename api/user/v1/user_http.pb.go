@@ -19,29 +19,29 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserSignIn = "/api.user.v1.User/SignIn"
-const OperationUserSignUp = "/api.user.v1.User/SignUp"
+const OperationUserServerLogin = "/api.user.v1.UserServer/Login"
+const OperationUserServerSignUp = "/api.user.v1.UserServer/SignUp"
 
-type UserHTTPServer interface {
-	// SignIn user sign in
-	SignIn(context.Context, *SignInRequest) (*SignInResponse, error)
+type UserServerHTTPServer interface {
+	// Login user sign in
+	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// SignUp user sign up
 	SignUp(context.Context, *SignUpRequest) (*EmptyResponse, error)
 }
 
-func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
+func RegisterUserServerHTTPServer(s *http.Server, srv UserServerHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/user/signup", _User_SignUp0_HTTP_Handler(srv))
-	r.POST("/v1/user/signin", _User_SignIn0_HTTP_Handler(srv))
+	r.POST("/v1/user/signup", _UserServer_SignUp0_HTTP_Handler(srv))
+	r.POST("/v1/user/login", _UserServer_Login0_HTTP_Handler(srv))
 }
 
-func _User_SignUp0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _UserServer_SignUp0_HTTP_Handler(srv UserServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SignUpRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSignUp)
+		http.SetOperation(ctx, OperationUserServerSignUp)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.SignUp(ctx, req.(*SignUpRequest))
 		})
@@ -54,43 +54,43 @@ func _User_SignUp0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error
 	}
 }
 
-func _User_SignIn0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _UserServer_Login0_HTTP_Handler(srv UserServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in SignInRequest
+		var in LoginRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSignIn)
+		http.SetOperation(ctx, OperationUserServerLogin)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SignIn(ctx, req.(*SignInRequest))
+			return srv.Login(ctx, req.(*LoginRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*SignInResponse)
+		reply := out.(*LoginResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
-type UserHTTPClient interface {
-	SignIn(ctx context.Context, req *SignInRequest, opts ...http.CallOption) (rsp *SignInResponse, err error)
+type UserServerHTTPClient interface {
+	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginResponse, err error)
 	SignUp(ctx context.Context, req *SignUpRequest, opts ...http.CallOption) (rsp *EmptyResponse, err error)
 }
 
-type UserHTTPClientImpl struct {
+type UserServerHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewUserHTTPClient(client *http.Client) UserHTTPClient {
-	return &UserHTTPClientImpl{client}
+func NewUserServerHTTPClient(client *http.Client) UserServerHTTPClient {
+	return &UserServerHTTPClientImpl{client}
 }
 
-func (c *UserHTTPClientImpl) SignIn(ctx context.Context, in *SignInRequest, opts ...http.CallOption) (*SignInResponse, error) {
-	var out SignInResponse
-	pattern := "/v1/user/signin"
+func (c *UserServerHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts ...http.CallOption) (*LoginResponse, error) {
+	var out LoginResponse
+	pattern := "/v1/user/login"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSignIn))
+	opts = append(opts, http.Operation(OperationUserServerLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -99,11 +99,11 @@ func (c *UserHTTPClientImpl) SignIn(ctx context.Context, in *SignInRequest, opts
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) SignUp(ctx context.Context, in *SignUpRequest, opts ...http.CallOption) (*EmptyResponse, error) {
+func (c *UserServerHTTPClientImpl) SignUp(ctx context.Context, in *SignUpRequest, opts ...http.CallOption) (*EmptyResponse, error) {
 	var out EmptyResponse
 	pattern := "/v1/user/signup"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSignUp))
+	opts = append(opts, http.Operation(OperationUserServerSignUp))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

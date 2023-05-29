@@ -10,11 +10,14 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
 
+	pbUser "github.com/faith2333/xuanwu/api/user/v1"
+	svcUser "github.com/faith2333/xuanwu/internal/service/user"
+
 	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, userSvc *svcUser.ServiceUser, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.ErrorEncoder(httpencoder.ErrorEncoder),
 		http.ResponseEncoder(httpencoder.ResponseEncoder),
@@ -36,5 +39,7 @@ func NewHTTPServer(c *conf.Server, logger log.Logger) *http.Server {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
+	pbUser.RegisterUserServerHTTPServer(srv, userSvc)
+
 	return srv
 }
