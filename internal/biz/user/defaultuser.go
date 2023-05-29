@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 	"github.com/pkg/errors"
+	"regexp"
 )
 
 type defaultUser struct {
@@ -45,6 +46,22 @@ func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 		return nil
 	}
 	return errors.New("validate password or username failed")
+}
+
+func (d *defaultUser) validatePassword(password string) error {
+	// Regex pattern for password validation
+	pattern := `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$`
+
+	match, err := regexp.MatchString(pattern, password)
+	if err != nil {
+		return errors.Wrap(err, "regexp match failed")
+	}
+
+	if !match {
+		return errors.New("password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long")
+	}
+
+	return nil
 }
 
 func (d *defaultUser) saltPassword(password string) string {

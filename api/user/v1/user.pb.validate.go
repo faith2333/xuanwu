@@ -205,10 +205,10 @@ func (m *SignUpRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_SignUpRequest_Password_Pattern.MatchString(m.GetPassword()) {
+	if utf8.RuneCountInString(m.GetPassword()) < 8 {
 		err := SignUpRequestValidationError{
 			field:  "Password",
-			reason: "value does not match regex pattern \"^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$\"",
+			reason: "value length must be at least 8 runes",
 		}
 		if !all {
 			return err
@@ -396,8 +396,6 @@ var _ interface {
 	ErrorName() string
 } = SignUpRequestValidationError{}
 
-var _SignUpRequest_Password_Pattern = regexp.MustCompile("^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$")
-
 // Validate checks the field values on LoginRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -431,10 +429,10 @@ func (m *LoginRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_LoginRequest_Password_Pattern.MatchString(m.GetPassword()) {
+	if utf8.RuneCountInString(m.GetPassword()) < 8 {
 		err := LoginRequestValidationError{
 			field:  "Password",
-			reason: "value does not match regex pattern \"^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$\"",
+			reason: "value length must be at least 8 runes",
 		}
 		if !all {
 			return err
@@ -518,8 +516,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LoginRequestValidationError{}
-
-var _LoginRequest_Password_Pattern = regexp.MustCompile("^(.*[A-Z])(.*[a-z])(.*[0-9])(.*[^A-Za-z0-9]).{8,}$")
 
 // Validate checks the field values on LoginResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
