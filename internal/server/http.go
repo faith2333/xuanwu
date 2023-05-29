@@ -4,9 +4,13 @@ import (
 	"github.com/faith2333/xuanwu/internal/conf"
 	"github.com/faith2333/xuanwu/pkg/httpencoder"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
+
+	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 )
 
 // NewHTTPServer new an HTTP server.
@@ -17,6 +21,9 @@ func NewHTTPServer(c *conf.Server, logger log.Logger) *http.Server {
 		http.Middleware(
 			recovery.Recovery(),
 			validate.Validator(),
+			selector.Server(
+				jwt.Server(selfJwt.NewJWTFunc([]byte(c.Auth.JwtSecretKey)), jwt.WithSigningMethod(selfJwt.SigningMethod)),
+			).Match(selfJwt.NewWhiteListMatcher(AuthenticationWhiteList)).Build(),
 		),
 	}
 	if c.Http.Network != "" {
