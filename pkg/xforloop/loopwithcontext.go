@@ -9,11 +9,12 @@ const (
 	// DefaultBackoffRetryLimit default no backoff retry limit
 	DefaultBackoffRetryLimit int = 0
 
-	baseBackoffTimes = 3
+	DefaultBaseBackoffDurationSec = 3
 )
 
 type config struct {
-	retryBackoffLimit int
+	retryBackoffLimit      int
+	baseBackoffDurationSec int
 }
 
 type OperationFunc func(c *config)
@@ -24,16 +25,24 @@ func WithRetryBackoffLimit(limits int) OperationFunc {
 	}
 }
 
+func WithBaseBackoffDurationSec(sec int) OperationFunc {
+	return func(c *config) {
+		c.baseBackoffDurationSec = sec
+	}
+}
+
+// LoopWithContextAndRetryBackoffLimit fn returns is stop or not
 func LoopWithContextAndRetryBackoffLimit(ctx context.Context, fn func(ctx context.Context) bool, ops ...OperationFunc) {
 	c := &config{
-		DefaultBackoffRetryLimit,
+		retryBackoffLimit:      DefaultBackoffRetryLimit,
+		baseBackoffDurationSec: DefaultBaseBackoffDurationSec,
 	}
 
 	for _, op := range ops {
 		op(c)
 	}
 
-	retryCount := 0
+	exeCount := 0
 
 	for {
 		select {
@@ -42,17 +51,18 @@ func LoopWithContextAndRetryBackoffLimit(ctx context.Context, fn func(ctx contex
 		default:
 		}
 
-		time.Sleep(time.Duration(baseBackoffTimes*retryCount) * time.Second)
-
-		if !fn(ctx) {
+		exeCount += 1
+		if fn(ctx) {
 			return
 		}
 
 		if c.retryBackoffLimit != 0 {
-			retryCount++
-			if retryCount >= c.retryBackoffLimit {
+			if exeCount > c.retryBackoffLimit {
 				return
 			}
+			time.Sleep(time.Duration(c.baseBackoffDurationSec*exeCount) * time.Second)
+		} else {
+			time.Sleep(time.Duration(c.baseBackoffDurationSec) * time.Second)
 		}
 
 	}

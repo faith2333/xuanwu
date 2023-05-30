@@ -4,15 +4,17 @@ import (
 	"context"
 	"fmt"
 	"testing"
-	"time"
 )
 
 func TestLoopWithContextAndRetryBackoffLimit(t *testing.T) {
+	exeCount := 0
 	LoopWithContextAndRetryBackoffLimit(context.Background(), func(ctx context.Context) bool {
-		fmt.Println(1)
-		time.Sleep(time.Second * 1)
-		return true
-	}, WithRetryBackoffLimit(3))
+		exeCount += 1
+		return false
+	}, WithRetryBackoffLimit(4), WithBaseBackoffDurationSec(0))
 
-	fmt.Println("OK")
+	if exeCount != 5 {
+		t.Log(fmt.Sprintf("expect 5 but got %d", exeCount))
+		t.FailNow()
+	}
 }

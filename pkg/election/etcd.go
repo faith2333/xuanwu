@@ -5,8 +5,8 @@ import (
 	"github.com/faith2333/xuanwu/pkg/safego"
 	"github.com/faith2333/xuanwu/pkg/xforloop"
 	"github.com/go-kratos/kratos/v2/log"
-	"go.etcd.io/etcd/clientv3"
-	"go.etcd.io/etcd/clientv3/concurrency"
+	"go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
 	"sync"
 )
 
@@ -14,12 +14,15 @@ type EtcdElection struct {
 	log        *log.Helper
 	lock       *sync.RWMutex
 	etcdClient *clientv3.Client
+	session    *concurrency.Session
+	election   *concurrency.Election
 	isLeader   bool
 	isReady    bool
 }
 
-func NewEtcdElection(etcdClient *clientv3.Client) *EtcdElection {
+func NewEtcdElection(etcdClient *clientv3.Client, logger log.Logger) *EtcdElection {
 	return &EtcdElection{
+		log:        log.NewHelper(logger),
 		lock:       &sync.RWMutex{},
 		etcdClient: etcdClient,
 		isLeader:   false,
@@ -36,20 +39,20 @@ func (e *EtcdElection) Champaign(ctx context.Context, prefix, name string) {
 			session, err := concurrency.NewSession(e.etcdClient)
 			if err != nil {
 				e.log.Errorf("new session failed (auto retry): %v", err)
-				return true
+				return false
 			}
 
-			election := concurrency.NewElection(session, prefix)
-
-			// the election is ready
 			e.lock.Lock()
+			e.session = session
+			e.election = concurrency.NewElection(session, prefix)
 			e.isReady = true
 			e.lock.Unlock()
 
-			if err = election.Campaign(ctx, name); err != nil {
+			if err = e.election.Campaign(ctx, name); err != nil {
 				e.log.Errorf("election campaign failed (auto retry): %v", err)
-				return true
+				return false
 			}
+			e.log.Infof("leader election success for %s", name)
 
 			// the election is success
 			e.lock.Lock()
@@ -59,28 +62,35 @@ func (e *EtcdElection) Champaign(ctx context.Context, prefix, name string) {
 			select {
 			case <-ctx.Done():
 				e.log.Errorf("context done received, election finished without retry")
-				// we should resign from etcd when context done
-				err = election.Resign(ctx)
-				if err != nil {
-					e.log.Errorf("node %s resign failed: %v", name, err)
-				}
-				// clear status here
+
+				// we should resign from etcd and clear status when received context done event
 				e.Resign(ctx)
-				return false
+				return true
 			case <-session.Done():
 				e.log.Errorf("session done received, retry election")
-				return true
+				return false
 			}
 		})
 	})
 }
 
+// Resign do resign from etcd and clear status
 func (e *EtcdElection) Resign(ctx context.Context) {
 	e.lock.Lock()
 	defer e.lock.Unlock()
 
 	e.isReady = false
 	e.isLeader = false
+
+	if e.election != nil {
+		_ = e.election.Resign(ctx)
+		e.election = nil
+	}
+
+	if e.session != nil {
+		_ = e.session.Close()
+		e.session = nil
+	}
 }
 
 func (e *EtcdElection) IsReady() bool {
