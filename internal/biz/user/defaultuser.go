@@ -9,6 +9,11 @@ import (
 	"regexp"
 )
 
+const (
+	// PasswordValidatePattern Regex pattern for password validation
+	PasswordValidatePattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+)
+
 type defaultUser struct {
 	c     *Config
 	uRepo IRepoUser
@@ -49,10 +54,7 @@ func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 }
 
 func (d *defaultUser) validatePassword(password string) error {
-	// Regex pattern for password validation
-	pattern := `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$`
-
-	match, err := regexp.MatchString(pattern, password)
+	match, err := regexp.MatchString(PasswordValidatePattern, password)
 	if err != nil {
 		return errors.Wrap(err, "regexp match failed")
 	}
