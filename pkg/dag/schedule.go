@@ -62,14 +62,14 @@ func (dag *DAG) toMap(nodeNames ...string) (map[string]Node, error) {
 
 func findSchedulableNode(n Node, visited, doneNodes map[string]Node) []string {
 	// if the node n is visited, returned directly
-	if _, ok := visited[n.Name()]; ok {
+	if _, ok := visited[n.NodeName()]; ok {
 		return nil
 	}
 
-	visited[n.Name()] = n
+	visited[n.NodeName()] = n
 
 	// the node n is finished, traverse the next node of node n, and returned
-	if _, ok := doneNodes[n.Name()]; ok {
+	if _, ok := doneNodes[n.NodeName()]; ok {
 		result := make([]string, 0)
 		for _, nextNode := range n.NextNodes() {
 			result = append(result, findSchedulableNode(nextNode, visited, doneNodes)...)
@@ -79,7 +79,7 @@ func findSchedulableNode(n Node, visited, doneNodes map[string]Node) []string {
 
 	// the node n is not finished, check it is schedulable
 	if isSchedulable(n, doneNodes) {
-		return []string{n.Name()}
+		return []string{n.NodeName()}
 	}
 
 	// the node is not finished and can not be scheduled
@@ -95,8 +95,8 @@ func isSchedulable(n Node, doneNodes map[string]Node) bool {
 	// if this node all previous node is finished, it can be scheduled
 	var collected []string
 	for _, prev := range n.PrevNodes() {
-		if _, ok := doneNodes[prev.Name()]; ok {
-			collected = append(collected, prev.Name())
+		if _, ok := doneNodes[prev.NodeName()]; ok {
+			collected = append(collected, prev.NodeName())
 		}
 	}
 	return len(collected) == len(n.PrevNodeNames())

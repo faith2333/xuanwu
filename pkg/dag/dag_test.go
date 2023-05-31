@@ -10,7 +10,7 @@ type MyNode struct {
 	runAfter []string
 }
 
-func (my *MyNode) Name() string {
+func (my *MyNode) NodeName() string {
 	return my.name
 }
 
@@ -22,7 +22,7 @@ func TestNew_Parallel(t *testing.T) {
 
 	// parallel
 	//    a   b   c
-	
+
 	a := &MyNode{name: "a"}
 	b := &MyNode{name: "b"}
 	c := &MyNode{name: "c"}
@@ -127,14 +127,14 @@ func assertNode(t *testing.T, n Node, expectedName string, expectedPrev []string
 }
 
 func assertSameNodeName(t *testing.T, n Node, expectedName string) {
-	assert.Equal(t, expectedName, n.Name())
+	assert.Equal(t, expectedName, n.NodeName())
 }
 
 func assertSameNodeDepends(t *testing.T, depends []Node, expected []string) {
 	assert.Equal(t, len(expected), len(depends))
 	prevNames := make(map[string]struct{})
 	for _, prev := range depends {
-		prevNames[prev.Name()] = struct{}{}
+		prevNames[prev.NodeName()] = struct{}{}
 	}
 	for _, ep := range expected {
 		_, ok := prevNames[ep]
