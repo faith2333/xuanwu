@@ -5,5 +5,17 @@ type Stage struct {
 	Code         string                 `json:"code"`
 	ExecutorName string                 `json:"executorName"`
 	ExecutorInfo map[string]interface{} `json:"executorInfo"`
-	NextStages   []*Stage               `json:"nextStages"`
+	RunAfter     []*Stage               `json:"runAfter"`
+}
+
+func (s *Stage) NodeName() string {
+	return s.Name
+}
+
+func (s *Stage) PrevNodeNames() []string {
+	res := make([]string, 0)
+	for _, prevStage := range s.RunAfter {
+		res = append(res, prevStage.Name)
+	}
+	return res
 }

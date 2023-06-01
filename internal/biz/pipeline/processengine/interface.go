@@ -2,6 +2,7 @@ package processengine
 
 import (
 	"context"
+	lwTypes "github.com/faith2333/xuanwu/internal/biz/pipeline/processengine/leaderworker/types"
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/types"
 )
 
@@ -13,6 +14,6 @@ type Interface interface {
 
 	// StartPipeline start schedule and execute pipeline
 	StartPipeline(ctx context.Context, pipeline *types.Pipeline) error
-	// StopPipeline stop the pipeline
-	StopPipeline(ctx context.Context, pipeline *types.Pipeline) error
+	// UpdatePipeline update the pipeline with specified operation
+	UpdatePipeline(ctx context.Context, pipelineID string, operation *lwTypes.UpdateOperation) error
 }
