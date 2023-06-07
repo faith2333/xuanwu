@@ -39,7 +39,7 @@ func (svc *ServiceUser) Login(ctx context.Context, request *pb.LoginRequest) (*p
 	}, nil
 }
 
-func (svc *ServiceUser) GetCurrentUser(ctx context.Context, request *pb.GetCurrentUserRequest) (*pb.GetCurrentUserResponse, error) {
+func (svc *ServiceUser) GetCurrentUser(ctx context.Context, request *pb.EmptyRequest) (*pb.GetCurrentUserResponse, error) {
 	user, err := svc.biz.GetCurrentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -50,4 +50,9 @@ func (svc *ServiceUser) GetCurrentUser(ctx context.Context, request *pb.GetCurre
 		Email:       user.Email,
 		PhoneNumber: user.PhoneNumber,
 	}, nil
+}
+
+func (svc *ServiceUser) Logout(ctx context.Context, request *pb.EmptyRequest) (*pb.EmptyResponse, error) {
+	// todo jwt logout
+	return nil, nil
 }

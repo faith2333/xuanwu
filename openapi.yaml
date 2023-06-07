@@ -38,6 +38,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.LoginResponse'
+    /v1/user/logout:
+        post:
+            tags:
+                - UserServer
+            description: logout
+            operationId: UserServer_Logout
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.EmptyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.EmptyResponse'
     /v1/user/signup:
         post:
             tags:
@@ -59,6 +78,9 @@ paths:
                                 $ref: '#/components/schemas/api.user.v1.EmptyResponse'
 components:
     schemas:
+        api.user.v1.EmptyRequest:
+            type: object
+            properties: {}
         api.user.v1.EmptyResponse:
             type: object
             properties: {}

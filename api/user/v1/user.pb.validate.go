@@ -619,108 +619,6 @@ var _ interface {
 	ErrorName() string
 } = LoginResponseValidationError{}
 
-// Validate checks the field values on GetCurrentUserRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetCurrentUserRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetCurrentUserRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetCurrentUserRequestMultiError, or nil if none found.
-func (m *GetCurrentUserRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetCurrentUserRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return GetCurrentUserRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// GetCurrentUserRequestMultiError is an error wrapping multiple validation
-// errors returned by GetCurrentUserRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetCurrentUserRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetCurrentUserRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetCurrentUserRequestMultiError) AllErrors() []error { return m }
-
-// GetCurrentUserRequestValidationError is the validation error returned by
-// GetCurrentUserRequest.Validate if the designated constraints aren't met.
-type GetCurrentUserRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e GetCurrentUserRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e GetCurrentUserRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e GetCurrentUserRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e GetCurrentUserRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e GetCurrentUserRequestValidationError) ErrorName() string {
-	return "GetCurrentUserRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e GetCurrentUserRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sGetCurrentUserRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = GetCurrentUserRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = GetCurrentUserRequestValidationError{}
-
 // Validate checks the field values on GetCurrentUserResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -830,6 +728,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetCurrentUserResponseValidationError{}
+
+// Validate checks the field values on EmptyRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *EmptyRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on EmptyRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in EmptyRequestMultiError, or
+// nil if none found.
+func (m *EmptyRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *EmptyRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return EmptyRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// EmptyRequestMultiError is an error wrapping multiple validation errors
+// returned by EmptyRequest.ValidateAll() if the designated constraints aren't met.
+type EmptyRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EmptyRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EmptyRequestMultiError) AllErrors() []error { return m }
+
+// EmptyRequestValidationError is the validation error returned by
+// EmptyRequest.Validate if the designated constraints aren't met.
+type EmptyRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EmptyRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EmptyRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EmptyRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EmptyRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EmptyRequestValidationError) ErrorName() string { return "EmptyRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EmptyRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEmptyRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EmptyRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EmptyRequestValidationError{}
 
 // Validate checks the field values on EmptyResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

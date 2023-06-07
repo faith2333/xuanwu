@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	UserServer_SignUp_FullMethodName         = "/api.user.v1.UserServer/SignUp"
 	UserServer_Login_FullMethodName          = "/api.user.v1.UserServer/Login"
+	UserServer_Logout_FullMethodName         = "/api.user.v1.UserServer/Logout"
 	UserServer_GetCurrentUser_FullMethodName = "/api.user.v1.UserServer/GetCurrentUser"
 )
 
@@ -32,8 +33,10 @@ type UserServerClient interface {
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	// user sign in
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	// logout
+	Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	// get current user
-	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
+	GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
 }
 
 type userServerClient struct {
@@ -62,7 +65,16 @@ func (c *userServerClient) Login(ctx context.Context, in *LoginRequest, opts ...
 	return out, nil
 }
 
-func (c *userServerClient) GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error) {
+func (c *userServerClient) Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, UserServer_Logout_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServerClient) GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error) {
 	out := new(GetCurrentUserResponse)
 	err := c.cc.Invoke(ctx, UserServer_GetCurrentUser_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -79,8 +91,10 @@ type UserServerServer interface {
 	SignUp(context.Context, *SignUpRequest) (*EmptyResponse, error)
 	// user sign in
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	// logout
+	Logout(context.Context, *EmptyRequest) (*EmptyResponse, error)
 	// get current user
-	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error)
+	GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserResponse, error)
 	mustEmbedUnimplementedUserServerServer()
 }
 
@@ -94,7 +108,10 @@ func (UnimplementedUserServerServer) SignUp(context.Context, *SignUpRequest) (*E
 func (UnimplementedUserServerServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error) {
+func (UnimplementedUserServerServer) Logout(context.Context, *EmptyRequest) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
 }
 func (UnimplementedUserServerServer) mustEmbedUnimplementedUserServerServer() {}
@@ -146,8 +163,26 @@ func _UserServer_Login_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserServer_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServerServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserServer_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServerServer).Logout(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserServer_GetCurrentUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCurrentUserRequest)
+	in := new(EmptyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -159,7 +194,7 @@ func _UserServer_GetCurrentUser_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: UserServer_GetCurrentUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServerServer).GetCurrentUser(ctx, req.(*GetCurrentUserRequest))
+		return srv.(UserServerServer).GetCurrentUser(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -178,6 +213,10 @@ var UserServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _UserServer_Login_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _UserServer_Logout_Handler,
 		},
 		{
 			MethodName: "GetCurrentUser",

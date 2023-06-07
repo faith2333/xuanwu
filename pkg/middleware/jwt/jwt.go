@@ -50,7 +50,7 @@ func CreateToken(secretKey []byte, username, email, phoneNumber string, extraInf
 			ExtraInfo:   extraInfo,
 		},
 		RegisteredClaims: jwtv4.RegisteredClaims{
-			ExpiresAt: jwtv4.NewNumericDate(time.Now().Add(10 * time.Minute)),
+			ExpiresAt: jwtv4.NewNumericDate(time.Now().Add(2 * time.Hour)),
 			IssuedAt:  jwtv4.NewNumericDate(time.Now()),
 			NotBefore: jwtv4.NewNumericDate(time.Now()),
 			Issuer:    Issuer,
