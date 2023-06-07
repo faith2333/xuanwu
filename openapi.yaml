@@ -6,6 +6,19 @@ info:
     title: UserServer API
     version: 0.0.1
 paths:
+    /v1/user/currentUser:
+        get:
+            tags:
+                - UserServer
+            description: get current user
+            operationId: UserServer_GetCurrentUser
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.GetCurrentUserResponse'
     /v1/user/login:
         post:
             tags:
@@ -49,6 +62,18 @@ components:
         api.user.v1.EmptyResponse:
             type: object
             properties: {}
+        api.user.v1.GetCurrentUserResponse:
+            type: object
+            properties:
+                username:
+                    type: string
+                email:
+                    type: string
+                phoneNumber:
+                    type: string
+                notificationNumber:
+                    type: integer
+                    format: int64
         api.user.v1.LoginRequest:
             type: object
             properties:

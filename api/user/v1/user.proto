@@ -27,6 +27,13 @@ service UserServer {
     };
   }
 
+  // get current user
+  rpc GetCurrentUser(GetCurrentUserRequest) returns (GetCurrentUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/currentUser";
+    };
+  }
+
 }
 
 message User {
@@ -53,6 +60,15 @@ message LoginRequest {
 
 message LoginResponse {
   string jwtToken = 1;
+}
+
+message GetCurrentUserRequest {}
+
+message GetCurrentUserResponse {
+  string username = 1;
+  string email = 2;
+  string phoneNumber = 3;
+  int64 notificationNumber = 4;
 }
 
 message EmptyResponse {}

@@ -26,6 +26,10 @@ func NewDefaultUser(uRepo IRepoUser, c *Config) Interface {
 	}
 }
 
+func (d *defaultUser) GetCurrentUser(ctx context.Context) (selfJwt.CurrentUser, error) {
+	return selfJwt.FromContext(ctx)
+}
+
 func (d *defaultUser) SignUp(ctx context.Context, user *User) error {
 	// salt the password
 	user.Password = d.saltPassword(user.Password)
@@ -38,7 +42,7 @@ func (d *defaultUser) Login(ctx context.Context, username, password string) (str
 		return "", err
 	}
 
-	tokenString, err := selfJwt.CreateToken([]byte(d.c.JWTSecretKey), dbUser.Username)
+	tokenString, err := selfJwt.CreateToken([]byte(d.c.JWTSecretKey), dbUser.Username, dbUser.Email, dbUser.PhoneNumber, dbUser.ExtraInfo)
 	if err != nil {
 		return "", errors.Wrap(err, "generate jwt token failed")
 	}

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserServer_SignUp_FullMethodName = "/api.user.v1.UserServer/SignUp"
-	UserServer_Login_FullMethodName  = "/api.user.v1.UserServer/Login"
+	UserServer_SignUp_FullMethodName         = "/api.user.v1.UserServer/SignUp"
+	UserServer_Login_FullMethodName          = "/api.user.v1.UserServer/Login"
+	UserServer_GetCurrentUser_FullMethodName = "/api.user.v1.UserServer/GetCurrentUser"
 )
 
 // UserServerClient is the client API for UserServer service.
@@ -31,6 +32,8 @@ type UserServerClient interface {
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	// user sign in
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	// get current user
+	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
 }
 
 type userServerClient struct {
@@ -59,6 +62,15 @@ func (c *userServerClient) Login(ctx context.Context, in *LoginRequest, opts ...
 	return out, nil
 }
 
+func (c *userServerClient) GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error) {
+	out := new(GetCurrentUserResponse)
+	err := c.cc.Invoke(ctx, UserServer_GetCurrentUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServerServer is the server API for UserServer service.
 // All implementations must embed UnimplementedUserServerServer
 // for forward compatibility
@@ -67,6 +79,8 @@ type UserServerServer interface {
 	SignUp(context.Context, *SignUpRequest) (*EmptyResponse, error)
 	// user sign in
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	// get current user
+	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error)
 	mustEmbedUnimplementedUserServerServer()
 }
 
@@ -79,6 +93,9 @@ func (UnimplementedUserServerServer) SignUp(context.Context, *SignUpRequest) (*E
 }
 func (UnimplementedUserServerServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
 }
 func (UnimplementedUserServerServer) mustEmbedUnimplementedUserServerServer() {}
 
@@ -129,6 +146,24 @@ func _UserServer_Login_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserServer_GetCurrentUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrentUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServerServer).GetCurrentUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserServer_GetCurrentUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServerServer).GetCurrentUser(ctx, req.(*GetCurrentUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserServer_ServiceDesc is the grpc.ServiceDesc for UserServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +178,10 @@ var UserServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _UserServer_Login_Handler,
+		},
+		{
+			MethodName: "GetCurrentUser",
+			Handler:    _UserServer_GetCurrentUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

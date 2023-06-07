@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/faith2333/xuanwu/internal/conf"
+	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 )
 
 type Interface interface {
 	SignUp(ctx context.Context, user *User) error
+	GetCurrentUser(ctx context.Context) (user selfJwt.CurrentUser, err error)
 	Login(ctx context.Context, username, password string) (string, error)
 }
 
@@ -24,6 +26,13 @@ type User struct {
 	ID          int64                  `json:"id"`
 	Username    string                 `json:"username"`
 	Password    string                 `json:"password"`
+	Email       string                 `json:"email"`
+	PhoneNumber string                 `json:"phoneNumber"`
+	ExtraInfo   map[string]interface{} `json:"extraInfo"`
+}
+
+type CurrentUser struct {
+	Username    string                 `json:"username"`
 	Email       string                 `json:"email"`
 	PhoneNumber string                 `json:"phoneNumber"`
 	ExtraInfo   map[string]interface{} `json:"extraInfo"`

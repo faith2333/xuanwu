@@ -38,3 +38,16 @@ func (svc *ServiceUser) Login(ctx context.Context, request *pb.LoginRequest) (*p
 		JwtToken: token,
 	}, nil
 }
+
+func (svc *ServiceUser) GetCurrentUser(ctx context.Context, request *pb.GetCurrentUserRequest) (*pb.GetCurrentUserResponse, error) {
+	user, err := svc.biz.GetCurrentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetCurrentUserResponse{
+		Username:    user.Username,
+		Email:       user.Email,
+		PhoneNumber: user.PhoneNumber,
+	}, nil
+}
