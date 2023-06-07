@@ -19,7 +19,7 @@ service UserServer {
     };
   }
 
-  // user sign in
+  // user login
   rpc Login (LoginRequest) returns (LoginResponse) {
     option (google.api.http) = {
       post: "/v1/user/login";
