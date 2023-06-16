@@ -23,6 +23,7 @@ const (
 	UserServer_Login_FullMethodName          = "/api.user.v1.UserServer/Login"
 	UserServer_Logout_FullMethodName         = "/api.user.v1.UserServer/Logout"
 	UserServer_GetCurrentUser_FullMethodName = "/api.user.v1.UserServer/GetCurrentUser"
+	UserServer_ChangePassword_FullMethodName = "/api.user.v1.UserServer/ChangePassword"
 )
 
 // UserServerClient is the client API for UserServer service.
@@ -30,13 +31,14 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServerClient interface {
 	// user sign up
-	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
-	// user sign in
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyReply, error)
+	// user login
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	// logout
-	Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
+	Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyReply, error)
 	// get current user
-	GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
+	GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserReply, error)
+	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*EmptyReply, error)
 }
 
 type userServerClient struct {
@@ -47,8 +49,8 @@ func NewUserServerClient(cc grpc.ClientConnInterface) UserServerClient {
 	return &userServerClient{cc}
 }
 
-func (c *userServerClient) SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	out := new(EmptyResponse)
+func (c *userServerClient) SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*EmptyReply, error) {
+	out := new(EmptyReply)
 	err := c.cc.Invoke(ctx, UserServer_SignUp_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,8 +58,8 @@ func (c *userServerClient) SignUp(ctx context.Context, in *SignUpRequest, opts .
 	return out, nil
 }
 
-func (c *userServerClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
+func (c *userServerClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error) {
+	out := new(LoginReply)
 	err := c.cc.Invoke(ctx, UserServer_Login_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -65,8 +67,8 @@ func (c *userServerClient) Login(ctx context.Context, in *LoginRequest, opts ...
 	return out, nil
 }
 
-func (c *userServerClient) Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	out := new(EmptyResponse)
+func (c *userServerClient) Logout(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*EmptyReply, error) {
+	out := new(EmptyReply)
 	err := c.cc.Invoke(ctx, UserServer_Logout_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,9 +76,18 @@ func (c *userServerClient) Logout(ctx context.Context, in *EmptyRequest, opts ..
 	return out, nil
 }
 
-func (c *userServerClient) GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error) {
-	out := new(GetCurrentUserResponse)
+func (c *userServerClient) GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserReply, error) {
+	out := new(GetCurrentUserReply)
 	err := c.cc.Invoke(ctx, UserServer_GetCurrentUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServerClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*EmptyReply, error) {
+	out := new(EmptyReply)
+	err := c.cc.Invoke(ctx, UserServer_ChangePassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,13 +99,14 @@ func (c *userServerClient) GetCurrentUser(ctx context.Context, in *EmptyRequest,
 // for forward compatibility
 type UserServerServer interface {
 	// user sign up
-	SignUp(context.Context, *SignUpRequest) (*EmptyResponse, error)
-	// user sign in
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	SignUp(context.Context, *SignUpRequest) (*EmptyReply, error)
+	// user login
+	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	// logout
-	Logout(context.Context, *EmptyRequest) (*EmptyResponse, error)
+	Logout(context.Context, *EmptyRequest) (*EmptyReply, error)
 	// get current user
-	GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserResponse, error)
+	GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserReply, error)
+	ChangePassword(context.Context, *ChangePasswordRequest) (*EmptyReply, error)
 	mustEmbedUnimplementedUserServerServer()
 }
 
@@ -102,17 +114,20 @@ type UserServerServer interface {
 type UnimplementedUserServerServer struct {
 }
 
-func (UnimplementedUserServerServer) SignUp(context.Context, *SignUpRequest) (*EmptyResponse, error) {
+func (UnimplementedUserServerServer) SignUp(context.Context, *SignUpRequest) (*EmptyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignUp not implemented")
 }
-func (UnimplementedUserServerServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+func (UnimplementedUserServerServer) Login(context.Context, *LoginRequest) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserServerServer) Logout(context.Context, *EmptyRequest) (*EmptyResponse, error) {
+func (UnimplementedUserServerServer) Logout(context.Context, *EmptyRequest) (*EmptyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
-func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserResponse, error) {
+func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
+}
+func (UnimplementedUserServerServer) ChangePassword(context.Context, *ChangePasswordRequest) (*EmptyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
 }
 func (UnimplementedUserServerServer) mustEmbedUnimplementedUserServerServer() {}
 
@@ -199,6 +214,24 @@ func _UserServer_GetCurrentUser_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserServer_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServerServer).ChangePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserServer_ChangePassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServerServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserServer_ServiceDesc is the grpc.ServiceDesc for UserServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -221,6 +254,10 @@ var UserServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrentUser",
 			Handler:    _UserServer_GetCurrentUser_Handler,
+		},
+		{
+			MethodName: "ChangePassword",
+			Handler:    _UserServer_ChangePassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

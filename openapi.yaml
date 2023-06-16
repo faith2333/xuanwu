@@ -6,6 +6,24 @@ info:
     title: UserServer API
     version: 0.0.1
 paths:
+    /v1/user/changePassword:
+        post:
+            tags:
+                - UserServer
+            operationId: UserServer_ChangePassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.ChangePasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
     /v1/user/currentUser:
         get:
             tags:
@@ -18,12 +36,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.GetCurrentUserResponse'
+                                $ref: '#/components/schemas/api.user.v1.GetCurrentUserReply'
     /v1/user/login:
         post:
             tags:
                 - UserServer
-            description: user sign in
+            description: user login
             operationId: UserServer_Login
             requestBody:
                 content:
@@ -37,7 +55,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.LoginResponse'
+                                $ref: '#/components/schemas/api.user.v1.LoginReply'
     /v1/user/logout:
         post:
             tags:
@@ -56,7 +74,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.EmptyResponse'
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
     /v1/user/signup:
         post:
             tags:
@@ -75,16 +93,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.EmptyResponse'
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
 components:
     schemas:
+        api.user.v1.ChangePasswordRequest:
+            type: object
+            properties: {}
+        api.user.v1.EmptyReply:
+            type: object
+            properties: {}
         api.user.v1.EmptyRequest:
             type: object
             properties: {}
-        api.user.v1.EmptyResponse:
-            type: object
-            properties: {}
-        api.user.v1.GetCurrentUserResponse:
+        api.user.v1.GetCurrentUserReply:
             type: object
             properties:
                 username:
@@ -96,17 +117,17 @@ components:
                 notificationNumber:
                     type: integer
                     format: int64
+        api.user.v1.LoginReply:
+            type: object
+            properties:
+                jwtToken:
+                    type: string
         api.user.v1.LoginRequest:
             type: object
             properties:
                 username:
                     type: string
                 password:
-                    type: string
-        api.user.v1.LoginResponse:
-            type: object
-            properties:
-                jwtToken:
                     type: string
         api.user.v1.SignUpRequest:
             type: object

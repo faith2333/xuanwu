@@ -50,6 +50,10 @@ func (d *defaultUser) Login(ctx context.Context, username, password string) (str
 	return tokenString, nil
 }
 
+func (d *defaultUser) ChangePassword(ctx context.Context, req *ChangePasswordReq) error {
+
+}
+
 func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 	if user.Password == d.saltPassword(reqPassword) {
 		return nil

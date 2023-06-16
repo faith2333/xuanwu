@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	pb "github.com/faith2333/xuanwu/api/user/v1"
 	"github.com/faith2333/xuanwu/internal/conf"
 	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 )
@@ -12,6 +13,7 @@ type Interface interface {
 	SignUp(ctx context.Context, user *User) error
 	GetCurrentUser(ctx context.Context) (user selfJwt.CurrentUser, err error)
 	Login(ctx context.Context, username, password string) (string, error)
+	ChangePassword(ctx context.Context, req *ChangePasswordReq) error
 }
 
 type IRepoUser interface {
@@ -42,6 +44,8 @@ type Config struct {
 	Type         Type   `json:"type"`
 	JWTSecretKey string `json:"jwtSecretKey"`
 }
+
+type ChangePasswordReq pb.ChangePasswordRequest
 
 func NewUserFactory(userRepo IRepoUser, c *conf.Server) (Interface, error) {
 	config := &Config{

@@ -12,7 +12,7 @@ option java_package = "api.user.v1";
 
 service UserServer {
   // user sign up
-  rpc SignUp (SignUpRequest) returns (EmptyResponse) {
+  rpc SignUp (SignUpRequest) returns (EmptyReply) {
     option (google.api.http) = {
       post: "/v1/user/signup";
       body: "*";
@@ -20,7 +20,7 @@ service UserServer {
   }
 
   // user login
-  rpc Login (LoginRequest) returns (LoginResponse) {
+  rpc Login (LoginRequest) returns (LoginReply) {
     option (google.api.http) = {
       post: "/v1/user/login";
       body: "*";
@@ -28,7 +28,7 @@ service UserServer {
   }
 
   // logout
-  rpc Logout(EmptyRequest) returns (EmptyResponse) {
+  rpc Logout(EmptyRequest) returns (EmptyReply) {
     option (google.api.http) = {
       post: "/v1/user/logout",
       body: "*",
@@ -36,9 +36,16 @@ service UserServer {
   }
 
   // get current user
-  rpc GetCurrentUser(EmptyRequest) returns (GetCurrentUserResponse) {
+  rpc GetCurrentUser(EmptyRequest) returns (GetCurrentUserReply) {
     option (google.api.http) = {
       get: "/v1/user/currentUser";
+    };
+  }
+
+  rpc ChangePassword(ChangePasswordRequest) returns (EmptyReply) {
+    option (google.api.http) = {
+      post: "/v1/user/changePassword";
+      body: "*",
     };
   }
 
@@ -66,18 +73,20 @@ message LoginRequest {
   string password = 2 [(validate.rules).string.min_len = 8];
 }
 
-message LoginResponse {
+message LoginReply {
   string jwtToken = 1;
 }
 
-message GetCurrentUserResponse {
+message GetCurrentUserReply {
   string username = 1;
   string email = 2;
   string phoneNumber = 3;
   int64 notificationNumber = 4;
 }
 
+message ChangePasswordRequest {}
+
 message EmptyRequest {}
 
-message EmptyResponse {}
+message EmptyReply {}
 
