@@ -12,7 +12,7 @@ type DAG struct {
 }
 
 type NamedNode interface {
-	Name() string
+	NodeName() string
 	PrevNodeNames() []string
 }
 
@@ -58,7 +58,7 @@ func NewDAG(nodes []NamedNode, ops ...OperationFunc) (*DAG, error) {
 	// init DAG
 	for _, node := range nodes {
 		if err := dag.addNode(node); err != nil {
-			return nil, errors.Errorf("failed add node %q to DAG %v", node.Name(), err)
+			return nil, errors.Errorf("failed add node %q to DAG %v", node.NodeName(), err)
 		}
 	}
 
@@ -75,22 +75,22 @@ func NewDAG(nodes []NamedNode, ops ...OperationFunc) (*DAG, error) {
 }
 
 func (dag *DAG) addNode(n NamedNode) error {
-	if _, ok := dag.Nodes[n.Name()]; ok {
-		return errors.Errorf("duplicate node found: %s", n.Name())
+	if _, ok := dag.Nodes[n.NodeName()]; ok {
+		return errors.Errorf("duplicate node found: %s", n.NodeName())
 	}
 
-	dag.Nodes[n.Name()] = &internalNode{name: n.Name(), prevNodeNames: n.PrevNodeNames()}
+	dag.Nodes[n.NodeName()] = &internalNode{name: n.NodeName(), prevNodeNames: n.PrevNodeNames()}
 	return nil
 }
 
 func (dag *DAG) addLink(n Node, prevNodeName string) error {
 	prevNode, ok := dag.Nodes[prevNodeName]
 	if !ok {
-		return errors.Errorf("node %s depend on non-existent node %s", n.Name(), prevNodeName)
+		return errors.Errorf("node %s depend on non-existent node %s", n.NodeName(), prevNodeName)
 	}
 
 	if err := dag.linkTwoNodes(prevNode, n); err != nil {
-		return errors.Errorf("create link form %q to %q failed: %v", n.Name(), prevNodeName, err)
+		return errors.Errorf("create link form %q to %q failed: %v", n.NodeName(), prevNodeName, err)
 	}
 	return nil
 }
@@ -110,12 +110,12 @@ func (dag *DAG) linkTwoNodes(from, to Node) error {
 
 func validateNodes(from, to Node) error {
 	// self cycle check
-	if from.Name() == to.Name() {
-		return errors.Errorf("self cycle deteced, node %q depends on itself", from.Name())
+	if from.NodeName() == to.NodeName() {
+		return errors.Errorf("self cycle deteced, node %q depends on itself", from.NodeName())
 	}
 
 	// check cycle
-	path := []string{to.Name(), from.Name()}
+	path := []string{to.NodeName(), from.NodeName()}
 	if err := visit(to, to.PrevNodes(), path); err != nil {
 		return errors.Wrap(err, "cycle detected")
 	}
@@ -124,8 +124,8 @@ func validateNodes(from, to Node) error {
 
 func visit(startNode Node, prevNodes []Node, visitedPath []string) error {
 	for _, n := range prevNodes {
-		visitedPath = append(visitedPath, n.Name())
-		if n.Name() == startNode.Name() {
+		visitedPath = append(visitedPath, n.NodeName())
+		if n.NodeName() == startNode.NodeName() {
 			return errors.Errorf("%s", getVisitedPath(visitedPath))
 		}
 
@@ -146,7 +146,7 @@ func getVisitedPath(path []string) string {
 	return strings.Join(path, " -> ")
 }
 
-func (inter *internalNode) Name() string {
+func (inter *internalNode) NodeName() string {
 	return inter.name
 }
 

@@ -2,8 +2,12 @@ package server
 
 import (
 	"github.com/faith2333/xuanwu/internal/conf"
+	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	pbUser "github.com/faith2333/xuanwu/api/user/v1"
@@ -15,6 +19,11 @@ func NewGRPCServer(c *conf.Server, userSvc *svcUser.ServiceUser, logger log.Logg
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
+			validate.Validator(),
+			selector.Server(
+				jwt.Server(selfJwt.NewJWTFunc([]byte(c.Auth.JwtSecretKey)), jwt.WithSigningMethod(selfJwt.SigningMethod)),
+			).Match(selfJwt.NewWhiteListMatcher(AuthenticationWhiteList)).Build(),
+			selfJwt.AuthPlugin,
 		),
 	}
 	if c.Grpc.Network != "" {

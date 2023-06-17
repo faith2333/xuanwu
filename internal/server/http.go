@@ -27,6 +27,7 @@ func NewHTTPServer(c *conf.Server, userSvc *svcUser.ServiceUser, logger log.Logg
 			selector.Server(
 				jwt.Server(selfJwt.NewJWTFunc([]byte(c.Auth.JwtSecretKey)), jwt.WithSigningMethod(selfJwt.SigningMethod)),
 			).Match(selfJwt.NewWhiteListMatcher(AuthenticationWhiteList)).Build(),
+			selfJwt.AuthPlugin,
 		),
 	}
 	if c.Http.Network != "" {

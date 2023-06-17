@@ -6,11 +6,59 @@ info:
     title: UserServer API
     version: 0.0.1
 paths:
+    /v1/user/changePassword:
+        post:
+            tags:
+                - UserServer
+            operationId: UserServer_ChangePassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.ChangePasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
+    /v1/user/currentUser:
+        get:
+            tags:
+                - UserServer
+            description: get current user
+            operationId: UserServer_GetCurrentUser
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.GetCurrentUserReply'
+    /v1/user/getByUsername:
+        get:
+            tags:
+                - UserServer
+            operationId: UserServer_GetUserByUsername
+            parameters:
+                - name: username
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.User'
     /v1/user/login:
         post:
             tags:
                 - UserServer
-            description: user sign in
+            description: user login
             operationId: UserServer_Login
             requestBody:
                 content:
@@ -24,7 +72,26 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.LoginResponse'
+                                $ref: '#/components/schemas/api.user.v1.LoginReply'
+    /v1/user/logout:
+        post:
+            tags:
+                - UserServer
+            description: logout
+            operationId: UserServer_Logout
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.EmptyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
     /v1/user/signup:
         post:
             tags:
@@ -43,12 +110,41 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.EmptyResponse'
+                                $ref: '#/components/schemas/api.user.v1.EmptyReply'
 components:
     schemas:
-        api.user.v1.EmptyResponse:
+        api.user.v1.ChangePasswordRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                currentPassword:
+                    type: string
+                newPassword:
+                    type: string
+        api.user.v1.EmptyReply:
             type: object
             properties: {}
+        api.user.v1.EmptyRequest:
+            type: object
+            properties: {}
+        api.user.v1.GetCurrentUserReply:
+            type: object
+            properties:
+                username:
+                    type: string
+                email:
+                    type: string
+                phoneNumber:
+                    type: string
+                notificationNumber:
+                    type: integer
+                    format: int64
+        api.user.v1.LoginReply:
+            type: object
+            properties:
+                jwtToken:
+                    type: string
         api.user.v1.LoginRequest:
             type: object
             properties:
@@ -56,14 +152,25 @@ components:
                     type: string
                 password:
                     type: string
-        api.user.v1.LoginResponse:
-            type: object
-            properties:
-                jwtToken:
-                    type: string
         api.user.v1.SignUpRequest:
             type: object
             properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                phoneNumber:
+                    type: string
+                extraInfo:
+                    type: object
+        api.user.v1.User:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
                 username:
                     type: string
                 password:
