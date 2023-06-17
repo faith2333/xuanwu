@@ -9,11 +9,6 @@ import (
 	"regexp"
 )
 
-const (
-	// PasswordValidatePattern Regex pattern for password validation
-	PasswordValidatePattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
-)
-
 type defaultUser struct {
 	c     *Config
 	uRepo IRepoUser
@@ -51,7 +46,20 @@ func (d *defaultUser) Login(ctx context.Context, username, password string) (str
 }
 
 func (d *defaultUser) ChangePassword(ctx context.Context, req *ChangePasswordReq) error {
+	user, err := d.uRepo.GetByUsername(ctx, req.Username)
+	if err != nil {
+		return err
+	}
 
+	if err = d.checkPassword(user, req.CurrentPassword); err != nil {
+		return err
+	}
+
+	if err = d.validatePassword(req.NewPassword); err != nil {
+		return err
+	}
+
+	return d.uRepo.Update(ctx, user.ID, map[string]interface{}{"password": req.NewPassword})
 }
 
 func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
@@ -62,13 +70,32 @@ func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 }
 
 func (d *defaultUser) validatePassword(password string) error {
-	match, err := regexp.MatchString(PasswordValidatePattern, password)
-	if err != nil {
-		return errors.Wrap(err, "regexp match failed")
+	if len(password) < 8 {
+		return errors.New("the length of password must be greater than 8")
 	}
 
-	if !match {
-		return errors.New("password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long")
+	numsPart := `[0-9]{1}`
+	matched, err := regexp.Match(numsPart, []byte(password))
+	if !matched || err != nil {
+		return errors.Errorf("password must contains number")
+	}
+
+	lowerPart := `[a-z]{1}`
+	matched, err = regexp.Match(lowerPart, []byte(password))
+	if !matched || err != nil {
+		return errors.Errorf("password must contains lower character")
+	}
+
+	upperPart := `[A-Z]{1}`
+	matched, err = regexp.Match(upperPart, []byte(password))
+	if !matched || err != nil {
+		return errors.Errorf("password must contains upper character")
+	}
+
+	symbolPart := `[!@#$%^&*()]{1}`
+	matched, err = regexp.Match(symbolPart, []byte(password))
+	if !matched || err != nil {
+		return errors.Errorf("password must contains symbol")
 	}
 
 	return nil

@@ -84,7 +84,11 @@ message GetCurrentUserReply {
   int64 notificationNumber = 4;
 }
 
-message ChangePasswordRequest {}
+message ChangePasswordRequest {
+  string username = 1 [(validate.rules).string.min_len = 3];
+  string currentPassword = 2 [(validate.rules).string.min_len = 8];
+  string newPassword = 3 [(validate.rules).string.min_len = 8];
+}
 
 message EmptyRequest {}
 

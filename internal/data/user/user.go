@@ -53,30 +53,14 @@ func (repo *RepoUser) Create(ctx context.Context, bizUser *biz.User) error {
 	return repo.data.DB(ctx).Model(&User{}).Create(&dbUser).Error
 }
 
-func (repo *RepoUser) Update(ctx context.Context, bizUser *biz.User) (*biz.User, error) {
-	userInDB, err := repo.getUserByUsername(ctx, bizUser.Username)
-	if err != nil {
-		return nil, err
+func (repo *RepoUser) Update(ctx context.Context, id int64, updateFields map[string]interface{}) error {
+	query := repo.data.DB(ctx).Where("id = ? and deleted = 0")
+
+	for k, v := range updateFields {
+		query = query.Update(k, v)
 	}
 
-	query := repo.data.DB(ctx).Model(&User{}).Where(bizUser.Username)
-
-	if userInDB.Password != bizUser.Password {
-		query = query.Update("password", bizUser.Password)
-	}
-	if userInDB.Email != bizUser.Email {
-		query = query.Update("email", bizUser.Email)
-	}
-	if userInDB.PhoneNumber != bizUser.PhoneNumber {
-		query = query.Update("phone_number", bizUser.PhoneNumber)
-	}
-
-	err = query.Error
-	if err != nil {
-		return nil, errors.Wrap(err, "update failed")
-	}
-
-	return bizUser, nil
+	return query.Error
 }
 
 func (repo *RepoUser) Delete(ctx context.Context, bizUser *biz.User) error {

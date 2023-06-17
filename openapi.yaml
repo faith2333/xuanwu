@@ -98,7 +98,13 @@ components:
     schemas:
         api.user.v1.ChangePasswordRequest:
             type: object
-            properties: {}
+            properties:
+                username:
+                    type: string
+                currentPassword:
+                    type: string
+                newPassword:
+                    type: string
         api.user.v1.EmptyReply:
             type: object
             properties: {}

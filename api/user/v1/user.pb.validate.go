@@ -750,6 +750,39 @@ func (m *ChangePasswordRequest) validate(all bool) error {
 
 	var errors []error
 
+	if utf8.RuneCountInString(m.GetUsername()) < 3 {
+		err := ChangePasswordRequestValidationError{
+			field:  "Username",
+			reason: "value length must be at least 3 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetCurrentPassword()) < 8 {
+		err := ChangePasswordRequestValidationError{
+			field:  "CurrentPassword",
+			reason: "value length must be at least 8 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetNewPassword()) < 8 {
+		err := ChangePasswordRequestValidationError{
+			field:  "NewPassword",
+			reason: "value length must be at least 8 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return ChangePasswordRequestMultiError(errors)
 	}
