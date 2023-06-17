@@ -37,6 +37,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.GetCurrentUserReply'
+    /v1/user/getByUsername:
+        get:
+            tags:
+                - UserServer
+            operationId: UserServer_GetUserByUsername
+            parameters:
+                - name: username
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.User'
     /v1/user/login:
         post:
             tags:
@@ -138,6 +155,22 @@ components:
         api.user.v1.SignUpRequest:
             type: object
             properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                phoneNumber:
+                    type: string
+                extraInfo:
+                    type: object
+        api.user.v1.User:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
                 username:
                     type: string
                 password:

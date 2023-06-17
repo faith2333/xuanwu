@@ -62,6 +62,10 @@ func (d *defaultUser) ChangePassword(ctx context.Context, req *ChangePasswordReq
 	return d.uRepo.Update(ctx, user.ID, map[string]interface{}{"password": req.NewPassword})
 }
 
+func (d *defaultUser) GetUserByUsername(ctx context.Context, username string) (*User, error) {
+	return d.uRepo.GetByUsername(ctx, username)
+}
+
 func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 	if user.Password == d.saltPassword(reqPassword) {
 		return nil

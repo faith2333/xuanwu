@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserServer_SignUp_FullMethodName         = "/api.user.v1.UserServer/SignUp"
-	UserServer_Login_FullMethodName          = "/api.user.v1.UserServer/Login"
-	UserServer_Logout_FullMethodName         = "/api.user.v1.UserServer/Logout"
-	UserServer_GetCurrentUser_FullMethodName = "/api.user.v1.UserServer/GetCurrentUser"
-	UserServer_ChangePassword_FullMethodName = "/api.user.v1.UserServer/ChangePassword"
+	UserServer_SignUp_FullMethodName            = "/api.user.v1.UserServer/SignUp"
+	UserServer_Login_FullMethodName             = "/api.user.v1.UserServer/Login"
+	UserServer_Logout_FullMethodName            = "/api.user.v1.UserServer/Logout"
+	UserServer_GetCurrentUser_FullMethodName    = "/api.user.v1.UserServer/GetCurrentUser"
+	UserServer_ChangePassword_FullMethodName    = "/api.user.v1.UserServer/ChangePassword"
+	UserServer_GetUserByUsername_FullMethodName = "/api.user.v1.UserServer/GetUserByUsername"
 )
 
 // UserServerClient is the client API for UserServer service.
@@ -39,6 +40,7 @@ type UserServerClient interface {
 	// get current user
 	GetCurrentUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetCurrentUserReply, error)
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*EmptyReply, error)
+	GetUserByUsername(ctx context.Context, in *GetUserByUsernameRequest, opts ...grpc.CallOption) (*User, error)
 }
 
 type userServerClient struct {
@@ -94,6 +96,15 @@ func (c *userServerClient) ChangePassword(ctx context.Context, in *ChangePasswor
 	return out, nil
 }
 
+func (c *userServerClient) GetUserByUsername(ctx context.Context, in *GetUserByUsernameRequest, opts ...grpc.CallOption) (*User, error) {
+	out := new(User)
+	err := c.cc.Invoke(ctx, UserServer_GetUserByUsername_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServerServer is the server API for UserServer service.
 // All implementations must embed UnimplementedUserServerServer
 // for forward compatibility
@@ -107,6 +118,7 @@ type UserServerServer interface {
 	// get current user
 	GetCurrentUser(context.Context, *EmptyRequest) (*GetCurrentUserReply, error)
 	ChangePassword(context.Context, *ChangePasswordRequest) (*EmptyReply, error)
+	GetUserByUsername(context.Context, *GetUserByUsernameRequest) (*User, error)
 	mustEmbedUnimplementedUserServerServer()
 }
 
@@ -128,6 +140,9 @@ func (UnimplementedUserServerServer) GetCurrentUser(context.Context, *EmptyReque
 }
 func (UnimplementedUserServerServer) ChangePassword(context.Context, *ChangePasswordRequest) (*EmptyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
+}
+func (UnimplementedUserServerServer) GetUserByUsername(context.Context, *GetUserByUsernameRequest) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByUsername not implemented")
 }
 func (UnimplementedUserServerServer) mustEmbedUnimplementedUserServerServer() {}
 
@@ -232,6 +247,24 @@ func _UserServer_ChangePassword_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserServer_GetUserByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServerServer).GetUserByUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserServer_GetUserByUsername_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServerServer).GetUserByUsername(ctx, req.(*GetUserByUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserServer_ServiceDesc is the grpc.ServiceDesc for UserServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -258,6 +291,10 @@ var UserServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangePassword",
 			Handler:    _UserServer_ChangePassword_Handler,
+		},
+		{
+			MethodName: "GetUserByUsername",
+			Handler:    _UserServer_GetUserByUsername_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

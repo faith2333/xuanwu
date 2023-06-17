@@ -14,6 +14,7 @@ type Interface interface {
 	GetCurrentUser(ctx context.Context) (user selfJwt.CurrentUser, err error)
 	Login(ctx context.Context, username, password string) (string, error)
 	ChangePassword(ctx context.Context, req *ChangePasswordReq) error
+	GetUserByUsername(ctx context.Context, username string) (*User, error)
 }
 
 type IRepoUser interface {

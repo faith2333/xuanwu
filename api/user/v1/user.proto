@@ -49,6 +49,12 @@ service UserServer {
     };
   }
 
+  rpc GetUserByUsername(GetUserByUsernameRequest) returns (User) {
+    option (google.api.http) = {
+      get: "/v1/user/getByUsername";
+    };
+  }
+
 }
 
 message User {
@@ -88,6 +94,10 @@ message ChangePasswordRequest {
   string username = 1 [(validate.rules).string.min_len = 3];
   string currentPassword = 2 [(validate.rules).string.min_len = 8];
   string newPassword = 3 [(validate.rules).string.min_len = 8];
+}
+
+message GetUserByUsernameRequest {
+  string username = 1 [(validate.rules).string.min_len = 3];
 }
 
 message EmptyRequest {}

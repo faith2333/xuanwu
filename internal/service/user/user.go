@@ -69,3 +69,18 @@ func (svc *ServiceUser) ChangePassword(ctx context.Context, request *pb.ChangePa
 
 	return nil, svc.biz.ChangePassword(ctx, bizReq)
 }
+
+func (svc *ServiceUser) GetUserByUsername(ctx context.Context, request *pb.GetUserByUsernameRequest) (*pb.User, error) {
+	bizResp, err := svc.biz.GetUserByUsername(ctx, request.GetUsername())
+	if err != nil {
+		return nil, err
+	}
+
+	pbUser := &pb.User{}
+	err = svc.TransformJSON(bizResp, &pbUser)
+	if err != nil {
+		return nil, err
+	}
+
+	return pbUser, nil
+}
