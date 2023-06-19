@@ -35,7 +35,8 @@ func (lw *defaultLeaderWorker) WatchPrefix(ctx context.Context, prefix string, p
 		case <-ctx.Done():
 			return
 		default:
-			// the function will be blocked here, if something error happened in watchPrefix function, it will auto retry until ctx done received
+			// the function will be blocked here, if something error happened in watchPrefix function,
+			// it will auto retry until ctx done received
 			lw.watchPrefix(ctx, prefix, putHandler, deleteHandler)
 		}
 	}
