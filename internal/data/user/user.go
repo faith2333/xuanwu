@@ -54,12 +54,7 @@ func (repo *RepoUser) Create(ctx context.Context, bizUser *biz.User) error {
 }
 
 func (repo *RepoUser) Update(ctx context.Context, id int64, updateFields map[string]interface{}) error {
-	query := repo.data.DB(ctx).Where("id = ? and deleted = 0")
-
-	for k, v := range updateFields {
-		query = query.Update(k, v)
-	}
-
+	query := repo.data.DB(ctx).Where("id = ? and deleted = 0", id).Updates(updateFields)
 	return query.Error
 }
 
