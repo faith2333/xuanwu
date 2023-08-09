@@ -12,9 +12,9 @@ Make Your *Online System* **develop** & **test** & **delivery** & **monitoring**
 ## Product Introduction
 ***
 
-This project has only just been started and is in development stages at the moment.
+As a Pass platform that is based on cloud native, this project references kubernetes heavily in code design and implementation.
 
-I will try my best to complete it as soon as possible.
+this project is just has been started, and will be finished as soon as possible.
 
 ## Project Introduction
 ***
