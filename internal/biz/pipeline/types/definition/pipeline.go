@@ -2,8 +2,10 @@ package definition
 
 // Pipeline The definition of pipeline, which is formatted in YAML.
 type Pipeline struct {
-	// the global unique identifier for the pipeline
-	Name            string       `yaml:"name"`
+	// the display name of the pipeline definition
+	Name string `yaml:"name"`
+	// the global unique identifier of the pipeline definition
+	Code            string       `json:"code"`
 	Type            PipelineType `yaml:"type"`
 	GlobalVariables []*Variable  `yaml:"globalVariables"`
 	// two-dimensional array, the stages in first level is order relationship, it will be executed one by one,
