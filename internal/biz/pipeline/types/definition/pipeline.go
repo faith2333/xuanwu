@@ -3,8 +3,9 @@ package definition
 // Pipeline The definition of pipeline, which is formatted in YAML.
 type Pipeline struct {
 	// the global unique identifier for the pipeline
-	Name            string      `yaml:"name"`
-	GlobalVariables []*Variable `yaml:"globalVariables"`
+	Name            string       `yaml:"name"`
+	Type            PipelineType `yaml:"type"`
+	GlobalVariables []*Variable  `yaml:"globalVariables"`
 	// two-dimensional array, the stages in first level is order relationship, it will be executed one by one,
 	// the stages in second level is parallel relationship, will be executed concurrently.
 	// all stages will parse as a DAG later.
@@ -14,6 +15,14 @@ type Pipeline struct {
 func (pipe *Pipeline) Validate() error {
 	if pipe.Name == "" {
 		return ErrNameIsEmpty
+	}
+
+	if pipe.Type == "" {
+		return ErrTypeIsEmpty
+	}
+
+	if !pipe.Type.IsSupported() {
+		return ErrTypeIsNotSupport
 	}
 
 	nameExists := make(map[string]struct{})
