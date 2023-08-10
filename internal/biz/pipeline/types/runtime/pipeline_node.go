@@ -6,9 +6,9 @@ type Node struct {
 	Name string `json:"name"`
 	Code string `json:"code"`
 	// the code of the pipeline instance
-	InstanceCode string      `json:"instanceCode"`
-	ExecutorName string      `json:"executorName"`
-	ExecutorInfo interface{} `json:"executorInfo"`
+	InstanceCode string                 `json:"instanceCode"`
+	ExecutorName string                 `json:"executorName"`
+	ExecuteInfo  map[string]interface{} `json:"executeInfo"`
 	// the front nodes name of the node
 	RunAfter    []string  `json:"runAfter"`
 	StartTime   time.Time `json:"startTime"`

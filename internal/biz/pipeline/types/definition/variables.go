@@ -10,15 +10,18 @@ type Variable struct {
 }
 
 const (
-	VariableTypeInt    VariableType = "INT"
-	VariableTypeString VariableType = "STRING"
-	VariableTypeSlice  VariableType = "SLICE"
-	VariableTypeBool   VariableType = "BOOL"
-	VariableTypeMap    VariableType = "MAP"
+	VariableTypeInt     VariableType = "INT"
+	VariableTypeFloat   VariableType = "FLOAT"
+	VariableTypeString  VariableType = "STRING"
+	VariableTypeSlice   VariableType = "SLICE"
+	VariableTypeBool    VariableType = "BOOL"
+	VariableTypeMap     VariableType = "MAP"
+	VariableTypeUnknown VariableType = "UNKNOWN"
 )
 
 var AllVariableTypes = []VariableType{
 	VariableTypeInt,
+	VariableTypeFloat,
 	VariableTypeString,
 	VariableTypeSlice,
 	VariableTypeBool,
@@ -62,4 +65,26 @@ func (vt VariableType) IsSlice() bool {
 
 func (vt VariableType) IsMap() bool {
 	return vt.Upper() == VariableTypeMap
+}
+
+func (vt VariableType) IsUnknown() bool {
+	return vt.Upper() == VariableTypeUnknown
+}
+
+func GetVariableType(v interface{}) VariableType {
+	switch v.(type) {
+	case int, int64, int32, int8, int16:
+		return VariableTypeInt
+	case float32, float64:
+		return VariableTypeFloat
+	case map[string]interface{}, map[string]string, map[string]int, map[string]int64:
+		return VariableTypeMap
+	case string:
+		return VariableTypeString
+	case []interface{}, []int, []int64, []int32, []int16, []int8:
+		return VariableTypeSlice
+	case bool:
+		return VariableTypeBool
+	}
+	return VariableTypeUnknown
 }

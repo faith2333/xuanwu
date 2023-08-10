@@ -14,6 +14,7 @@ type Pipeline struct {
 	Stages [][]*Stage `yaml:"stages"`
 }
 
+// Validate confirm that the definition of pipeline is legal.
 func (pipe *Pipeline) Validate() error {
 	if pipe.Name == "" {
 		return ErrNameIsEmpty
@@ -30,6 +31,9 @@ func (pipe *Pipeline) Validate() error {
 	nameExists := make(map[string]struct{})
 	globalVars := make(map[string]*Variable)
 	for _, v := range pipe.GlobalVariables {
+		if !v.Type.IsSupported() {
+			return ErrVariableNotSupported
+		}
 		globalVars[v.Key] = v
 	}
 
