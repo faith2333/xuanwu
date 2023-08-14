@@ -15,23 +15,23 @@ type defaultEngine struct {
 	tx       base.Transaction
 }
 
-func (de *defaultEngine) ParseAndGenerate(ctx context.Context, pipeline *definition.Pipeline, variables map[string]interface{}) (*runtime.Instance, []*runtime.Node, error) {
+func (eng *defaultEngine) ParseAndGenerate(ctx context.Context, pipeline *definition.Pipeline, variables map[string]interface{}) (*runtime.Instance, []*runtime.Node, error) {
 	err := pipeline.Validate()
 	if err != nil {
 		return nil, nil, errors.Errorf("validate pipeline definition failed: %v", err)
 	}
 
-	innerVariables, err := de.validateVariables(pipeline, variables)
+	innerVariables, err := eng.validateVariables(pipeline, variables)
 	if err != nil {
 		return nil, nil, errors.Errorf("validate variables failed: %v", err)
 	}
 
-	inst, err := de.generateInstance(ctx, pipeline, innerVariables)
+	inst, err := eng.generateInstance(ctx, pipeline, innerVariables)
 	if err != nil {
 		return nil, nil, errors.Errorf("generate instance failed: %v", err)
 	}
 
-	nodes, err := de.generateNodes(ctx, pipeline, inst.Code, innerVariables)
+	nodes, err := eng.generateNodes(ctx, pipeline, inst.Code, innerVariables)
 	if err != nil {
 		return nil, nil, errors.Errorf("generate nodes failed: %v", err)
 	}
@@ -39,7 +39,7 @@ func (de *defaultEngine) ParseAndGenerate(ctx context.Context, pipeline *definit
 	return inst, nodes, nil
 }
 
-func (de *defaultEngine) generateInstance(ctx context.Context, pipeline *definition.Pipeline, variables map[string]*innerVariable) (*runtime.Instance, error) {
+func (eng *defaultEngine) generateInstance(ctx context.Context, pipeline *definition.Pipeline, variables map[string]*innerVariable) (*runtime.Instance, error) {
 	inst := &runtime.Instance{
 		Code:            uuid.New().String(),
 		Name:            pipeline.Name,
@@ -55,15 +55,15 @@ func (de *defaultEngine) generateInstance(ctx context.Context, pipeline *definit
 	return inst, nil
 }
 
-func (de *defaultEngine) Save(ctx context.Context, instance *runtime.Instance, nodes []*runtime.Node) error {
-	err := de.tx.ExecTx(ctx, func(ctx context.Context) error {
-		_, err := de.instRepo.Create(ctx, instance)
+func (eng *defaultEngine) Save(ctx context.Context, instance *runtime.Instance, nodes []*runtime.Node) error {
+	err := eng.tx.ExecTx(ctx, func(ctx context.Context) error {
+		_, err := eng.instRepo.Create(ctx, instance)
 		if err != nil {
 			return err
 		}
 
 		for _, node := range nodes {
-			_, err = de.nodeRepo.Create(ctx, node)
+			_, err = eng.nodeRepo.Create(ctx, node)
 			if err != nil {
 				return err
 			}
@@ -77,7 +77,7 @@ func (de *defaultEngine) Save(ctx context.Context, instance *runtime.Instance, n
 	return nil
 }
 
-func (de *defaultEngine) validateVariables(pipeline *definition.Pipeline, variables map[string]interface{}) (map[string]*innerVariable, error) {
+func (eng *defaultEngine) validateVariables(pipeline *definition.Pipeline, variables map[string]interface{}) (map[string]*innerVariable, error) {
 	innerVariables := make(map[string]*innerVariable)
 	for _, vDef := range pipeline.GlobalVariables {
 		v, ok := variables[vDef.Key]

@@ -6,6 +6,11 @@
 name: "The test example"
 code: "example_01"
 type: "CICD" 
+globalVariables:
+- key: "key1"
+  type: "STRING"
+  required: false
+  defaultValue: "value1"
 ```
 
 1. `code` the global unique identifier in all pipeline definition.
