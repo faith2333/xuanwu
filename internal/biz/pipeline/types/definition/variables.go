@@ -81,7 +81,7 @@ func GetVariableType(v interface{}) VariableType {
 		return VariableTypeMap
 	case string:
 		return VariableTypeString
-	case []interface{}, []int, []int64, []int32, []int16, []int8:
+	case []interface{}, []int, []int64, []int32, []int16, []int8, []string, []bool:
 		return VariableTypeSlice
 	case bool:
 		return VariableTypeBool

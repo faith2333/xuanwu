@@ -11,6 +11,8 @@ import (
 
 func (eng *defaultEngine) Repeat(stage *definition.Stage, variables map[string]*innerVariable) (repeatedStages []*definition.Stage,
 	newVariables map[string]*innerVariable, err error) {
+	newVariables = make(map[string]*innerVariable)
+
 	repeatVariable, ok := variables[stage.RepeatFromVariable]
 	if !ok {
 		return nil, nil, errors.Errorf("repeat variable %q is not exist", stage.RepeatFromVariable)
