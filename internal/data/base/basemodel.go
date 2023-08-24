@@ -3,6 +3,7 @@ package base
 import (
 	"context"
 	"encoding/json"
+	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 	"github.com/faith2333/xuanwu/pkg/xtime"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -40,8 +41,12 @@ func (b RepoBase) StringToPBStruct(source string) (*structpb.Struct, error) {
 }
 
 func (m *Model) getUserFromCtx(ctx context.Context) string {
-	// todo get user form context, which set up in middleware
-	return "sys"
+	curUser, err := selfJwt.FromContext(ctx)
+	if err != nil {
+		return "sys"
+	}
+
+	return curUser.Username
 }
 
 func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
@@ -57,6 +62,12 @@ func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (m *Model) BeforeUpdate(tx *gorm.DB) (err error) {
+	m.GmtModify = xtime.StringTime(time.Now())
+	m.ModifyUser = m.getUserFromCtx(tx.Statement.Context)
+	return
+}
+
+func (m *Model) BeforeSave(tx *gorm.DB) (err error) {
 	m.GmtModify = xtime.StringTime(time.Now())
 	m.ModifyUser = m.getUserFromCtx(tx.Statement.Context)
 	return
