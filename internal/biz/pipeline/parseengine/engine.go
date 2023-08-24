@@ -2,18 +2,13 @@ package parseengine
 
 import (
 	"context"
-	"github.com/faith2333/xuanwu/internal/biz/base"
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/types/definition"
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/types/runtime"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
-type defaultEngine struct {
-	instRepo IInstanceRepo
-	nodeRepo INodeRepo
-	tx       base.Transaction
-}
+type defaultEngine struct{}
 
 func (eng *defaultEngine) ParseAndGenerate(ctx context.Context, pipeline *definition.Pipeline, variables map[string]interface{}) (*runtime.Instance, []*runtime.Node, error) {
 	err := pipeline.Validate()
@@ -53,28 +48,6 @@ func (eng *defaultEngine) generateInstance(ctx context.Context, pipeline *defini
 	}
 
 	return inst, nil
-}
-
-func (eng *defaultEngine) Save(ctx context.Context, instance *runtime.Instance, nodes []*runtime.Node) error {
-	err := eng.tx.ExecTx(ctx, func(ctx context.Context) error {
-		_, err := eng.instRepo.Create(ctx, instance)
-		if err != nil {
-			return err
-		}
-
-		for _, node := range nodes {
-			_, err = eng.nodeRepo.Create(ctx, node)
-			if err != nil {
-				return err
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (eng *defaultEngine) validateVariables(pipeline *definition.Pipeline, variables map[string]interface{}) (map[string]*innerVariable, error) {
