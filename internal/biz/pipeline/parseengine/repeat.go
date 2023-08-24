@@ -60,6 +60,9 @@ func (eng *defaultEngine) Repeat(stage *definition.Stage, variables map[string]*
 
 		newStage.Name = eng.makeRepeatStageName(stage.Name, k)
 
+		// repeat stage will not be repeated
+		newStage.Repeat = false
+
 		repeatedStages = append(repeatedStages, newStage)
 		newVariables[newVariableKey] = &innerVariable{
 			Key:   newVariableKey,

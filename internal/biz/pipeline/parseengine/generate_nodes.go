@@ -5,7 +5,6 @@ import (
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/types/definition"
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/types/runtime"
 	"github.com/google/uuid"
-	"github.com/pkg/errors"
 )
 
 func (eng *defaultEngine) generateNodes(ctx context.Context, pipeline *definition.Pipeline, instCode string, variables map[string]*innerVariable) ([]*runtime.Node, error) {
@@ -71,14 +70,19 @@ func (eng *defaultEngine) genNodeByStageWithParams(stages []*definition.Stage, i
 	return nodes, curStagesName, nil
 }
 
-func (eng *defaultEngine) repeatStageAndGenNodes(stage *definition.Stage, instCode string, preStagesName []string, variables map[string]*innerVariable) ([]*runtime.Node, []string, error) {
+func (eng *defaultEngine) repeatStageAndGenNodes(stage *definition.Stage, instCode string, preStageName []string, variables map[string]*innerVariable) (nodes []*runtime.Node, lastStagesName []string, err error) {
 	repeatedStages, newVariables, err := eng.Repeat(stage, variables)
-	if err != nil {
-		return nil, nil, errors.Errorf("repeat stage failed: %v", err)
-	}
-	repeatedNodes, lastStagesName, err := eng.genNodeByStageWithParams(repeatedStages, instCode, preStagesName, newVariables)
 	if err != nil {
 		return nil, nil, err
 	}
 
+	repeatedNodes, repeatedStagesName, err := eng.genNodeByStageWithParams(repeatedStages, instCode, preStageName, newVariables)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	nodes = append(nodes, repeatedNodes...)
+	lastStagesName = append(lastStagesName, repeatedStagesName...)
+
+	return nodes, lastStagesName, nil
 }
