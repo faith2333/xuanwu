@@ -24,7 +24,7 @@ var TestPipeline = &definition.Pipeline{
 				Name:         "build",
 				ExecutorName: "POD",
 				ExecuteInfo: map[string]interface{}{
-					"test": "${test}$",
+					"test": "${test-1}$",
 				},
 				Repeat:             true,
 				RepeatFromVariable: "env",
