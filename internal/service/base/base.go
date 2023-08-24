@@ -15,3 +15,7 @@ func (b *Base) TransformJSON(source, target interface{}) error {
 
 	return json.Unmarshal(sBytes, &target)
 }
+
+func (b *Base) ProtoStructUnmarshal(source, target interface{}) error {
+
+}

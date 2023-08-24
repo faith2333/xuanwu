@@ -2,6 +2,4 @@ package application
 
 import "github.com/google/wire"
 
-var ProviderSet = wire.NewSet(
-	NewAppRepo,
-)
+var ProviderSet = wire.NewSet(NewAppSvc)

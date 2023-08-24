@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package api.application.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/struct.proto";
+import "base/v1/pageinfo.proto";
+
+option go_package = "github.com/faith2333/xuanwu/api/application/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.application.v1";
+
+service ApplicationSvc {
+  rpc CreateApplication(CreateAppRequest) returns (Application) {
+    option (google.api.http) = {
+      post: "/v1/applications/create"
+      body: "*"
+    };
+  }
+  rpc ListApplications(ListAppRequest) returns (ListAppResponse) {
+    option (google.api.http) = {
+      get: "/v1/applications/list"
+    };
+  }
+}
+
+message Application {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string appType = 4;
+  repeated string labels = 5;
+  string category = 6;
+  google.protobuf.Struct developmentInfo = 7;
+  google.protobuf.Struct testInfo = 8;
+  google.protobuf.Struct notificationInfos = 9;
+}
+
+message CreateAppRequest {
+  string name = 1[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
+  string appType = 2;
+  repeated string labels = 3;
+  string category = 4[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
+  google.protobuf.Struct developmentInfo = 5;
+  google.protobuf.Struct testInfo = 6;
+  google.protobuf.Struct notificationInfos = 7;
+}
+
+message ListAppRequest {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+  string appType = 4;
+  repeated string labels = 5;
+  string category = 6;
+  string developmentLanguage = 7;
+  int64 pageIndex = 8;
+  int64 pageSize = 9;
+}
+
+message ListAppResponse {
+  repeated Application data = 1;
+  base.v1.pageInfo pageInfo = 2;
+}
+
