@@ -29,6 +29,7 @@ type Application struct {
 	Developers         base.TypeSlice            `json:"developers" gorm:"type:json"`
 	TestManager        string                    `json:"testManager" gorm:"type:varchar(64)"`
 	NotificationInfos  types.NotificationInfos   `json:"notificationInfos" gorm:"type:json"`
+	Desc               string                    `json:"desc" gorm:"type:varchar(400)"`
 	base.Model
 }
 
@@ -163,6 +164,7 @@ func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 			TestManager: dbApp.TestManager,
 		},
 		NotificationInfos: dbApp.NotificationInfos.ToSlice(),
+		Desc:              dbApp.Desc,
 	}
 }
 
@@ -180,5 +182,6 @@ func (repo *AppRepo) bizToDbApp(bizApp *bizApp.Application) *Application {
 		Developers:         base.NewTypeSlice(bizApp.DevelopmentInfo.Developers),
 		TestManager:        bizApp.TestInfo.TestManager,
 		NotificationInfos:  bizApp.NotificationInfos,
+		Desc:               bizApp.Desc,
 	}
 }

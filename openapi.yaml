@@ -211,6 +211,8 @@ components:
                     type: array
                     items:
                         type: object
+                desc:
+                    type: string
                 gmtCreate:
                     type: string
                 gmtModify:
@@ -242,6 +244,8 @@ components:
                     type: array
                     items:
                         type: object
+                desc:
+                    type: string
         api.application.v1.ListAppResponse:
             type: object
             properties:

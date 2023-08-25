@@ -29,6 +29,7 @@ func (s *AppSvc) CreateApplication(ctx context.Context, req *pb.CreateAppRequest
 		AppType:  types.AppType(req.AppType),
 		Category: req.Category,
 		Labels:   req.Labels,
+		Desc:     req.Desc,
 	}
 
 	err := s.PBStructUnmarshal(req.DevelopmentInfo, &bizCreateReq.DevelopmentInfo)

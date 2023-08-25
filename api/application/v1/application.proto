@@ -35,6 +35,7 @@ message Application {
   google.protobuf.Struct developmentInfo = 7;
   google.protobuf.Struct testInfo = 8;
   repeated google.protobuf.Struct notificationInfos = 9;
+  string desc = 14;
   string gmtCreate = 10;
   string gmtModify = 11;
   string createUser = 12;
@@ -50,6 +51,7 @@ message CreateAppRequest {
   google.protobuf.Struct developmentInfo = 6;
   google.protobuf.Struct testInfo = 7;
   repeated google.protobuf.Struct notificationInfos = 8;
+  string desc = 9;
 }
 
 message ListAppRequest {

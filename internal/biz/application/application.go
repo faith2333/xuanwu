@@ -20,6 +20,7 @@ type Application struct {
 	// the category of the application, it is used for the organization of the application.
 	Category          string                    `json:"category"`
 	Labels            []string                  `json:"labels"`
+	Desc              string                    `json:"desc"`
 	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
 	TestInfo          TestInfo                  `json:"testInfo"`
 	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
@@ -46,6 +47,7 @@ type CreateAppReq struct {
 	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
 	TestInfo          TestInfo                  `json:"testInfo"`
 	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
+	Desc              string                    `json:"desc"`
 }
 
 func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application, error) {
@@ -66,6 +68,7 @@ func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application,
 		DevelopmentInfo:   req.DevelopmentInfo,
 		TestInfo:          req.TestInfo,
 		NotificationInfos: req.NotificationInfos,
+		Desc:              req.Desc,
 	}
 
 	return biz.appRepo.Create(ctx, app)

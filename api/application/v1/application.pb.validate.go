@@ -159,6 +159,8 @@ func (m *Application) validate(all bool) error {
 
 	}
 
+	// no validation rules for Desc
+
 	// no validation rules for GmtCreate
 
 	// no validation rules for GmtModify
@@ -383,6 +385,8 @@ func (m *CreateAppRequest) validate(all bool) error {
 		}
 
 	}
+
+	// no validation rules for Desc
 
 	if len(errors) > 0 {
 		return CreateAppRequestMultiError(errors)
