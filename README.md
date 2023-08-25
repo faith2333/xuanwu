@@ -7,7 +7,7 @@ Make Your *Online System* **develop** & **test** & **delivery** & **monitoring**
 
 **XuanWu** is Ancient Chinese mythical beasts.
 
-![xuanwu](./static/image/xuanwu.jpg)
+![xuanwu](./static/image/logo.png)
 
 ## Product Introduction
 ***

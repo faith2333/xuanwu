@@ -12,12 +12,12 @@ import (
 var userRunOnce = sync.Once{}
 
 type User struct {
-	ID          int64          `json:"id" gorm:"primaryKey"`
-	Username    string         `json:"username" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
-	Password    string         `json:"password" gorm:"type:varchar(128)"`
-	Email       string         `json:"email" gorm:"type:varchar(128)"`
-	PhoneNumber string         `json:"phoneNumber" gorm:"type:varchar(128)"`
-	ExtraInfo   base.ExtraInfo `json:"extraInfo" gorm:"type:json"`
+	ID          int64        `json:"id" gorm:"primaryKey"`
+	Username    string       `json:"username" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
+	Password    string       `json:"password" gorm:"type:varchar(128)"`
+	Email       string       `json:"email" gorm:"type:varchar(128)"`
+	PhoneNumber string       `json:"phoneNumber" gorm:"type:varchar(128)"`
+	ExtraInfo   base.TypeMap `json:"extraInfo" gorm:"type:json"`
 	base.Model
 }
 

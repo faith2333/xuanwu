@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/faith2333/xuanwu/internal/biz/pipeline/processengine/leaderworker"
 	lwTypes "github.com/faith2333/xuanwu/internal/biz/pipeline/processengine/leaderworker/types"
-	"github.com/faith2333/xuanwu/internal/biz/pipeline/types"
+	"github.com/faith2333/xuanwu/internal/biz/pipeline/types/definition"
 )
 
 type Engine struct {
@@ -27,7 +27,7 @@ func (e *Engine) Stop(ctx context.Context) error {
 	return nil
 }
 
-func (e *Engine) StartPipeline(ctx context.Context, pipeline *types.Pipeline) error {
+func (e *Engine) StartPipeline(ctx context.Context, pipeline *definition.Pipeline) error {
 	//todo distribute start a pipeline
 	return nil
 }

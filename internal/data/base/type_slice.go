@@ -6,18 +6,26 @@ import (
 	"fmt"
 )
 
-type ExtraInfo map[string]interface{}
+type TypeSlice []string
+
+func NewTypeSlice(value []string) TypeSlice {
+	return value
+}
 
 // Value Marshal
-func (a ExtraInfo) Value() (driver.Value, error) {
+func (a TypeSlice) Value() (driver.Value, error) {
 	return json.Marshal(a)
 }
 
 // Scan Unmarshal
-func (a *ExtraInfo) Scan(value interface{}) error {
+func (a *TypeSlice) Scan(value interface{}) error {
 	b, ok := value.([]byte)
 	if !ok {
 		return fmt.Errorf("type assertion to []byte failed")
 	}
 	return json.Unmarshal(b, &a)
+}
+
+func (a TypeSlice) ToSlice() []string {
+	return a
 }
