@@ -29,8 +29,8 @@ type ApplicationSvcHTTPServer interface {
 
 func RegisterApplicationSvcHTTPServer(s *http.Server, srv ApplicationSvcHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/applications/create", _ApplicationSvc_CreateApplication0_HTTP_Handler(srv))
-	r.GET("/v1/applications/list", _ApplicationSvc_ListApplications0_HTTP_Handler(srv))
+	r.POST("/v1/application/create", _ApplicationSvc_CreateApplication0_HTTP_Handler(srv))
+	r.GET("/v1/application/list", _ApplicationSvc_ListApplications0_HTTP_Handler(srv))
 }
 
 func _ApplicationSvc_CreateApplication0_HTTP_Handler(srv ApplicationSvcHTTPServer) func(ctx http.Context) error {
@@ -86,7 +86,7 @@ func NewApplicationSvcHTTPClient(client *http.Client) ApplicationSvcHTTPClient {
 
 func (c *ApplicationSvcHTTPClientImpl) CreateApplication(ctx context.Context, in *CreateAppRequest, opts ...http.CallOption) (*Application, error) {
 	var out Application
-	pattern := "/v1/applications/create"
+	pattern := "/v1/application/create"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationApplicationSvcCreateApplication))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -99,7 +99,7 @@ func (c *ApplicationSvcHTTPClientImpl) CreateApplication(ctx context.Context, in
 
 func (c *ApplicationSvcHTTPClientImpl) ListApplications(ctx context.Context, in *ListAppRequest, opts ...http.CallOption) (*ListAppResponse, error) {
 	var out ListAppResponse
-	pattern := "/v1/applications/list"
+	pattern := "/v1/application/list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationApplicationSvcListApplications))
 	opts = append(opts, http.PathTemplate(pattern))

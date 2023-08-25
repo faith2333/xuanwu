@@ -6,7 +6,7 @@ info:
     title: ""
     version: 0.0.1
 paths:
-    /v1/applications/create:
+    /v1/application/create:
         post:
             tags:
                 - ApplicationSvc
@@ -24,7 +24,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
-    /v1/applications/list:
+    /v1/application/list:
         get:
             tags:
                 - ApplicationSvc
@@ -208,11 +208,23 @@ components:
                 testInfo:
                     type: object
                 notificationInfos:
-                    type: object
+                    type: array
+                    items:
+                        type: object
+                gmtCreate:
+                    type: string
+                gmtModify:
+                    type: string
+                createUser:
+                    type: string
+                modifyUser:
+                    type: string
         api.application.v1.CreateAppRequest:
             type: object
             properties:
                 name:
+                    type: string
+                code:
                     type: string
                 appType:
                     type: string
@@ -227,7 +239,9 @@ components:
                 testInfo:
                     type: object
                 notificationInfos:
-                    type: object
+                    type: array
+                    items:
+                        type: object
         api.application.v1.ListAppResponse:
             type: object
             properties:

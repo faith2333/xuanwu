@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/faith2333/xuanwu/internal/biz/application/types"
 	"github.com/faith2333/xuanwu/internal/biz/base"
-	"github.com/google/uuid"
 )
 
 type IAppRepo interface {
@@ -19,11 +18,11 @@ type Application struct {
 	Name    string        `json:"name"`
 	AppType types.AppType `json:"appType"`
 	// the category of the application, it is used for the organization of the application.
-	Category          string                  `json:"category"`
-	Labels            []string                `json:"labels"`
-	DevelopmentInfo   DevelopmentInfo         `json:"developmentInfo"`
-	TestInfo          TestInfo                `json:"testInfo"`
-	NotificationInfos types.NotificationInfos `json:"notificationInfos"`
+	Category          string                    `json:"category"`
+	Labels            []string                  `json:"labels"`
+	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
+	TestInfo          TestInfo                  `json:"testInfo"`
+	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
 }
 
 type DevelopmentInfo struct {
@@ -39,13 +38,14 @@ type TestInfo struct {
 }
 
 type CreateAppReq struct {
-	Name              string                  `json:"name"`
-	AppType           types.AppType           `json:"appType"`
-	Labels            []string                `json:"labels"`
-	Category          string                  `json:"category"`
-	DevelopmentInfo   DevelopmentInfo         `json:"developmentInfo"`
-	TestInfo          TestInfo                `json:"testInfo"`
-	NotificationInfos types.NotificationInfos `json:"notificationInfos"`
+	Name              string                    `json:"name"`
+	Code              string                    `json:"code"`
+	AppType           types.AppType             `json:"appType"`
+	Labels            []string                  `json:"labels"`
+	Category          string                    `json:"category"`
+	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
+	TestInfo          TestInfo                  `json:"testInfo"`
+	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
 }
 
 func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application, error) {
@@ -59,7 +59,7 @@ func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application,
 
 	app := &Application{
 		Name:              req.Name,
-		Code:              uuid.New().String(),
+		Code:              req.Code,
 		AppType:           req.AppType,
 		Labels:            req.Labels,
 		Category:          req.Category,

@@ -125,34 +125,47 @@ func (m *Application) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetNotificationInfos()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ApplicationValidationError{
-					field:  "NotificationInfos",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetNotificationInfos() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ApplicationValidationError{
+						field:  fmt.Sprintf("NotificationInfos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ApplicationValidationError{
+						field:  fmt.Sprintf("NotificationInfos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ApplicationValidationError{
-					field:  "NotificationInfos",
+				return ApplicationValidationError{
+					field:  fmt.Sprintf("NotificationInfos[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetNotificationInfos()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ApplicationValidationError{
-				field:  "NotificationInfos",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
+
+	// no validation rules for GmtCreate
+
+	// no validation rules for GmtModify
+
+	// no validation rules for CreateUser
+
+	// no validation rules for ModifyUser
 
 	if len(errors) > 0 {
 		return ApplicationMultiError(errors)
@@ -264,6 +277,8 @@ func (m *CreateAppRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for Code
+
 	// no validation rules for AppType
 
 	if l := utf8.RuneCountInString(m.GetCategory()); l < 3 || l > 64 {
@@ -335,33 +350,38 @@ func (m *CreateAppRequest) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetNotificationInfos()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CreateAppRequestValidationError{
-					field:  "NotificationInfos",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetNotificationInfos() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateAppRequestValidationError{
+						field:  fmt.Sprintf("NotificationInfos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateAppRequestValidationError{
+						field:  fmt.Sprintf("NotificationInfos[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, CreateAppRequestValidationError{
-					field:  "NotificationInfos",
+				return CreateAppRequestValidationError{
+					field:  fmt.Sprintf("NotificationInfos[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetNotificationInfos()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateAppRequestValidationError{
-				field:  "NotificationInfos",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {

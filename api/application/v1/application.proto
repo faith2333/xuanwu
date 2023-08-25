@@ -14,13 +14,13 @@ option java_package = "api.application.v1";
 service ApplicationSvc {
   rpc CreateApplication(CreateAppRequest) returns (Application) {
     option (google.api.http) = {
-      post: "/v1/applications/create"
+      post: "/v1/application/create"
       body: "*"
     };
   }
   rpc ListApplications(ListAppRequest) returns (ListAppResponse) {
     option (google.api.http) = {
-      get: "/v1/applications/list"
+      get: "/v1/application/list"
     };
   }
 }
@@ -34,17 +34,22 @@ message Application {
   string category = 6;
   google.protobuf.Struct developmentInfo = 7;
   google.protobuf.Struct testInfo = 8;
-  google.protobuf.Struct notificationInfos = 9;
+  repeated google.protobuf.Struct notificationInfos = 9;
+  string gmtCreate = 10;
+  string gmtModify = 11;
+  string createUser = 12;
+  string modifyUser = 13;
 }
 
 message CreateAppRequest {
   string name = 1[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
-  string appType = 2;
-  repeated string labels = 3;
-  string category = 4[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
-  google.protobuf.Struct developmentInfo = 5;
-  google.protobuf.Struct testInfo = 6;
-  google.protobuf.Struct notificationInfos = 7;
+  string code = 2;
+  string appType = 3;
+  repeated string labels = 4;
+  string category = 5[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
+  google.protobuf.Struct developmentInfo = 6;
+  google.protobuf.Struct testInfo = 7;
+  repeated google.protobuf.Struct notificationInfos = 8;
 }
 
 message ListAppRequest {

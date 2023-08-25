@@ -9,6 +9,7 @@ import (
 	"github.com/faith2333/xuanwu/internal/data/base"
 	"github.com/faith2333/xuanwu/pkg/xerrors"
 	"github.com/pkg/errors"
+	"sync"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 type Application struct {
 	ID                 int64                     `json:"id" gorm:"primaryKey;autoIncrement"`
-	Code               string                    `json:"code" gorm:"uniqueIndex:CODE_DELETED"`
+	Code               string                    `json:"code" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
 	Name               string                    `json:"name" gorm:"type:varchar(64)"`
 	AppType            types.AppType             `json:"appType" gorm:"type:varchar(64)"`
 	Category           string                    `json:"category" gorm:"type:varchar(64)"`
@@ -31,6 +32,8 @@ type Application struct {
 	base.Model
 }
 
+var appRunOnce = &sync.Once{}
+
 func (Application) TableName() string {
 	return TablePrefix + "apps"
 }
@@ -41,6 +44,12 @@ type AppRepo struct {
 }
 
 func NewAppRepo(data *base.Data) bizApp.IAppRepo {
+	appRunOnce.Do(func() {
+		err := data.DB(context.Background()).AutoMigrate(&Application{})
+		if err != nil {
+			panic(err)
+		}
+	})
 	return &AppRepo{
 		data: data,
 	}
@@ -60,7 +69,7 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 	offset := (req.PageIndex - 1) * req.PageSize
 	dbApps := make([]*Application, 0)
 
-	query := repo.data.DB(ctx).Where("deleted = 0")
+	query := repo.data.DB(ctx).Model(&Application{}).Where("deleted = 0")
 	if req.ID != 0 {
 		query = query.Where("id = ?", req.ID)
 	}
@@ -153,7 +162,7 @@ func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 		TestInfo: bizApp.TestInfo{
 			TestManager: dbApp.TestManager,
 		},
-		NotificationInfos: dbApp.NotificationInfos,
+		NotificationInfos: dbApp.NotificationInfos.ToSlice(),
 	}
 }
 
