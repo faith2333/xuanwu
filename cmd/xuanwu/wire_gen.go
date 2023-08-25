@@ -7,11 +7,14 @@
 package main
 
 import (
+	application2 "github.com/faith2333/xuanwu/internal/biz/application"
 	user2 "github.com/faith2333/xuanwu/internal/biz/user"
 	"github.com/faith2333/xuanwu/internal/conf"
+	"github.com/faith2333/xuanwu/internal/data/application"
 	"github.com/faith2333/xuanwu/internal/data/base"
 	"github.com/faith2333/xuanwu/internal/data/user"
 	"github.com/faith2333/xuanwu/internal/server"
+	application3 "github.com/faith2333/xuanwu/internal/service/application"
 	user3 "github.com/faith2333/xuanwu/internal/service/user"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -35,8 +38,11 @@ func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*krat
 		return nil, nil, err
 	}
 	serviceUser := user3.NewServiceUser(userInterface)
-	grpcServer := server.NewGRPCServer(confServer, serviceUser, logger)
-	httpServer := server.NewHTTPServer(confServer, serviceUser, logger)
+	iAppRepo := application.NewAppRepo(baseData)
+	biz := application2.NewBiz(iAppRepo)
+	appSvc := application3.NewAppSvc(biz)
+	grpcServer := server.NewGRPCServer(confServer, serviceUser, appSvc, logger)
+	httpServer := server.NewHTTPServer(confServer, serviceUser, appSvc, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 	}, nil
