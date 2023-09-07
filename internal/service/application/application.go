@@ -25,9 +25,11 @@ func NewAppSvc(biz *bizApp.Biz) *AppSvc {
 func (s *AppSvc) CreateApplication(ctx context.Context, req *pb.CreateAppRequest) (*pb.Application, error) {
 	bizCreateReq := &bizApp.CreateAppReq{
 		Name:     req.Name,
+		Code:     req.Code,
 		AppType:  types.AppType(req.AppType),
 		Category: req.Category,
 		Labels:   req.Labels,
+		Desc:     req.Desc,
 	}
 
 	err := s.PBStructUnmarshal(req.DevelopmentInfo, &bizCreateReq.DevelopmentInfo)
@@ -40,7 +42,7 @@ func (s *AppSvc) CreateApplication(ctx context.Context, req *pb.CreateAppRequest
 		return nil, err
 	}
 
-	err = s.PBStructUnmarshal(req.NotificationInfos, &bizCreateReq.NotificationInfos)
+	err = s.SlicePBStructUnmarshal(req.NotificationInfos, &bizCreateReq.NotificationInfos)
 	if err != nil {
 		return nil, err
 	}
@@ -89,14 +91,28 @@ func (s *AppSvc) ListApplications(ctx context.Context, req *pb.ListAppRequest) (
 	return pbResp, nil
 }
 
+func (s *AppSvc) DeleteApplication(ctx context.Context, req *pb.DeleteAppRequest) (*pb.EmptyResponse, error) {
+	err := s.biz.DeleteApp(ctx, req.Code)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.EmptyResponse{}, nil
+}
+
 func (s *AppSvc) bizAppToPBApp(bApp *bizApp.Application) (*pb.Application, error) {
 	pbApp := &pb.Application{
-		Id:       bApp.ID,
-		Name:     bApp.Name,
-		Code:     bApp.Code,
-		AppType:  bApp.AppType.String(),
-		Category: bApp.Category,
-		Labels:   bApp.Labels,
+		Id:         bApp.ID,
+		Name:       bApp.Name,
+		Code:       bApp.Code,
+		AppType:    bApp.AppType.String(),
+		Category:   bApp.Category,
+		Labels:     bApp.Labels,
+		Desc:       bApp.Desc,
+		GmtCreate:  bApp.GmtCreate,
+		GmtModify:  bApp.GmtModify,
+		CreateUser: bApp.CreateUser,
+		ModifyUser: bApp.ModifyUser,
 	}
 
 	var err error
@@ -110,7 +126,7 @@ func (s *AppSvc) bizAppToPBApp(bApp *bizApp.Application) (*pb.Application, error
 		return nil, err
 	}
 
-	pbApp.NotificationInfos, err = s.NewPBStruct(bApp.NotificationInfos)
+	pbApp.NotificationInfos, err = s.NewPBStructSlice(bApp.NotificationInfos)
 	if err != nil {
 		return nil, err
 	}

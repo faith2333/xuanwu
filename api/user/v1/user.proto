@@ -63,6 +63,7 @@ message User {
   string password = 3;
   string email = 4;
   string phoneNumber = 5;
+  bool enabled = 7;
   google.protobuf.Struct extraInfo = 6;
 }
 

@@ -9,6 +9,7 @@ import (
 	"github.com/faith2333/xuanwu/internal/data/base"
 	"github.com/faith2333/xuanwu/pkg/xerrors"
 	"github.com/pkg/errors"
+	"sync"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 type Application struct {
 	ID                 int64                     `json:"id" gorm:"primaryKey;autoIncrement"`
-	Code               string                    `json:"code" gorm:"uniqueIndex:CODE_DELETED"`
+	Code               string                    `json:"code" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
 	Name               string                    `json:"name" gorm:"type:varchar(64)"`
 	AppType            types.AppType             `json:"appType" gorm:"type:varchar(64)"`
 	Category           string                    `json:"category" gorm:"type:varchar(64)"`
@@ -28,8 +29,11 @@ type Application struct {
 	Developers         base.TypeSlice            `json:"developers" gorm:"type:json"`
 	TestManager        string                    `json:"testManager" gorm:"type:varchar(64)"`
 	NotificationInfos  types.NotificationInfos   `json:"notificationInfos" gorm:"type:json"`
+	Desc               string                    `json:"desc" gorm:"type:varchar(400)"`
 	base.Model
 }
+
+var appRunOnce = &sync.Once{}
 
 func (Application) TableName() string {
 	return TablePrefix + "apps"
@@ -41,6 +45,12 @@ type AppRepo struct {
 }
 
 func NewAppRepo(data *base.Data) bizApp.IAppRepo {
+	appRunOnce.Do(func() {
+		err := data.DB(context.Background()).AutoMigrate(&Application{})
+		if err != nil {
+			panic(err)
+		}
+	})
 	return &AppRepo{
 		data: data,
 	}
@@ -60,7 +70,7 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 	offset := (req.PageIndex - 1) * req.PageSize
 	dbApps := make([]*Application, 0)
 
-	query := repo.data.DB(ctx).Where("deleted = 0")
+	query := repo.data.DB(ctx).Model(&Application{}).Where("deleted = 0")
 	if req.ID != 0 {
 		query = query.Where("id = ?", req.ID)
 	}
@@ -89,7 +99,7 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 		return nil, errors.Wrap(err, "count failed")
 	}
 
-	err = query.Offset(int(offset)).Limit(int(req.PageSize)).Find(&dbApps).Error
+	err = query.Offset(int(offset)).Limit(int(req.PageSize)).Order("id desc").Find(&dbApps).Error
 	if err != nil {
 		return nil, errors.Wrap(err, "list failed")
 	}
@@ -107,6 +117,16 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 			PageSize:  req.PageSize,
 		},
 	}, nil
+}
+
+func (repo *AppRepo) DeleteByCode(ctx context.Context, code string) error {
+	dbApp, err := repo.getByCode(ctx, code)
+	if err != nil {
+		return err
+	}
+
+	dbApp.Deleted = dbApp.ID
+	return repo.data.DB(ctx).Save(dbApp).Error
 }
 
 func (repo *AppRepo) GetByCode(ctx context.Context, code string) (*bizApp.Application, error) {
@@ -138,7 +158,13 @@ func (repo *AppRepo) getByCode(ctx context.Context, code string) (*Application, 
 
 func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 	return &bizApp.Application{
-		ID:       dbApp.ID,
+		Model: bizBase.Model{
+			ID:         dbApp.ID,
+			GmtCreate:  dbApp.GmtCreate,
+			GmtModify:  dbApp.GmtModify,
+			CreateUser: dbApp.CreateUser,
+			ModifyUser: dbApp.ModifyUser,
+		},
 		Code:     dbApp.Code,
 		Name:     dbApp.Name,
 		AppType:  dbApp.AppType,
@@ -153,7 +179,8 @@ func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 		TestInfo: bizApp.TestInfo{
 			TestManager: dbApp.TestManager,
 		},
-		NotificationInfos: dbApp.NotificationInfos,
+		NotificationInfos: dbApp.NotificationInfos.ToSlice(),
+		Desc:              dbApp.Desc,
 	}
 }
 
@@ -171,5 +198,6 @@ func (repo *AppRepo) bizToDbApp(bizApp *bizApp.Application) *Application {
 		Developers:         base.NewTypeSlice(bizApp.DevelopmentInfo.Developers),
 		TestManager:        bizApp.TestInfo.TestManager,
 		NotificationInfos:  bizApp.NotificationInfos,
+		Desc:               bizApp.Desc,
 	}
 }

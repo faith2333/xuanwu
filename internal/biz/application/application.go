@@ -4,26 +4,27 @@ import (
 	"context"
 	"github.com/faith2333/xuanwu/internal/biz/application/types"
 	"github.com/faith2333/xuanwu/internal/biz/base"
-	"github.com/google/uuid"
 )
 
 type IAppRepo interface {
 	Create(ctx context.Context, app *Application) (*Application, error)
 	List(ctx context.Context, req *ListAppReq) (*ListAppReply, error)
 	GetByCode(ctx context.Context, code string) (*Application, error)
+	DeleteByCode(ctx context.Context, code string) error
 }
 
 type Application struct {
-	ID      int64         `json:"id"`
 	Code    string        `json:"code"`
 	Name    string        `json:"name"`
 	AppType types.AppType `json:"appType"`
-	// the category of the application, it is used for the organization of the application.
-	Category          string                  `json:"category"`
-	Labels            []string                `json:"labels"`
-	DevelopmentInfo   DevelopmentInfo         `json:"developmentInfo"`
-	TestInfo          TestInfo                `json:"testInfo"`
-	NotificationInfos types.NotificationInfos `json:"notificationInfos"`
+	// the category of the application, it is used for the organization.proto of the application.
+	Category          string                    `json:"category"`
+	Labels            []string                  `json:"labels"`
+	Desc              string                    `json:"desc"`
+	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
+	TestInfo          TestInfo                  `json:"testInfo"`
+	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
+	base.Model
 }
 
 type DevelopmentInfo struct {
@@ -39,13 +40,15 @@ type TestInfo struct {
 }
 
 type CreateAppReq struct {
-	Name              string                  `json:"name"`
-	AppType           types.AppType           `json:"appType"`
-	Labels            []string                `json:"labels"`
-	Category          string                  `json:"category"`
-	DevelopmentInfo   DevelopmentInfo         `json:"developmentInfo"`
-	TestInfo          TestInfo                `json:"testInfo"`
-	NotificationInfos types.NotificationInfos `json:"notificationInfos"`
+	Name              string                    `json:"name"`
+	Code              string                    `json:"code"`
+	AppType           types.AppType             `json:"appType"`
+	Labels            []string                  `json:"labels"`
+	Category          string                    `json:"category"`
+	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
+	TestInfo          TestInfo                  `json:"testInfo"`
+	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
+	Desc              string                    `json:"desc"`
 }
 
 func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application, error) {
@@ -59,13 +62,14 @@ func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application,
 
 	app := &Application{
 		Name:              req.Name,
-		Code:              uuid.New().String(),
+		Code:              req.Code,
 		AppType:           req.AppType,
 		Labels:            req.Labels,
 		Category:          req.Category,
 		DevelopmentInfo:   req.DevelopmentInfo,
 		TestInfo:          req.TestInfo,
 		NotificationInfos: req.NotificationInfos,
+		Desc:              req.Desc,
 	}
 
 	return biz.appRepo.Create(ctx, app)
@@ -98,4 +102,8 @@ func (biz *Biz) ListApps(ctx context.Context, req *ListAppReq) (*ListAppReply, e
 	}
 
 	return biz.appRepo.List(ctx, req)
+}
+
+func (biz *Biz) DeleteApp(ctx context.Context, code string) error {
+	return biz.appRepo.DeleteByCode(ctx, code)
 }

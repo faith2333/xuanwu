@@ -9,6 +9,7 @@ import (
 type NotificationInfos []*NotificationInfo
 
 type NotificationInfo struct {
+	NotifyType  string   `json:"notifyType"`
 	NotifyUsers []string `json:"notifyUsers"`
 	// the id of the notify config in notification center.
 	NotifyID string `json:"notifyId"`

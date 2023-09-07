@@ -6,7 +6,7 @@ info:
     title: ""
     version: 0.0.1
 paths:
-    /v1/applications/create:
+    /v1/application/create:
         post:
             tags:
                 - ApplicationSvc
@@ -24,7 +24,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
-    /v1/applications/list:
+    /v1/application/delete/{code}:
+        delete:
+            tags:
+                - ApplicationSvc
+            operationId: ApplicationSvc_DeleteApplication
+            parameters:
+                - name: code
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.EmptyResponse'
+    /v1/application/list:
         get:
             tags:
                 - ApplicationSvc
@@ -208,11 +226,25 @@ components:
                 testInfo:
                     type: object
                 notificationInfos:
-                    type: object
+                    type: array
+                    items:
+                        type: object
+                desc:
+                    type: string
+                gmtCreate:
+                    type: string
+                gmtModify:
+                    type: string
+                createUser:
+                    type: string
+                modifyUser:
+                    type: string
         api.application.v1.CreateAppRequest:
             type: object
             properties:
                 name:
+                    type: string
+                code:
                     type: string
                 appType:
                     type: string
@@ -227,7 +259,14 @@ components:
                 testInfo:
                     type: object
                 notificationInfos:
-                    type: object
+                    type: array
+                    items:
+                        type: object
+                desc:
+                    type: string
+        api.application.v1.EmptyResponse:
+            type: object
+            properties: {}
         api.application.v1.ListAppResponse:
             type: object
             properties:
@@ -315,6 +354,8 @@ components:
                     type: string
                 phoneNumber:
                     type: string
+                enabled:
+                    type: boolean
                 extraInfo:
                     type: object
 tags:
