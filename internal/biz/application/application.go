@@ -17,7 +17,7 @@ type Application struct {
 	Code    string        `json:"code"`
 	Name    string        `json:"name"`
 	AppType types.AppType `json:"appType"`
-	// the category of the application, it is used for the organization of the application.
+	// the category of the application, it is used for the organization.proto of the application.
 	Category          string                    `json:"category"`
 	Labels            []string                  `json:"labels"`
 	Desc              string                    `json:"desc"`
