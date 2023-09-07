@@ -99,7 +99,7 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 		return nil, errors.Wrap(err, "count failed")
 	}
 
-	err = query.Offset(int(offset)).Limit(int(req.PageSize)).Find(&dbApps).Error
+	err = query.Offset(int(offset)).Limit(int(req.PageSize)).Order("id desc").Find(&dbApps).Error
 	if err != nil {
 		return nil, errors.Wrap(err, "list failed")
 	}
