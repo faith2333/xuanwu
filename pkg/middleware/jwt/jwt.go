@@ -60,7 +60,7 @@ func CreateToken(secretKey []byte, username, email, phoneNumber string, extraInf
 	return token.SignedString(secretKey)
 }
 
-// AuthPlugin get jwt claims from context and put CurrentUser into it.
+// AuthPlugin get jwt claims from context and put CurrentUser to it.
 func AuthPlugin(handler middleware.Handler) middleware.Handler {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		claims, ok := jwt.FromContext(ctx)

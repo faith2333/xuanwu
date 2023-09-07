@@ -62,5 +62,5 @@ func (data *Data) DB(ctx context.Context) *gorm.DB {
 	if ok {
 		return tx
 	}
-	return data.db
+	return data.db.WithContext(ctx)
 }
