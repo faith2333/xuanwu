@@ -354,6 +354,8 @@ components:
                     type: string
                 phoneNumber:
                     type: string
+                enabled:
+                    type: boolean
                 extraInfo:
                     type: object
 tags:
