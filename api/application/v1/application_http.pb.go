@@ -20,10 +20,12 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationApplicationSvcCreateApplication = "/api.application.v1.ApplicationSvc/CreateApplication"
+const OperationApplicationSvcDeleteApplication = "/api.application.v1.ApplicationSvc/DeleteApplication"
 const OperationApplicationSvcListApplications = "/api.application.v1.ApplicationSvc/ListApplications"
 
 type ApplicationSvcHTTPServer interface {
 	CreateApplication(context.Context, *CreateAppRequest) (*Application, error)
+	DeleteApplication(context.Context, *DeleteAppRequest) (*EmptyResponse, error)
 	ListApplications(context.Context, *ListAppRequest) (*ListAppResponse, error)
 }
 
@@ -31,6 +33,7 @@ func RegisterApplicationSvcHTTPServer(s *http.Server, srv ApplicationSvcHTTPServ
 	r := s.Route("/")
 	r.POST("/v1/application/create", _ApplicationSvc_CreateApplication0_HTTP_Handler(srv))
 	r.GET("/v1/application/list", _ApplicationSvc_ListApplications0_HTTP_Handler(srv))
+	r.DELETE("/v1/application/delete/{code}", _ApplicationSvc_DeleteApplication0_HTTP_Handler(srv))
 }
 
 func _ApplicationSvc_CreateApplication0_HTTP_Handler(srv ApplicationSvcHTTPServer) func(ctx http.Context) error {
@@ -71,8 +74,31 @@ func _ApplicationSvc_ListApplications0_HTTP_Handler(srv ApplicationSvcHTTPServer
 	}
 }
 
+func _ApplicationSvc_DeleteApplication0_HTTP_Handler(srv ApplicationSvcHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAppRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationApplicationSvcDeleteApplication)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteApplication(ctx, req.(*DeleteAppRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*EmptyResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ApplicationSvcHTTPClient interface {
 	CreateApplication(ctx context.Context, req *CreateAppRequest, opts ...http.CallOption) (rsp *Application, err error)
+	DeleteApplication(ctx context.Context, req *DeleteAppRequest, opts ...http.CallOption) (rsp *EmptyResponse, err error)
 	ListApplications(ctx context.Context, req *ListAppRequest, opts ...http.CallOption) (rsp *ListAppResponse, err error)
 }
 
@@ -91,6 +117,19 @@ func (c *ApplicationSvcHTTPClientImpl) CreateApplication(ctx context.Context, in
 	opts = append(opts, http.Operation(OperationApplicationSvcCreateApplication))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ApplicationSvcHTTPClientImpl) DeleteApplication(ctx context.Context, in *DeleteAppRequest, opts ...http.CallOption) (*EmptyResponse, error) {
+	var out EmptyResponse
+	pattern := "/v1/application/delete/{code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationApplicationSvcDeleteApplication))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

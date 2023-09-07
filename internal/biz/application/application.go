@@ -10,10 +10,10 @@ type IAppRepo interface {
 	Create(ctx context.Context, app *Application) (*Application, error)
 	List(ctx context.Context, req *ListAppReq) (*ListAppReply, error)
 	GetByCode(ctx context.Context, code string) (*Application, error)
+	DeleteByCode(ctx context.Context, code string) error
 }
 
 type Application struct {
-	ID      int64         `json:"id"`
 	Code    string        `json:"code"`
 	Name    string        `json:"name"`
 	AppType types.AppType `json:"appType"`
@@ -24,6 +24,7 @@ type Application struct {
 	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
 	TestInfo          TestInfo                  `json:"testInfo"`
 	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
+	base.Model
 }
 
 type DevelopmentInfo struct {
@@ -101,4 +102,8 @@ func (biz *Biz) ListApps(ctx context.Context, req *ListAppReq) (*ListAppReply, e
 	}
 
 	return biz.appRepo.List(ctx, req)
+}
+
+func (biz *Biz) DeleteApp(ctx context.Context, code string) error {
+	return biz.appRepo.DeleteByCode(ctx, code)
 }

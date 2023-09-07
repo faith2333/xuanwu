@@ -744,3 +744,205 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListAppResponseValidationError{}
+
+// Validate checks the field values on DeleteAppRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *DeleteAppRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeleteAppRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeleteAppRequestMultiError, or nil if none found.
+func (m *DeleteAppRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeleteAppRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	if len(errors) > 0 {
+		return DeleteAppRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeleteAppRequestMultiError is an error wrapping multiple validation errors
+// returned by DeleteAppRequest.ValidateAll() if the designated constraints
+// aren't met.
+type DeleteAppRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteAppRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteAppRequestMultiError) AllErrors() []error { return m }
+
+// DeleteAppRequestValidationError is the validation error returned by
+// DeleteAppRequest.Validate if the designated constraints aren't met.
+type DeleteAppRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteAppRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteAppRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteAppRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteAppRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteAppRequestValidationError) ErrorName() string { return "DeleteAppRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeleteAppRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteAppRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteAppRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteAppRequestValidationError{}
+
+// Validate checks the field values on EmptyResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *EmptyResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on EmptyResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in EmptyResponseMultiError, or
+// nil if none found.
+func (m *EmptyResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *EmptyResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return EmptyResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// EmptyResponseMultiError is an error wrapping multiple validation errors
+// returned by EmptyResponse.ValidateAll() if the designated constraints
+// aren't met.
+type EmptyResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EmptyResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EmptyResponseMultiError) AllErrors() []error { return m }
+
+// EmptyResponseValidationError is the validation error returned by
+// EmptyResponse.Validate if the designated constraints aren't met.
+type EmptyResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EmptyResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EmptyResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EmptyResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EmptyResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EmptyResponseValidationError) ErrorName() string { return "EmptyResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EmptyResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEmptyResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EmptyResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EmptyResponseValidationError{}

@@ -91,14 +91,28 @@ func (s *AppSvc) ListApplications(ctx context.Context, req *pb.ListAppRequest) (
 	return pbResp, nil
 }
 
+func (s *AppSvc) DeleteApplication(ctx context.Context, req *pb.DeleteAppRequest) (*pb.EmptyResponse, error) {
+	err := s.biz.DeleteApp(ctx, req.Code)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.EmptyResponse{}, nil
+}
+
 func (s *AppSvc) bizAppToPBApp(bApp *bizApp.Application) (*pb.Application, error) {
 	pbApp := &pb.Application{
-		Id:       bApp.ID,
-		Name:     bApp.Name,
-		Code:     bApp.Code,
-		AppType:  bApp.AppType.String(),
-		Category: bApp.Category,
-		Labels:   bApp.Labels,
+		Id:         bApp.ID,
+		Name:       bApp.Name,
+		Code:       bApp.Code,
+		AppType:    bApp.AppType.String(),
+		Category:   bApp.Category,
+		Labels:     bApp.Labels,
+		Desc:       bApp.Desc,
+		GmtCreate:  bApp.GmtCreate,
+		GmtModify:  bApp.GmtModify,
+		CreateUser: bApp.CreateUser,
+		ModifyUser: bApp.ModifyUser,
 	}
 
 	var err error

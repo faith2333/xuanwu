@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	ApplicationSvc_CreateApplication_FullMethodName = "/api.application.v1.ApplicationSvc/CreateApplication"
 	ApplicationSvc_ListApplications_FullMethodName  = "/api.application.v1.ApplicationSvc/ListApplications"
+	ApplicationSvc_DeleteApplication_FullMethodName = "/api.application.v1.ApplicationSvc/DeleteApplication"
 )
 
 // ApplicationSvcClient is the client API for ApplicationSvc service.
@@ -29,6 +30,7 @@ const (
 type ApplicationSvcClient interface {
 	CreateApplication(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*Application, error)
 	ListApplications(ctx context.Context, in *ListAppRequest, opts ...grpc.CallOption) (*ListAppResponse, error)
+	DeleteApplication(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
 type applicationSvcClient struct {
@@ -57,12 +59,22 @@ func (c *applicationSvcClient) ListApplications(ctx context.Context, in *ListApp
 	return out, nil
 }
 
+func (c *applicationSvcClient) DeleteApplication(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, ApplicationSvc_DeleteApplication_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationSvcServer is the server API for ApplicationSvc service.
 // All implementations must embed UnimplementedApplicationSvcServer
 // for forward compatibility
 type ApplicationSvcServer interface {
 	CreateApplication(context.Context, *CreateAppRequest) (*Application, error)
 	ListApplications(context.Context, *ListAppRequest) (*ListAppResponse, error)
+	DeleteApplication(context.Context, *DeleteAppRequest) (*EmptyResponse, error)
 	mustEmbedUnimplementedApplicationSvcServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedApplicationSvcServer) CreateApplication(context.Context, *Cre
 }
 func (UnimplementedApplicationSvcServer) ListApplications(context.Context, *ListAppRequest) (*ListAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListApplications not implemented")
+}
+func (UnimplementedApplicationSvcServer) DeleteApplication(context.Context, *DeleteAppRequest) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteApplication not implemented")
 }
 func (UnimplementedApplicationSvcServer) mustEmbedUnimplementedApplicationSvcServer() {}
 
@@ -125,6 +140,24 @@ func _ApplicationSvc_ListApplications_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationSvc_DeleteApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationSvcServer).DeleteApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationSvc_DeleteApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationSvcServer).DeleteApplication(ctx, req.(*DeleteAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationSvc_ServiceDesc is the grpc.ServiceDesc for ApplicationSvc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var ApplicationSvc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListApplications",
 			Handler:    _ApplicationSvc_ListApplications_Handler,
+		},
+		{
+			MethodName: "DeleteApplication",
+			Handler:    _ApplicationSvc_DeleteApplication_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

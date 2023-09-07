@@ -119,6 +119,16 @@ func (repo *AppRepo) List(ctx context.Context, req *bizApp.ListAppReq) (*bizApp.
 	}, nil
 }
 
+func (repo *AppRepo) DeleteByCode(ctx context.Context, code string) error {
+	dbApp, err := repo.getByCode(ctx, code)
+	if err != nil {
+		return err
+	}
+
+	dbApp.Deleted = dbApp.ID
+	return repo.data.DB(ctx).Save(dbApp).Error
+}
+
 func (repo *AppRepo) GetByCode(ctx context.Context, code string) (*bizApp.Application, error) {
 	dbApp, err := repo.getByCode(ctx, code)
 	if err != nil {
@@ -148,7 +158,13 @@ func (repo *AppRepo) getByCode(ctx context.Context, code string) (*Application, 
 
 func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 	return &bizApp.Application{
-		ID:       dbApp.ID,
+		Model: bizBase.Model{
+			ID:         dbApp.ID,
+			GmtCreate:  dbApp.GmtCreate,
+			GmtModify:  dbApp.GmtModify,
+			CreateUser: dbApp.CreateUser,
+			ModifyUser: dbApp.ModifyUser,
+		},
 		Code:     dbApp.Code,
 		Name:     dbApp.Name,
 		AppType:  dbApp.AppType,

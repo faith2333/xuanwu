@@ -24,6 +24,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
+    /v1/application/delete/{code}:
+        delete:
+            tags:
+                - ApplicationSvc
+            operationId: ApplicationSvc_DeleteApplication
+            parameters:
+                - name: code
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.EmptyResponse'
     /v1/application/list:
         get:
             tags:
@@ -246,6 +264,9 @@ components:
                         type: object
                 desc:
                     type: string
+        api.application.v1.EmptyResponse:
+            type: object
+            properties: {}
         api.application.v1.ListAppResponse:
             type: object
             properties:

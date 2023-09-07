@@ -23,6 +23,11 @@ service ApplicationSvc {
       get: "/v1/application/list"
     };
   }
+  rpc DeleteApplication(DeleteAppRequest) returns (EmptyResponse) {
+    option (google.api.http) = {
+      delete: "/v1/application/delete/{code}"
+    };
+  }
 }
 
 message Application {
@@ -70,4 +75,10 @@ message ListAppResponse {
   repeated Application data = 1;
   base.v1.pageInfo pageInfo = 2;
 }
+
+message DeleteAppRequest {
+  string code = 1;
+}
+
+message EmptyResponse {}
 
