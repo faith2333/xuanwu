@@ -14,18 +14,23 @@ option java_package = "api.application.v1";
 service ApplicationSvc {
   rpc CreateApplication(CreateAppRequest) returns (Application) {
     option (google.api.http) = {
-      post: "/v1/application/create"
+      post: "/v1/application/app"
       body: "*"
     };
   }
   rpc ListApplications(ListAppRequest) returns (ListAppResponse) {
     option (google.api.http) = {
-      get: "/v1/application/list"
+      get: "/v1/application/app"
+    };
+  }
+  rpc GetApplication(GetAppRequest) returns (Application) {
+    option (google.api.http) = {
+      get: "/v1/application/app/{code}"
     };
   }
   rpc DeleteApplication(DeleteAppRequest) returns (EmptyResponse) {
     option (google.api.http) = {
-      delete: "/v1/application/delete/{code}"
+      delete: "/v1/application/app/delete/{code}"
     };
   }
 }
@@ -36,7 +41,7 @@ message Application {
   string name = 3;
   string appType = 4;
   repeated string labels = 5;
-  string category = 6;
+  string organization = 6;
   google.protobuf.Struct developmentInfo = 7;
   google.protobuf.Struct testInfo = 8;
   repeated google.protobuf.Struct notificationInfos = 9;
@@ -52,7 +57,7 @@ message CreateAppRequest {
   string code = 2;
   string appType = 3;
   repeated string labels = 4;
-  string category = 5[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
+  string Organization = 5[(validate.rules).string.min_len = 3, (validate.rules).string.max_len = 64];
   google.protobuf.Struct developmentInfo = 6;
   google.protobuf.Struct testInfo = 7;
   repeated google.protobuf.Struct notificationInfos = 8;
@@ -65,7 +70,7 @@ message ListAppRequest {
   string name = 3;
   string appType = 4;
   repeated string labels = 5;
-  string category = 6;
+  string Organization = 6;
   string developmentLanguage = 7;
   int64 pageIndex = 8;
   int64 pageSize = 9;
@@ -74,6 +79,10 @@ message ListAppRequest {
 message ListAppResponse {
   repeated Application data = 1;
   base.v1.pageInfo pageInfo = 2;
+}
+
+message GetAppRequest {
+  string code = 1;
 }
 
 message DeleteAppRequest {

@@ -8,13 +8,16 @@ package main
 
 import (
 	application2 "github.com/faith2333/xuanwu/internal/biz/application"
+	organization2 "github.com/faith2333/xuanwu/internal/biz/organization"
 	user2 "github.com/faith2333/xuanwu/internal/biz/user"
 	"github.com/faith2333/xuanwu/internal/conf"
 	"github.com/faith2333/xuanwu/internal/data/application"
 	"github.com/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/internal/data/organization"
 	"github.com/faith2333/xuanwu/internal/data/user"
 	"github.com/faith2333/xuanwu/internal/server"
 	application3 "github.com/faith2333/xuanwu/internal/service/application"
+	organization3 "github.com/faith2333/xuanwu/internal/service/organization"
 	user3 "github.com/faith2333/xuanwu/internal/service/user"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -41,8 +44,11 @@ func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*krat
 	iAppRepo := application.NewAppRepo(baseData)
 	biz := application2.NewBiz(iAppRepo)
 	appSvc := application3.NewAppSvc(biz)
-	grpcServer := server.NewGRPCServer(confServer, serviceUser, appSvc, logger)
-	httpServer := server.NewHTTPServer(confServer, serviceUser, appSvc, logger)
+	iRepoOrganization := organization.NewOrgRepo(baseData)
+	organizationBiz := organization2.NewBiz(iRepoOrganization)
+	orgSvc := organization3.NewOrgSvc(organizationBiz)
+	grpcServer := server.NewGRPCServer(confServer, serviceUser, appSvc, orgSvc, logger)
+	httpServer := server.NewHTTPServer(confServer, serviceUser, appSvc, orgSvc, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 	}, nil

@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package api.organization.v1;
+
+import "google/api/annotations.proto";
+import "user/v1/user.proto";
+import "base/v1/pageinfo.proto";
+
+option go_package = "github.com/faith2333/xuanwu/api/organization/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.organization.v1";
+
+service OrganizationService {
+  // users operation
+  rpc ListUsers(ListUserRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/organization/users"
+    };
+  }
+  rpc CreateUsers(CreateUserRequest) returns (user.v1.User) {
+    option (google.api.http) = {
+      post: "/v1/organization/users"
+      body: "*"
+    };
+  }
+
+  // role operation
+  rpc ListRoles(ListRoleRequest) returns (ListRolesResponse) {
+    option (google.api.http) = {
+      get: "/v1/organization/roles"
+    };
+  }
+  rpc CreateRole(CreateRoleRequest) returns (Role) {
+    option (google.api.http) = {
+      post: "/v1/organization/roles"
+      body: "*"
+    };
+  }
+
+  // organization operation
+  rpc ListOrganizations(ListOrgsRequest) returns (ListOrgsResponse) {
+    option (google.api.http) = {
+      get: "/v1/organization/orgs"
+    };
+  }
+  rpc CreateOrganization(CreateOrgRequest) returns (Organization) {
+    option (google.api.http) = {
+      post: "/v1/organization/orgs"
+      body: "*"
+    };
+  }
+
+
+}
+
+message ListUserRequest {
+  int64 pageIndex = 1;
+  int64 pageSize = 2;
+  string name = 3;
+  bool enabled = 4;
+}
+
+message ListUsersResponse {
+  repeated user.v1.User data = 1;
+  base.v1.pageInfo pageInfo = 2;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string password = 2;
+  string email = 3;
+  string phone = 4;
+  string desc = 6;
+  bool enabled = 7;
+}
+
+message Role {
+  int64 id = 1;
+  string name = 2;
+  string code = 3;
+  string desc = 4;
+  bool enabled = 5;
+}
+
+message ListRoleRequest {
+  int64 pageIndex = 1;
+  int64 pageSize = 2;
+  string name = 3;
+  string code = 4;
+  bool enabled = 5;
+}
+
+message ListRolesResponse {
+  repeated Role data = 1;
+  base.v1.pageInfo pageInfo = 2;
+}
+
+message CreateRoleRequest {
+  string name = 1;
+  string code = 2;
+  string desc = 3;
+  bool enabled = 4;
+}
+
+message Organization {
+  int64 id = 1;
+  string name = 2;
+  string code = 3;
+  string desc = 4;
+  bool enabled = 5;
+}
+
+message ListOrgsRequest {
+  int64 pageIndex = 1;
+  int64 pageSize = 2;
+  int64 id = 6;
+  string name = 3;
+  string code = 4;
+  bool enabled = 5;
+}
+
+message ListOrgsResponse {
+  repeated Organization data = 1;
+  base.v1.pageInfo pageInfo = 2;
+}
+
+message CreateOrgRequest {
+  string name = 1;
+  string code = 2;
+  string desc = 3;
+  bool enabled = 4;
+}

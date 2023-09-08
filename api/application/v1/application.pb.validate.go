@@ -65,7 +65,7 @@ func (m *Application) validate(all bool) error {
 
 	// no validation rules for AppType
 
-	// no validation rules for Category
+	// no validation rules for Organization
 
 	if all {
 		switch v := interface{}(m.GetDevelopmentInfo()).(type) {
@@ -283,9 +283,9 @@ func (m *CreateAppRequest) validate(all bool) error {
 
 	// no validation rules for AppType
 
-	if l := utf8.RuneCountInString(m.GetCategory()); l < 3 || l > 64 {
+	if l := utf8.RuneCountInString(m.GetOrganization()); l < 3 || l > 64 {
 		err := CreateAppRequestValidationError{
-			field:  "Category",
+			field:  "Organization",
 			reason: "value length must be between 3 and 64 runes, inclusive",
 		}
 		if !all {
@@ -496,7 +496,7 @@ func (m *ListAppRequest) validate(all bool) error {
 
 	// no validation rules for AppType
 
-	// no validation rules for Category
+	// no validation rules for Organization
 
 	// no validation rules for DevelopmentLanguage
 
@@ -744,6 +744,108 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListAppResponseValidationError{}
+
+// Validate checks the field values on GetAppRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetAppRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAppRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetAppRequestMultiError, or
+// nil if none found.
+func (m *GetAppRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAppRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	if len(errors) > 0 {
+		return GetAppRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetAppRequestMultiError is an error wrapping multiple validation errors
+// returned by GetAppRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetAppRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAppRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAppRequestMultiError) AllErrors() []error { return m }
+
+// GetAppRequestValidationError is the validation error returned by
+// GetAppRequest.Validate if the designated constraints aren't met.
+type GetAppRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetAppRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetAppRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetAppRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetAppRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetAppRequestValidationError) ErrorName() string { return "GetAppRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetAppRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetAppRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetAppRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetAppRequestValidationError{}
 
 // Validate checks the field values on DeleteAppRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the

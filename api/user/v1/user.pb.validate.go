@@ -68,6 +68,8 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for Enabled
 
+	// no validation rules for Desc
+
 	if all {
 		switch v := interface{}(m.GetExtraInfo()).(type) {
 		case interface{ ValidateAll() error }:

@@ -24,12 +24,12 @@ func NewAppSvc(biz *bizApp.Biz) *AppSvc {
 
 func (s *AppSvc) CreateApplication(ctx context.Context, req *pb.CreateAppRequest) (*pb.Application, error) {
 	bizCreateReq := &bizApp.CreateAppReq{
-		Name:     req.Name,
-		Code:     req.Code,
-		AppType:  types.AppType(req.AppType),
-		Category: req.Category,
-		Labels:   req.Labels,
-		Desc:     req.Desc,
+		Name:         req.Name,
+		Code:         req.Code,
+		AppType:      types.AppType(req.AppType),
+		Organization: req.Organization,
+		Labels:       req.Labels,
+		Desc:         req.Desc,
 	}
 
 	err := s.PBStructUnmarshal(req.DevelopmentInfo, &bizCreateReq.DevelopmentInfo)
@@ -102,17 +102,17 @@ func (s *AppSvc) DeleteApplication(ctx context.Context, req *pb.DeleteAppRequest
 
 func (s *AppSvc) bizAppToPBApp(bApp *bizApp.Application) (*pb.Application, error) {
 	pbApp := &pb.Application{
-		Id:         bApp.ID,
-		Name:       bApp.Name,
-		Code:       bApp.Code,
-		AppType:    bApp.AppType.String(),
-		Category:   bApp.Category,
-		Labels:     bApp.Labels,
-		Desc:       bApp.Desc,
-		GmtCreate:  bApp.GmtCreate,
-		GmtModify:  bApp.GmtModify,
-		CreateUser: bApp.CreateUser,
-		ModifyUser: bApp.ModifyUser,
+		Id:           bApp.ID,
+		Name:         bApp.Name,
+		Code:         bApp.Code,
+		AppType:      bApp.AppType.String(),
+		Organization: bApp.Organization,
+		Labels:       bApp.Labels,
+		Desc:         bApp.Desc,
+		GmtCreate:    bApp.GmtCreate,
+		GmtModify:    bApp.GmtModify,
+		CreateUser:   bApp.CreateUser,
+		ModifyUser:   bApp.ModifyUser,
 	}
 
 	var err error

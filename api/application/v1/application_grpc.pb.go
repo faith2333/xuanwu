@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	ApplicationSvc_CreateApplication_FullMethodName = "/api.application.v1.ApplicationSvc/CreateApplication"
 	ApplicationSvc_ListApplications_FullMethodName  = "/api.application.v1.ApplicationSvc/ListApplications"
+	ApplicationSvc_GetApplication_FullMethodName    = "/api.application.v1.ApplicationSvc/GetApplication"
 	ApplicationSvc_DeleteApplication_FullMethodName = "/api.application.v1.ApplicationSvc/DeleteApplication"
 )
 
@@ -30,6 +31,7 @@ const (
 type ApplicationSvcClient interface {
 	CreateApplication(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*Application, error)
 	ListApplications(ctx context.Context, in *ListAppRequest, opts ...grpc.CallOption) (*ListAppResponse, error)
+	GetApplication(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*Application, error)
 	DeleteApplication(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
@@ -59,6 +61,15 @@ func (c *applicationSvcClient) ListApplications(ctx context.Context, in *ListApp
 	return out, nil
 }
 
+func (c *applicationSvcClient) GetApplication(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*Application, error) {
+	out := new(Application)
+	err := c.cc.Invoke(ctx, ApplicationSvc_GetApplication_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationSvcClient) DeleteApplication(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
 	out := new(EmptyResponse)
 	err := c.cc.Invoke(ctx, ApplicationSvc_DeleteApplication_FullMethodName, in, out, opts...)
@@ -74,6 +85,7 @@ func (c *applicationSvcClient) DeleteApplication(ctx context.Context, in *Delete
 type ApplicationSvcServer interface {
 	CreateApplication(context.Context, *CreateAppRequest) (*Application, error)
 	ListApplications(context.Context, *ListAppRequest) (*ListAppResponse, error)
+	GetApplication(context.Context, *GetAppRequest) (*Application, error)
 	DeleteApplication(context.Context, *DeleteAppRequest) (*EmptyResponse, error)
 	mustEmbedUnimplementedApplicationSvcServer()
 }
@@ -87,6 +99,9 @@ func (UnimplementedApplicationSvcServer) CreateApplication(context.Context, *Cre
 }
 func (UnimplementedApplicationSvcServer) ListApplications(context.Context, *ListAppRequest) (*ListAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListApplications not implemented")
+}
+func (UnimplementedApplicationSvcServer) GetApplication(context.Context, *GetAppRequest) (*Application, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApplication not implemented")
 }
 func (UnimplementedApplicationSvcServer) DeleteApplication(context.Context, *DeleteAppRequest) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteApplication not implemented")
@@ -140,6 +155,24 @@ func _ApplicationSvc_ListApplications_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationSvc_GetApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationSvcServer).GetApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ApplicationSvc_GetApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationSvcServer).GetApplication(ctx, req.(*GetAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationSvc_DeleteApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteAppRequest)
 	if err := dec(in); err != nil {
@@ -172,6 +205,10 @@ var ApplicationSvc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListApplications",
 			Handler:    _ApplicationSvc_ListApplications_Handler,
+		},
+		{
+			MethodName: "GetApplication",
+			Handler:    _ApplicationSvc_GetApplication_Handler,
 		},
 		{
 			MethodName: "DeleteApplication",

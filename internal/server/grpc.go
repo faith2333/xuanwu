@@ -15,10 +15,13 @@ import (
 
 	pbApp "github.com/faith2333/xuanwu/api/application/v1"
 	svcApp "github.com/faith2333/xuanwu/internal/service/application"
+
+	pbORG "github.com/faith2333/xuanwu/api/organization/v1"
+	svcORG "github.com/faith2333/xuanwu/internal/service/organization"
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.AppSvc, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.AppSvc, orgSvc *svcORG.OrgSvc, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -42,5 +45,7 @@ func NewGRPCServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.
 
 	pbUser.RegisterUserServerServer(srv, userSvc)
 	pbApp.RegisterApplicationSvcServer(srv, appSvc)
+	pbORG.RegisterOrganizationServiceServer(srv, orgSvc)
+	
 	return srv
 }

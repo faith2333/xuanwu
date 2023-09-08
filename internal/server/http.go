@@ -16,11 +16,14 @@ import (
 	pbApp "github.com/faith2333/xuanwu/api/application/v1"
 	svcApp "github.com/faith2333/xuanwu/internal/service/application"
 
+	pbORG "github.com/faith2333/xuanwu/api/organization/v1"
+	svcORG "github.com/faith2333/xuanwu/internal/service/organization"
+
 	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.AppSvc, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.AppSvc, orgSVC *svcORG.OrgSvc, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.ErrorEncoder(httpencoder.ErrorEncoder),
 		http.ResponseEncoder(httpencoder.ResponseEncoder),
@@ -45,6 +48,7 @@ func NewHTTPServer(c *conf.Server, userSvc *svcUser.ServiceUser, appSvc *svcApp.
 	srv := http.NewServer(opts...)
 	pbUser.RegisterUserServerHTTPServer(srv, userSvc)
 	pbApp.RegisterApplicationSvcHTTPServer(srv, appSvc)
+	pbORG.RegisterOrganizationServiceHTTPServer(srv, orgSVC)
 
 	return srv
 }

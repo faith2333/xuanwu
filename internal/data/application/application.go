@@ -21,7 +21,7 @@ type Application struct {
 	Code               string                    `json:"code" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
 	Name               string                    `json:"name" gorm:"type:varchar(64)"`
 	AppType            types.AppType             `json:"appType" gorm:"type:varchar(64)"`
-	Category           string                    `json:"category" gorm:"type:varchar(64)"`
+	Organization       string                    `json:"organization" gorm:"type:varchar(64)"`
 	Labels             base.TypeSlice            `json:"labels" gorm:"type:json"`
 	Language           types.DevelopmentLanguage `json:"language" gorm:"type:varchar(64)"`
 	GitAddress         string                    `json:"gitAddress" gorm:"type:varchar(64)"`
@@ -165,11 +165,11 @@ func (repo *AppRepo) dbToBizApp(dbApp *Application) *bizApp.Application {
 			CreateUser: dbApp.CreateUser,
 			ModifyUser: dbApp.ModifyUser,
 		},
-		Code:     dbApp.Code,
-		Name:     dbApp.Name,
-		AppType:  dbApp.AppType,
-		Category: dbApp.Category,
-		Labels:   dbApp.Labels.ToSlice(),
+		Code:         dbApp.Code,
+		Name:         dbApp.Name,
+		AppType:      dbApp.AppType,
+		Organization: dbApp.Organization,
+		Labels:       dbApp.Labels.ToSlice(),
 		DevelopmentInfo: bizApp.DevelopmentInfo{
 			Language:           dbApp.Language,
 			GitAddress:         dbApp.GitAddress,
@@ -190,7 +190,7 @@ func (repo *AppRepo) bizToDbApp(bizApp *bizApp.Application) *Application {
 		Code:               bizApp.Code,
 		Name:               bizApp.Name,
 		AppType:            bizApp.AppType,
-		Category:           bizApp.Category,
+		Organization:       bizApp.Organization,
 		Labels:             base.NewTypeSlice(bizApp.Labels),
 		Language:           bizApp.DevelopmentInfo.Language,
 		GitAddress:         bizApp.DevelopmentInfo.GitAddress,

@@ -6,43 +6,7 @@ info:
     title: ""
     version: 0.0.1
 paths:
-    /v1/application/create:
-        post:
-            tags:
-                - ApplicationSvc
-            operationId: ApplicationSvc_CreateApplication
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.application.v1.CreateAppRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.application.v1.Application'
-    /v1/application/delete/{code}:
-        delete:
-            tags:
-                - ApplicationSvc
-            operationId: ApplicationSvc_DeleteApplication
-            parameters:
-                - name: code
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.application.v1.EmptyResponse'
-    /v1/application/list:
+    /v1/application/app:
         get:
             tags:
                 - ApplicationSvc
@@ -71,7 +35,7 @@ paths:
                     type: array
                     items:
                         type: string
-                - name: category
+                - name: Organization
                   in: query
                   schema:
                     type: string
@@ -96,6 +60,219 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.ListAppResponse'
+        post:
+            tags:
+                - ApplicationSvc
+            operationId: ApplicationSvc_CreateApplication
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.application.v1.CreateAppRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.Application'
+    /v1/application/app/delete/{code}:
+        delete:
+            tags:
+                - ApplicationSvc
+            operationId: ApplicationSvc_DeleteApplication
+            parameters:
+                - name: code
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.EmptyResponse'
+    /v1/application/app/{code}:
+        get:
+            tags:
+                - ApplicationSvc
+            operationId: ApplicationSvc_GetApplication
+            parameters:
+                - name: code
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.application.v1.Application'
+    /v1/organization/orgs:
+        get:
+            tags:
+                - OrganizationService
+            description: organization operation
+            operationId: OrganizationService_ListOrganizations
+            parameters:
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: code
+                  in: query
+                  schema:
+                    type: string
+                - name: enabled
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.ListOrgsResponse'
+        post:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_CreateOrganization
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.organization.v1.CreateOrgRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.Organization'
+    /v1/organization/roles:
+        get:
+            tags:
+                - OrganizationService
+            description: role operation
+            operationId: OrganizationService_ListRoles
+            parameters:
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: code
+                  in: query
+                  schema:
+                    type: string
+                - name: enabled
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.ListRolesResponse'
+        post:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_CreateRole
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.organization.v1.CreateRoleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.Role'
+    /v1/organization/users:
+        get:
+            tags:
+                - OrganizationService
+            description: users operation
+            operationId: OrganizationService_ListUsers
+            parameters:
+                - name: pageIndex
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: enabled
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.ListUsersResponse'
+        post:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_CreateUsers
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.organization.v1.CreateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.User'
     /v1/user/changePassword:
         post:
             tags:
@@ -219,7 +396,7 @@ components:
                     type: array
                     items:
                         type: string
-                category:
+                organization:
                     type: string
                 developmentInfo:
                     type: object
@@ -252,7 +429,7 @@ components:
                     type: array
                     items:
                         type: string
-                category:
+                Organization:
                     type: string
                 developmentInfo:
                     type: object
@@ -288,6 +465,98 @@ components:
                 total:
                     type: integer
                     format: int64
+        api.organization.v1.CreateOrgRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                code:
+                    type: string
+                desc:
+                    type: string
+                enabled:
+                    type: boolean
+        api.organization.v1.CreateRoleRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                code:
+                    type: string
+                desc:
+                    type: string
+                enabled:
+                    type: boolean
+        api.organization.v1.CreateUserRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                phone:
+                    type: string
+                desc:
+                    type: string
+                enabled:
+                    type: boolean
+        api.organization.v1.ListOrgsResponse:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.organization.v1.Organization'
+                pageInfo:
+                    $ref: '#/components/schemas/api.base.v1.PageInfo'
+        api.organization.v1.ListRolesResponse:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.organization.v1.Role'
+                pageInfo:
+                    $ref: '#/components/schemas/api.base.v1.PageInfo'
+        api.organization.v1.ListUsersResponse:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.user.v1.User'
+                pageInfo:
+                    $ref: '#/components/schemas/api.base.v1.PageInfo'
+        api.organization.v1.Organization:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                name:
+                    type: string
+                code:
+                    type: string
+                desc:
+                    type: string
+                enabled:
+                    type: boolean
+        api.organization.v1.Role:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                name:
+                    type: string
+                code:
+                    type: string
+                desc:
+                    type: string
+                enabled:
+                    type: boolean
         api.user.v1.ChangePasswordRequest:
             type: object
             properties:
@@ -356,8 +625,11 @@ components:
                     type: string
                 enabled:
                     type: boolean
+                desc:
+                    type: string
                 extraInfo:
                     type: object
 tags:
     - name: ApplicationSvc
+    - name: OrganizationService
     - name: UserServer

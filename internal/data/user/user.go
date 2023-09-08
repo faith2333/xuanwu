@@ -18,6 +18,7 @@ type User struct {
 	Email       string       `json:"email" gorm:"type:varchar(128)"`
 	PhoneNumber string       `json:"phoneNumber" gorm:"type:varchar(128)"`
 	Enabled     bool         `json:"enabled"`
+	Desc        string       `json:"desc" gorm:"type:varchar(400)"`
 	ExtraInfo   base.TypeMap `json:"extraInfo" gorm:"type:json"`
 	base.Model
 }
