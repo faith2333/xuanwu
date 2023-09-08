@@ -947,6 +947,14 @@ func (m *Organization) validate(all bool) error {
 
 	// no validation rules for Enabled
 
+	// no validation rules for GmtCreate
+
+	// no validation rules for GmtModify
+
+	// no validation rules for CreateUser
+
+	// no validation rules for ModifyUser
+
 	if len(errors) > 0 {
 		return OrganizationMultiError(errors)
 	}

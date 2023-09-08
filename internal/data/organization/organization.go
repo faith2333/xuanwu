@@ -2,6 +2,8 @@ package organization
 
 import (
 	"context"
+	basePB "github.com/faith2333/xuanwu/api/base/v1"
+	pbORG "github.com/faith2333/xuanwu/api/organization/v1"
 	bizORG "github.com/faith2333/xuanwu/internal/biz/organization"
 	"github.com/faith2333/xuanwu/internal/data/base"
 	"github.com/pkg/errors"
@@ -98,10 +100,21 @@ func (repo *OrgRepo) List(ctx context.Context, req *bizORG.ListOrgReq) (*bizORG.
 		return nil, errors.Errorf("list failed: %v", err)
 	}
 
-	resp := &bizORG.ListOrgReply{}
-	err = repo.Transform(dbOrgs, &resp)
+	pbORGs := make([]*pbORG.Organization, 0)
+	err = repo.Transform(dbOrgs, &pbORGs)
 	if err != nil {
 		return nil, err
+	}
+
+	resp := &bizORG.ListOrgReply{
+		ListOrgsResponse: pbORG.ListOrgsResponse{
+			Data: pbORGs,
+			PageInfo: &basePB.PageInfo{
+				Total:     total,
+				PageSize:  req.PageSize,
+				PageIndex: req.PageIndex,
+			},
+		},
 	}
 
 	return resp, nil

@@ -31,5 +31,13 @@ type ListOrgReply struct {
 }
 
 func (biz *Biz) ListOrgs(ctx context.Context, req *ListOrgReq) (*ListOrgReply, error) {
+	if req.PageIndex <= 0 {
+		req.PageIndex = 1
+	}
+
+	if req.PageSize <= 0 {
+		req.PageSize = 20
+	}
+
 	return biz.repo.List(ctx, req)
 }

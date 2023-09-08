@@ -154,6 +154,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.organization.v1.ListOrgsResponse'
+        put:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_UpdateOrganization
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.organization.v1.CreateOrgRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.organization.v1.Organization'
         post:
             tags:
                 - OrganizationService
@@ -543,6 +560,14 @@ components:
                     type: string
                 enabled:
                     type: boolean
+                gmtCreate:
+                    type: string
+                gmtModify:
+                    type: string
+                createUser:
+                    type: string
+                modifyUser:
+                    type: string
         api.organization.v1.Role:
             type: object
             properties:

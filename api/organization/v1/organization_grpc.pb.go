@@ -26,6 +26,7 @@ const (
 	OrganizationService_CreateRole_FullMethodName         = "/api.organization.v1.OrganizationService/CreateRole"
 	OrganizationService_ListOrganizations_FullMethodName  = "/api.organization.v1.OrganizationService/ListOrganizations"
 	OrganizationService_CreateOrganization_FullMethodName = "/api.organization.v1.OrganizationService/CreateOrganization"
+	OrganizationService_UpdateOrganization_FullMethodName = "/api.organization.v1.OrganizationService/UpdateOrganization"
 )
 
 // OrganizationServiceClient is the client API for OrganizationService service.
@@ -41,6 +42,7 @@ type OrganizationServiceClient interface {
 	// organization operation
 	ListOrganizations(ctx context.Context, in *ListOrgsRequest, opts ...grpc.CallOption) (*ListOrgsResponse, error)
 	CreateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...grpc.CallOption) (*Organization, error)
+	UpdateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...grpc.CallOption) (*Organization, error)
 }
 
 type organizationServiceClient struct {
@@ -105,6 +107,15 @@ func (c *organizationServiceClient) CreateOrganization(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *organizationServiceClient) UpdateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...grpc.CallOption) (*Organization, error) {
+	out := new(Organization)
+	err := c.cc.Invoke(ctx, OrganizationService_UpdateOrganization_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrganizationServiceServer is the server API for OrganizationService service.
 // All implementations must embed UnimplementedOrganizationServiceServer
 // for forward compatibility
@@ -118,6 +129,7 @@ type OrganizationServiceServer interface {
 	// organization operation
 	ListOrganizations(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error)
 	CreateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
+	UpdateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
 	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
@@ -142,6 +154,9 @@ func (UnimplementedOrganizationServiceServer) ListOrganizations(context.Context,
 }
 func (UnimplementedOrganizationServiceServer) CreateOrganization(context.Context, *CreateOrgRequest) (*Organization, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOrganization not implemented")
+}
+func (UnimplementedOrganizationServiceServer) UpdateOrganization(context.Context, *CreateOrgRequest) (*Organization, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateOrganization not implemented")
 }
 func (UnimplementedOrganizationServiceServer) mustEmbedUnimplementedOrganizationServiceServer() {}
 
@@ -264,6 +279,24 @@ func _OrganizationService_CreateOrganization_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrganizationService_UpdateOrganization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOrgRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrganizationServiceServer).UpdateOrganization(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrganizationService_UpdateOrganization_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrganizationServiceServer).UpdateOrganization(ctx, req.(*CreateOrgRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrganizationService_ServiceDesc is the grpc.ServiceDesc for OrganizationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -294,6 +327,10 @@ var OrganizationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateOrganization",
 			Handler:    _OrganizationService_CreateOrganization_Handler,
+		},
+		{
+			MethodName: "UpdateOrganization",
+			Handler:    _OrganizationService_UpdateOrganization_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

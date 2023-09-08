@@ -26,6 +26,7 @@ const OperationOrganizationServiceCreateUsers = "/api.organization.v1.Organizati
 const OperationOrganizationServiceListOrganizations = "/api.organization.v1.OrganizationService/ListOrganizations"
 const OperationOrganizationServiceListRoles = "/api.organization.v1.OrganizationService/ListRoles"
 const OperationOrganizationServiceListUsers = "/api.organization.v1.OrganizationService/ListUsers"
+const OperationOrganizationServiceUpdateOrganization = "/api.organization.v1.OrganizationService/UpdateOrganization"
 
 type OrganizationServiceHTTPServer interface {
 	CreateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
@@ -37,6 +38,7 @@ type OrganizationServiceHTTPServer interface {
 	ListRoles(context.Context, *ListRoleRequest) (*ListRolesResponse, error)
 	// ListUsers users operation
 	ListUsers(context.Context, *ListUserRequest) (*ListUsersResponse, error)
+	UpdateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
 }
 
 func RegisterOrganizationServiceHTTPServer(s *http.Server, srv OrganizationServiceHTTPServer) {
@@ -47,6 +49,7 @@ func RegisterOrganizationServiceHTTPServer(s *http.Server, srv OrganizationServi
 	r.POST("/v1/organization/roles", _OrganizationService_CreateRole0_HTTP_Handler(srv))
 	r.GET("/v1/organization/orgs", _OrganizationService_ListOrganizations0_HTTP_Handler(srv))
 	r.POST("/v1/organization/orgs", _OrganizationService_CreateOrganization0_HTTP_Handler(srv))
+	r.PUT("/v1/organization/orgs", _OrganizationService_UpdateOrganization0_HTTP_Handler(srv))
 }
 
 func _OrganizationService_ListUsers0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
@@ -163,6 +166,25 @@ func _OrganizationService_CreateOrganization0_HTTP_Handler(srv OrganizationServi
 	}
 }
 
+func _OrganizationService_UpdateOrganization0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateOrgRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrganizationServiceUpdateOrganization)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateOrganization(ctx, req.(*CreateOrgRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*Organization)
+		return ctx.Result(200, reply)
+	}
+}
+
 type OrganizationServiceHTTPClient interface {
 	CreateOrganization(ctx context.Context, req *CreateOrgRequest, opts ...http.CallOption) (rsp *Organization, err error)
 	CreateRole(ctx context.Context, req *CreateRoleRequest, opts ...http.CallOption) (rsp *Role, err error)
@@ -170,6 +192,7 @@ type OrganizationServiceHTTPClient interface {
 	ListOrganizations(ctx context.Context, req *ListOrgsRequest, opts ...http.CallOption) (rsp *ListOrgsResponse, err error)
 	ListRoles(ctx context.Context, req *ListRoleRequest, opts ...http.CallOption) (rsp *ListRolesResponse, err error)
 	ListUsers(ctx context.Context, req *ListUserRequest, opts ...http.CallOption) (rsp *ListUsersResponse, err error)
+	UpdateOrganization(ctx context.Context, req *CreateOrgRequest, opts ...http.CallOption) (rsp *Organization, err error)
 }
 
 type OrganizationServiceHTTPClientImpl struct {
@@ -252,6 +275,19 @@ func (c *OrganizationServiceHTTPClientImpl) ListUsers(ctx context.Context, in *L
 	opts = append(opts, http.Operation(OperationOrganizationServiceListUsers))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrganizationServiceHTTPClientImpl) UpdateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...http.CallOption) (*Organization, error) {
+	var out Organization
+	pattern := "/v1/organization/orgs"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrganizationServiceUpdateOrganization))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

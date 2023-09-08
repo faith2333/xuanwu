@@ -49,6 +49,12 @@ service OrganizationService {
       body: "*"
     };
   }
+  rpc UpdateOrganization(CreateOrgRequest) returns (Organization) {
+    option (google.api.http) = {
+      put: "/v1/organization/orgs"
+      body: "*"
+    };
+  }
 
 
 }
@@ -108,6 +114,10 @@ message Organization {
   string code = 3;
   string desc = 4;
   bool enabled = 5;
+  string gmtCreate = 6;
+  string gmtModify = 7;
+  string createUser = 8;
+  string modifyUser = 9;
 }
 
 message ListOrgsRequest {
