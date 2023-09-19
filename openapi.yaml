@@ -113,6 +113,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
+    /v1/organization/changeStatus:
+        post:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_ChangeOrganizationStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.organization.v1.ChangeOrgStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.base.v1.EmptyResponse'
     /v1/organization/orgs:
         get:
             tags:
@@ -470,6 +488,9 @@ components:
                         $ref: '#/components/schemas/api.application.v1.Application'
                 pageInfo:
                     $ref: '#/components/schemas/api.base.v1.PageInfo'
+        api.base.v1.EmptyResponse:
+            type: object
+            properties: {}
         api.base.v1.PageInfo:
             type: object
             properties:
@@ -482,6 +503,13 @@ components:
                 total:
                     type: integer
                     format: int64
+        api.organization.v1.ChangeOrgStatusRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                enabled:
+                    type: boolean
         api.organization.v1.CreateOrgRequest:
             type: object
             properties:
