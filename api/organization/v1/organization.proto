@@ -55,6 +55,12 @@ service OrganizationService {
       body: "*"
     };
   }
+  rpc ChangeOrganizationStatus(ChangeOrgStatusRequest) returns (base.v1.emptyResponse) {
+    option (google.api.http) = {
+      post: "/v1/organization/changeStatus"
+      body: "*"
+    };
+  }
 
 
 }
@@ -139,4 +145,9 @@ message CreateOrgRequest {
   string code = 2;
   string desc = 3;
   bool enabled = 4;
+}
+
+message ChangeOrgStatusRequest {
+  string code = 1;
+  bool enabled = 2;
 }
