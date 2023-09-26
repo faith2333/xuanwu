@@ -8,6 +8,8 @@ import (
 type IRepoOrganization interface {
 	Create(ctx context.Context, req *CreateOrgReq) (*Organization, error)
 	List(ctx context.Context, req *ListOrgReq) (*ListOrgReply, error)
+	GetByCode(ctx context.Context, code string) (*Organization, error)
+	Update(ctx context.Context, org *Organization) error
 }
 
 type Organization struct {
@@ -20,6 +22,27 @@ type CreateOrgReq struct {
 
 func (biz *Biz) CreateOrg(ctx context.Context, req *CreateOrgReq) (*Organization, error) {
 	return biz.repo.Create(ctx, req)
+}
+
+func (biz *Biz) UpdateOrg(ctx context.Context, req *CreateOrgReq) (*Organization, error) {
+	org, err := biz.repo.GetByCode(ctx, req.Code)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.Name != org.Name {
+		org.Name = req.Name
+	}
+
+	if req.Enabled != org.Enabled {
+		org.Enabled = req.Enabled
+	}
+
+	if req.Desc != org.Desc {
+		org.Desc = req.Desc
+	}
+
+	return org, biz.repo.Update(ctx, org)
 }
 
 type ListOrgReq struct {
@@ -40,4 +63,24 @@ func (biz *Biz) ListOrgs(ctx context.Context, req *ListOrgReq) (*ListOrgReply, e
 	}
 
 	return biz.repo.List(ctx, req)
+}
+
+type ChangeOrgStatusReq struct {
+	Code   string `json:"code"`
+	Enable bool   `json:"enable"`
+}
+
+func (biz *Biz) ChangeOrgStatus(ctx context.Context, req *ChangeOrgStatusReq) error {
+	org, err := biz.repo.GetByCode(ctx, req.Code)
+	if err != nil {
+		return err
+	}
+
+	if org.Enabled == req.Enable {
+		return nil
+	}
+
+	org.Enabled = req.Enable
+
+	return biz.repo.Update(ctx, org)
 }

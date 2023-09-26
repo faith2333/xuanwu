@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	basePb "github.com/faith2333/xuanwu/api/base/v1"
 	pb "github.com/faith2333/xuanwu/api/organization/v1"
 	bizORG "github.com/faith2333/xuanwu/internal/biz/organization"
 	"github.com/faith2333/xuanwu/internal/service/base"
@@ -59,4 +60,36 @@ func (s *OrgSvc) ListOrganizations(ctx context.Context, req *pb.ListOrgsRequest)
 	}
 
 	return pbResp, nil
+}
+
+func (s *OrgSvc) UpdateOrganization(ctx context.Context, req *pb.CreateOrgRequest) (*pb.Organization, error) {
+	bizReq := &bizORG.CreateOrgReq{}
+
+	err := s.TransformJSON(req, &bizReq)
+	if err != nil {
+		return nil, err
+	}
+
+	bizResp, err := s.biz.UpdateOrg(ctx, bizReq)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &pb.Organization{}
+	err = s.TransformJSON(bizResp, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func (s *OrgSvc) ChangeOrganizationStatus(ctx context.Context, req *pb.ChangeOrgStatusRequest) (*basePb.EmptyResponse, error) {
+	bizReq := &bizORG.ChangeOrgStatusReq{}
+	err := s.TransformJSON(req, &bizReq)
+	if err != nil {
+		return nil, err
+	}
+
+	return &basePb.EmptyResponse{}, s.biz.ChangeOrgStatus(ctx, bizReq)
 }

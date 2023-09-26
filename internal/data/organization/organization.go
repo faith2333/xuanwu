@@ -6,6 +6,7 @@ import (
 	pbORG "github.com/faith2333/xuanwu/api/organization/v1"
 	bizORG "github.com/faith2333/xuanwu/internal/biz/organization"
 	"github.com/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/pkg/xerrors"
 	"github.com/pkg/errors"
 	"sync"
 )
@@ -66,6 +67,54 @@ func (repo *OrgRepo) Create(ctx context.Context, req *bizORG.CreateOrgReq) (*biz
 	}
 
 	return bizResp, nil
+}
+
+func (repo *OrgRepo) GetByCode(ctx context.Context, code string) (*bizORG.Organization, error) {
+	org, err := repo.getByCode(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+
+	bizOrg := &bizORG.Organization{}
+	err = repo.Transform(org, &bizOrg)
+	if err != nil {
+		return nil, err
+	}
+
+	return bizOrg, nil
+}
+
+func (repo *OrgRepo) Update(ctx context.Context, org *bizORG.Organization) error {
+	dbOrg := &Organization{}
+	err := repo.Transform(org, &dbOrg)
+	if err != nil {
+		return err
+	}
+
+	err = repo.data.DB(ctx).Model(&Organization{}).Save(&dbOrg).Error
+	if err != nil {
+		return errors.Errorf("update failed: %v", err)
+	}
+
+	return nil
+}
+
+func (repo *OrgRepo) getByCode(ctx context.Context, code string) (*Organization, error) {
+	orgs := make([]*Organization, 0)
+	err := repo.data.DB(ctx).Model(&Organization{}).Where("code = ? and deleted = 0", code).Find(&orgs).Error
+	if err != nil {
+		return nil, errors.Errorf("query failed: %v", err)
+	}
+
+	if len(orgs) == 0 {
+		return nil, xerrors.ErrNotFound
+	}
+
+	if len(orgs) > 1 {
+		return nil, xerrors.ErrMultipleValues
+	}
+
+	return orgs[0], nil
 }
 
 func (repo *OrgRepo) List(ctx context.Context, req *bizORG.ListOrgReq) (*bizORG.ListOrgReply, error) {
