@@ -66,9 +66,3 @@ func (m *Model) BeforeUpdate(tx *gorm.DB) (err error) {
 	m.ModifyUser = m.getUserFromCtx(tx.Statement.Context)
 	return
 }
-
-func (m *Model) BeforeSave(tx *gorm.DB) (err error) {
-	m.GmtModify = xtime.StringTime(time.Now())
-	m.ModifyUser = m.getUserFromCtx(tx.Statement.Context)
-	return
-}

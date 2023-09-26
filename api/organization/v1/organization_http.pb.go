@@ -21,27 +21,27 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationOrganizationServiceChangeOrganizationStatus = "/api.organization.v1.OrganizationService/ChangeOrganizationStatus"
 const OperationOrganizationServiceCreateOrganization = "/api.organization.v1.OrganizationService/CreateOrganization"
 const OperationOrganizationServiceCreateRole = "/api.organization.v1.OrganizationService/CreateRole"
 const OperationOrganizationServiceCreateUsers = "/api.organization.v1.OrganizationService/CreateUsers"
+const OperationOrganizationServiceDeleteOrganization = "/api.organization.v1.OrganizationService/DeleteOrganization"
 const OperationOrganizationServiceListOrganizations = "/api.organization.v1.OrganizationService/ListOrganizations"
 const OperationOrganizationServiceListRoles = "/api.organization.v1.OrganizationService/ListRoles"
 const OperationOrganizationServiceListUsers = "/api.organization.v1.OrganizationService/ListUsers"
 const OperationOrganizationServiceUpdateOrganization = "/api.organization.v1.OrganizationService/UpdateOrganization"
 
 type OrganizationServiceHTTPServer interface {
-	ChangeOrganizationStatus(context.Context, *ChangeOrgStatusRequest) (*v11.EmptyResponse, error)
 	CreateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
 	CreateRole(context.Context, *CreateRoleRequest) (*Role, error)
 	CreateUsers(context.Context, *CreateUserRequest) (*v1.User, error)
+	DeleteOrganization(context.Context, *DeleteOrgRequest) (*v11.EmptyResponse, error)
 	// ListOrganizations organization operation
 	ListOrganizations(context.Context, *ListOrgsRequest) (*ListOrgsResponse, error)
 	// ListRoles role operation
 	ListRoles(context.Context, *ListRoleRequest) (*ListRolesResponse, error)
 	// ListUsers users operation
 	ListUsers(context.Context, *ListUserRequest) (*ListUsersResponse, error)
-	UpdateOrganization(context.Context, *CreateOrgRequest) (*Organization, error)
+	UpdateOrganization(context.Context, *UpdateOrgRequest) (*Organization, error)
 }
 
 func RegisterOrganizationServiceHTTPServer(s *http.Server, srv OrganizationServiceHTTPServer) {
@@ -53,7 +53,7 @@ func RegisterOrganizationServiceHTTPServer(s *http.Server, srv OrganizationServi
 	r.GET("/v1/organization/orgs", _OrganizationService_ListOrganizations0_HTTP_Handler(srv))
 	r.POST("/v1/organization/orgs", _OrganizationService_CreateOrganization0_HTTP_Handler(srv))
 	r.PUT("/v1/organization/orgs", _OrganizationService_UpdateOrganization0_HTTP_Handler(srv))
-	r.POST("/v1/organization/changeStatus", _OrganizationService_ChangeOrganizationStatus0_HTTP_Handler(srv))
+	r.DELETE("/v1/organization/orgs/{id}", _OrganizationService_DeleteOrganization0_HTTP_Handler(srv))
 }
 
 func _OrganizationService_ListUsers0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
@@ -181,7 +181,7 @@ func _OrganizationService_CreateOrganization0_HTTP_Handler(srv OrganizationServi
 
 func _OrganizationService_UpdateOrganization0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CreateOrgRequest
+		var in UpdateOrgRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -190,7 +190,7 @@ func _OrganizationService_UpdateOrganization0_HTTP_Handler(srv OrganizationServi
 		}
 		http.SetOperation(ctx, OperationOrganizationServiceUpdateOrganization)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateOrganization(ctx, req.(*CreateOrgRequest))
+			return srv.UpdateOrganization(ctx, req.(*UpdateOrgRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -201,18 +201,18 @@ func _OrganizationService_UpdateOrganization0_HTTP_Handler(srv OrganizationServi
 	}
 }
 
-func _OrganizationService_ChangeOrganizationStatus0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
+func _OrganizationService_DeleteOrganization0_HTTP_Handler(srv OrganizationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ChangeOrgStatusRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
+		var in DeleteOrgRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationOrganizationServiceChangeOrganizationStatus)
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrganizationServiceDeleteOrganization)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ChangeOrganizationStatus(ctx, req.(*ChangeOrgStatusRequest))
+			return srv.DeleteOrganization(ctx, req.(*DeleteOrgRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -224,14 +224,14 @@ func _OrganizationService_ChangeOrganizationStatus0_HTTP_Handler(srv Organizatio
 }
 
 type OrganizationServiceHTTPClient interface {
-	ChangeOrganizationStatus(ctx context.Context, req *ChangeOrgStatusRequest, opts ...http.CallOption) (rsp *v11.EmptyResponse, err error)
 	CreateOrganization(ctx context.Context, req *CreateOrgRequest, opts ...http.CallOption) (rsp *Organization, err error)
 	CreateRole(ctx context.Context, req *CreateRoleRequest, opts ...http.CallOption) (rsp *Role, err error)
 	CreateUsers(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *v1.User, err error)
+	DeleteOrganization(ctx context.Context, req *DeleteOrgRequest, opts ...http.CallOption) (rsp *v11.EmptyResponse, err error)
 	ListOrganizations(ctx context.Context, req *ListOrgsRequest, opts ...http.CallOption) (rsp *ListOrgsResponse, err error)
 	ListRoles(ctx context.Context, req *ListRoleRequest, opts ...http.CallOption) (rsp *ListRolesResponse, err error)
 	ListUsers(ctx context.Context, req *ListUserRequest, opts ...http.CallOption) (rsp *ListUsersResponse, err error)
-	UpdateOrganization(ctx context.Context, req *CreateOrgRequest, opts ...http.CallOption) (rsp *Organization, err error)
+	UpdateOrganization(ctx context.Context, req *UpdateOrgRequest, opts ...http.CallOption) (rsp *Organization, err error)
 }
 
 type OrganizationServiceHTTPClientImpl struct {
@@ -240,19 +240,6 @@ type OrganizationServiceHTTPClientImpl struct {
 
 func NewOrganizationServiceHTTPClient(client *http.Client) OrganizationServiceHTTPClient {
 	return &OrganizationServiceHTTPClientImpl{client}
-}
-
-func (c *OrganizationServiceHTTPClientImpl) ChangeOrganizationStatus(ctx context.Context, in *ChangeOrgStatusRequest, opts ...http.CallOption) (*v11.EmptyResponse, error) {
-	var out v11.EmptyResponse
-	pattern := "/v1/organization/changeStatus"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationOrganizationServiceChangeOrganizationStatus))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
 }
 
 func (c *OrganizationServiceHTTPClientImpl) CreateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...http.CallOption) (*Organization, error) {
@@ -288,6 +275,19 @@ func (c *OrganizationServiceHTTPClientImpl) CreateUsers(ctx context.Context, in 
 	opts = append(opts, http.Operation(OperationOrganizationServiceCreateUsers))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrganizationServiceHTTPClientImpl) DeleteOrganization(ctx context.Context, in *DeleteOrgRequest, opts ...http.CallOption) (*v11.EmptyResponse, error) {
+	var out v11.EmptyResponse
+	pattern := "/v1/organization/orgs/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationOrganizationServiceDeleteOrganization))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -333,7 +333,7 @@ func (c *OrganizationServiceHTTPClientImpl) ListUsers(ctx context.Context, in *L
 	return &out, err
 }
 
-func (c *OrganizationServiceHTTPClientImpl) UpdateOrganization(ctx context.Context, in *CreateOrgRequest, opts ...http.CallOption) (*Organization, error) {
+func (c *OrganizationServiceHTTPClientImpl) UpdateOrganization(ctx context.Context, in *UpdateOrgRequest, opts ...http.CallOption) (*Organization, error) {
 	var out Organization
 	pattern := "/v1/organization/orgs"
 	path := binding.EncodeURL(pattern, in, false)

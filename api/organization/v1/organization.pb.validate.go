@@ -609,7 +609,7 @@ func (m *Organization) Validate() error {
 
 	// no validation rules for Desc
 
-	// no validation rules for Enabled
+	// no validation rules for Status
 
 	// no validation rules for GmtCreate
 
@@ -694,7 +694,7 @@ func (m *ListOrgsRequest) Validate() error {
 
 	// no validation rules for Code
 
-	// no validation rules for Enabled
+	// no validation rules for Status
 
 	return nil
 }
@@ -857,7 +857,7 @@ func (m *CreateOrgRequest) Validate() error {
 
 	// no validation rules for Desc
 
-	// no validation rules for Enabled
+	// no validation rules for Status
 
 	return nil
 }
@@ -916,24 +916,28 @@ var _ interface {
 	ErrorName() string
 } = CreateOrgRequestValidationError{}
 
-// Validate checks the field values on ChangeOrgStatusRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ChangeOrgStatusRequest) Validate() error {
+// Validate checks the field values on UpdateOrgRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *UpdateOrgRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	// no validation rules for Code
 
-	// no validation rules for Enabled
+	// no validation rules for Name
+
+	// no validation rules for Status
+
+	// no validation rules for Desc
 
 	return nil
 }
 
-// ChangeOrgStatusRequestValidationError is the validation error returned by
-// ChangeOrgStatusRequest.Validate if the designated constraints aren't met.
-type ChangeOrgStatusRequestValidationError struct {
+// UpdateOrgRequestValidationError is the validation error returned by
+// UpdateOrgRequest.Validate if the designated constraints aren't met.
+type UpdateOrgRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -941,24 +945,22 @@ type ChangeOrgStatusRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChangeOrgStatusRequestValidationError) Field() string { return e.field }
+func (e UpdateOrgRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChangeOrgStatusRequestValidationError) Reason() string { return e.reason }
+func (e UpdateOrgRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChangeOrgStatusRequestValidationError) Cause() error { return e.cause }
+func (e UpdateOrgRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChangeOrgStatusRequestValidationError) Key() bool { return e.key }
+func (e UpdateOrgRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChangeOrgStatusRequestValidationError) ErrorName() string {
-	return "ChangeOrgStatusRequestValidationError"
-}
+func (e UpdateOrgRequestValidationError) ErrorName() string { return "UpdateOrgRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChangeOrgStatusRequestValidationError) Error() string {
+func (e UpdateOrgRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -970,14 +972,14 @@ func (e ChangeOrgStatusRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChangeOrgStatusRequest.%s: %s%s",
+		"invalid %sUpdateOrgRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChangeOrgStatusRequestValidationError{}
+var _ error = UpdateOrgRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -985,4 +987,71 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChangeOrgStatusRequestValidationError{}
+} = UpdateOrgRequestValidationError{}
+
+// Validate checks the field values on DeleteOrgRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *DeleteOrgRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	return nil
+}
+
+// DeleteOrgRequestValidationError is the validation error returned by
+// DeleteOrgRequest.Validate if the designated constraints aren't met.
+type DeleteOrgRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteOrgRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteOrgRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteOrgRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteOrgRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteOrgRequestValidationError) ErrorName() string { return "DeleteOrgRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeleteOrgRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteOrgRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteOrgRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteOrgRequestValidationError{}

@@ -3,13 +3,15 @@ package organization
 import (
 	"context"
 	pb "github.com/faith2333/xuanwu/api/organization/v1"
+	"github.com/pkg/errors"
 )
 
 type IRepoOrganization interface {
 	Create(ctx context.Context, req *CreateOrgReq) (*Organization, error)
 	List(ctx context.Context, req *ListOrgReq) (*ListOrgReply, error)
 	GetByCode(ctx context.Context, code string) (*Organization, error)
-	Update(ctx context.Context, org *Organization) error
+	Update(ctx context.Context, req *UpdateOrgReq) (*Organization, error)
+	Delete(ctx context.Context, id int64) error
 }
 
 type Organization struct {
@@ -24,25 +26,16 @@ func (biz *Biz) CreateOrg(ctx context.Context, req *CreateOrgReq) (*Organization
 	return biz.repo.Create(ctx, req)
 }
 
-func (biz *Biz) UpdateOrg(ctx context.Context, req *CreateOrgReq) (*Organization, error) {
-	org, err := biz.repo.GetByCode(ctx, req.Code)
-	if err != nil {
-		return nil, err
+type UpdateOrgReq struct {
+	pb.UpdateOrgRequest
+}
+
+func (biz *Biz) UpdateOrg(ctx context.Context, req *UpdateOrgReq) (*Organization, error) {
+	if req.Code == "" {
+		return nil, errors.New("the code not been specified")
 	}
 
-	if req.Name != org.Name {
-		org.Name = req.Name
-	}
-
-	if req.Enabled != org.Enabled {
-		org.Enabled = req.Enabled
-	}
-
-	if req.Desc != org.Desc {
-		org.Desc = req.Desc
-	}
-
-	return org, biz.repo.Update(ctx, org)
+	return biz.repo.Update(ctx, req)
 }
 
 type ListOrgReq struct {
@@ -65,22 +58,6 @@ func (biz *Biz) ListOrgs(ctx context.Context, req *ListOrgReq) (*ListOrgReply, e
 	return biz.repo.List(ctx, req)
 }
 
-type ChangeOrgStatusReq struct {
-	Code   string `json:"code"`
-	Enable bool   `json:"enable"`
-}
-
-func (biz *Biz) ChangeOrgStatus(ctx context.Context, req *ChangeOrgStatusReq) error {
-	org, err := biz.repo.GetByCode(ctx, req.Code)
-	if err != nil {
-		return err
-	}
-
-	if org.Enabled == req.Enable {
-		return nil
-	}
-
-	org.Enabled = req.Enable
-
-	return biz.repo.Update(ctx, org)
+func (biz *Biz) DeleteOrg(ctx context.Context, id int64) error {
+	return biz.repo.Delete(ctx, id)
 }

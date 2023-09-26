@@ -113,24 +113,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.application.v1.Application'
-    /v1/organization/changeStatus:
-        post:
-            tags:
-                - OrganizationService
-            operationId: OrganizationService_ChangeOrganizationStatus
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.organization.v1.ChangeOrgStatusRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.base.v1.EmptyResponse'
     /v1/organization/orgs:
         get:
             tags:
@@ -161,10 +143,10 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: enabled
+                - name: status
                   in: query
                   schema:
-                    type: boolean
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -180,7 +162,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.organization.v1.CreateOrgRequest'
+                            $ref: '#/components/schemas/api.organization.v1.UpdateOrgRequest'
                 required: true
             responses:
                 "200":
@@ -206,6 +188,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.organization.v1.Organization'
+    /v1/organization/orgs/{id}:
+        delete:
+            tags:
+                - OrganizationService
+            operationId: OrganizationService_DeleteOrganization
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.base.v1.EmptyResponse'
     /v1/organization/roles:
         get:
             tags:
@@ -503,13 +504,6 @@ components:
                 total:
                     type: integer
                     format: int64
-        api.organization.v1.ChangeOrgStatusRequest:
-            type: object
-            properties:
-                code:
-                    type: string
-                enabled:
-                    type: boolean
         api.organization.v1.CreateOrgRequest:
             type: object
             properties:
@@ -519,8 +513,8 @@ components:
                     type: string
                 desc:
                     type: string
-                enabled:
-                    type: boolean
+                status:
+                    type: string
         api.organization.v1.CreateRoleRequest:
             type: object
             properties:
@@ -586,8 +580,8 @@ components:
                     type: string
                 desc:
                     type: string
-                enabled:
-                    type: boolean
+                status:
+                    type: string
                 gmtCreate:
                     type: string
                 gmtModify:
@@ -610,6 +604,17 @@ components:
                     type: string
                 enabled:
                     type: boolean
+        api.organization.v1.UpdateOrgRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: string
+                desc:
+                    type: string
         api.user.v1.ChangePasswordRequest:
             type: object
             properties:

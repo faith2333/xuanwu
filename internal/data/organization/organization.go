@@ -12,11 +12,11 @@ import (
 )
 
 type Organization struct {
-	ID      int64  `json:"id" gorm:"primaryKey;autoIncrement"`
-	Name    string `json:"name" gorm:"type:varchar(64);not null"`
-	Code    string `json:"code" gorm:"type:varchar(64);not null;uniqueIndex:CODE_DELETED"`
-	Desc    string `json:"desc" gorm:"type:varchar(400)"`
-	Enabled bool   `json:"enabled"`
+	ID     int64  `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name   string `json:"name" gorm:"type:varchar(64);not null"`
+	Code   string `json:"code" gorm:"type:varchar(64);not null;uniqueIndex:CODE_DELETED"`
+	Desc   string `json:"desc" gorm:"type:varchar(400)"`
+	Status string `json:"status"`
 	base.Model
 }
 
@@ -84,19 +84,36 @@ func (repo *OrgRepo) GetByCode(ctx context.Context, code string) (*bizORG.Organi
 	return bizOrg, nil
 }
 
-func (repo *OrgRepo) Update(ctx context.Context, org *bizORG.Organization) error {
-	dbOrg := &Organization{}
-	err := repo.Transform(org, &dbOrg)
+func (repo *OrgRepo) Update(ctx context.Context, req *bizORG.UpdateOrgReq) (*bizORG.Organization, error) {
+	dbORG, err := repo.getByCode(ctx, req.Code)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = repo.data.DB(ctx).Model(&Organization{}).Save(&dbOrg).Error
-	if err != nil {
-		return errors.Errorf("update failed: %v", err)
+	if req.Name != dbORG.Name && req.Name != "" {
+		dbORG.Name = req.Name
 	}
 
-	return nil
+	if req.Status != dbORG.Status && req.Status != "" {
+		dbORG.Status = req.Status
+	}
+
+	if req.Desc != dbORG.Desc && req.Desc != "" {
+		dbORG.Desc = req.Desc
+	}
+
+	err = repo.data.DB(ctx).Save(dbORG).Error
+	if err != nil {
+		return nil, errors.Errorf("update failed: %v", err)
+	}
+
+	org := &bizORG.Organization{}
+	err = repo.Transform(dbORG, &org)
+	if err != nil {
+		return nil, err
+	}
+
+	return org, nil
 }
 
 func (repo *OrgRepo) getByCode(ctx context.Context, code string) (*Organization, error) {
@@ -134,8 +151,8 @@ func (repo *OrgRepo) List(ctx context.Context, req *bizORG.ListOrgReq) (*bizORG.
 		query = query.Where("name like ?", "%"+req.Name+"%")
 	}
 
-	if req.Enabled {
-		query = query.Where("enabled = 1")
+	if req.Status != "" {
+		query = query.Where("status = ?", req.Status)
 	}
 
 	var total int64
@@ -167,4 +184,31 @@ func (repo *OrgRepo) List(ctx context.Context, req *bizORG.ListOrgReq) (*bizORG.
 	}
 
 	return resp, nil
+}
+
+func (repo *OrgRepo) Delete(ctx context.Context, id int64) error {
+	err := repo.data.DB(ctx).Model(&Organization{}).Where("id = ? and deleted = 0", id).Update("deleted", id).Error
+	if err != nil {
+		return errors.Errorf("delete failed: %v", err)
+	}
+
+	return nil
+}
+
+func (repo *OrgRepo) getOrgByID(ctx context.Context, id int64) (*Organization, error) {
+	orgs := make([]*Organization, 0)
+	err := repo.data.DB(ctx).Model(&Organization{}).Where("id = ? and deleted = 0", id).Find(&orgs).Error
+	if err != nil {
+		return nil, err
+	}
+
+	if len(orgs) == 0 {
+		return nil, xerrors.ErrNotFound
+	}
+
+	if len(orgs) > 1 {
+		return nil, xerrors.ErrMultipleValues
+	}
+
+	return orgs[0], nil
 }
