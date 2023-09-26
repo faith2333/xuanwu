@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,30 +31,14 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on PageInfo with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *PageInfo) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on PageInfo with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PageInfoMultiError, or nil
-// if none found.
-func (m *PageInfo) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *PageInfo) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for PageIndex
 
@@ -63,28 +46,8 @@ func (m *PageInfo) validate(all bool) error {
 
 	// no validation rules for Total
 
-	if len(errors) > 0 {
-		return PageInfoMultiError(errors)
-	}
-
 	return nil
 }
-
-// PageInfoMultiError is an error wrapping multiple validation errors returned
-// by PageInfo.ValidateAll() if the designated constraints aren't met.
-type PageInfoMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PageInfoMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PageInfoMultiError) AllErrors() []error { return m }
 
 // PageInfoValidationError is the validation error returned by
 // PageInfo.Validate if the designated constraints aren't met.
@@ -139,3 +102,68 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PageInfoValidationError{}
+
+// Validate checks the field values on EmptyResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *EmptyResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// EmptyResponseValidationError is the validation error returned by
+// EmptyResponse.Validate if the designated constraints aren't met.
+type EmptyResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EmptyResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EmptyResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EmptyResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EmptyResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EmptyResponseValidationError) ErrorName() string { return "EmptyResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EmptyResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEmptyResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EmptyResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EmptyResponseValidationError{}

@@ -37,6 +37,10 @@ func (d *defaultUser) Login(ctx context.Context, username, password string) (str
 		return "", err
 	}
 
+	if err = d.checkPassword(dbUser, password); err != nil {
+		return "", err
+	}
+
 	tokenString, err := selfJwt.CreateToken([]byte(d.c.JWTSecretKey), dbUser.Username, dbUser.Email, dbUser.PhoneNumber, dbUser.ExtraInfo)
 	if err != nil {
 		return "", errors.Wrap(err, "generate jwt token failed")

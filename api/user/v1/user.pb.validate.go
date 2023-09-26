@@ -11,7 +11,6 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -32,29 +31,14 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
-	_ = sort.Sort
 )
 
 // Validate checks the field values on User with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
+// definition for this message. If any rules are violated, an error is returned.
 func (m *User) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on User with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in UserMultiError, or nil if none found.
-func (m *User) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *User) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Id
 
@@ -68,26 +52,9 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for Enabled
 
-	if all {
-		switch v := interface{}(m.GetExtraInfo()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, UserValidationError{
-					field:  "ExtraInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, UserValidationError{
-					field:  "ExtraInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetExtraInfo()).(interface{ Validate() error }); ok {
+	// no validation rules for Desc
+
+	if v, ok := interface{}(m.GetExtraInfo()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return UserValidationError{
 				field:  "ExtraInfo",
@@ -97,28 +64,8 @@ func (m *User) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return UserMultiError(errors)
-	}
-
 	return nil
 }
-
-// UserMultiError is an error wrapping multiple validation errors returned by
-// User.ValidateAll() if the designated constraints aren't met.
-type UserMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m UserMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m UserMultiError) AllErrors() []error { return m }
 
 // UserValidationError is the validation error returned by User.Validate if the
 // designated constraints aren't met.
@@ -175,92 +122,43 @@ var _ interface {
 } = UserValidationError{}
 
 // Validate checks the field values on SignUpRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *SignUpRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SignUpRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SignUpRequestMultiError, or
-// nil if none found.
-func (m *SignUpRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SignUpRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetUsername()) < 3 {
-		err := SignUpRequestValidationError{
+		return SignUpRequestValidationError{
 			field:  "Username",
 			reason: "value length must be at least 3 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetPassword()) < 8 {
-		err := SignUpRequestValidationError{
+		return SignUpRequestValidationError{
 			field:  "Password",
 			reason: "value length must be at least 8 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if err := m._validateEmail(m.GetEmail()); err != nil {
-		err = SignUpRequestValidationError{
+		return SignUpRequestValidationError{
 			field:  "Email",
 			reason: "value must be a valid email address",
 			cause:  err,
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetPhoneNumber()) < 11 {
-		err := SignUpRequestValidationError{
+		return SignUpRequestValidationError{
 			field:  "PhoneNumber",
 			reason: "value length must be at least 11 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetExtraInfo()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, SignUpRequestValidationError{
-					field:  "ExtraInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, SignUpRequestValidationError{
-					field:  "ExtraInfo",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetExtraInfo()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetExtraInfo()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SignUpRequestValidationError{
 				field:  "ExtraInfo",
@@ -268,10 +166,6 @@ func (m *SignUpRequest) validate(all bool) error {
 				cause:  err,
 			}
 		}
-	}
-
-	if len(errors) > 0 {
-		return SignUpRequestMultiError(errors)
 	}
 
 	return nil
@@ -326,23 +220,6 @@ func (m *SignUpRequest) _validateEmail(addr string) error {
 
 	return m._validateHostname(parts[1])
 }
-
-// SignUpRequestMultiError is an error wrapping multiple validation errors
-// returned by SignUpRequest.ValidateAll() if the designated constraints
-// aren't met.
-type SignUpRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SignUpRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SignUpRequestMultiError) AllErrors() []error { return m }
 
 // SignUpRequestValidationError is the validation error returned by
 // SignUpRequest.Validate if the designated constraints aren't met.
@@ -399,71 +276,29 @@ var _ interface {
 } = SignUpRequestValidationError{}
 
 // Validate checks the field values on LoginRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *LoginRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on LoginRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in LoginRequestMultiError, or
-// nil if none found.
-func (m *LoginRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *LoginRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetUsername()) < 3 {
-		err := LoginRequestValidationError{
+		return LoginRequestValidationError{
 			field:  "Username",
 			reason: "value length must be at least 3 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetPassword()) < 8 {
-		err := LoginRequestValidationError{
+		return LoginRequestValidationError{
 			field:  "Password",
 			reason: "value length must be at least 8 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return LoginRequestMultiError(errors)
 	}
 
 	return nil
 }
-
-// LoginRequestMultiError is an error wrapping multiple validation errors
-// returned by LoginRequest.ValidateAll() if the designated constraints aren't met.
-type LoginRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m LoginRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m LoginRequestMultiError) AllErrors() []error { return m }
 
 // LoginRequestValidationError is the validation error returned by
 // LoginRequest.Validate if the designated constraints aren't met.
@@ -520,51 +355,16 @@ var _ interface {
 } = LoginRequestValidationError{}
 
 // Validate checks the field values on LoginReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *LoginReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on LoginReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in LoginReplyMultiError, or
-// nil if none found.
-func (m *LoginReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *LoginReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for JwtToken
-
-	if len(errors) > 0 {
-		return LoginReplyMultiError(errors)
-	}
 
 	return nil
 }
-
-// LoginReplyMultiError is an error wrapping multiple validation errors
-// returned by LoginReply.ValidateAll() if the designated constraints aren't met.
-type LoginReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m LoginReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m LoginReplyMultiError) AllErrors() []error { return m }
 
 // LoginReplyValidationError is the validation error returned by
 // LoginReply.Validate if the designated constraints aren't met.
@@ -622,25 +422,11 @@ var _ interface {
 
 // Validate checks the field values on GetCurrentUserReply with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetCurrentUserReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetCurrentUserReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetCurrentUserReplyMultiError, or nil if none found.
-func (m *GetCurrentUserReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetCurrentUserReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Username
 
@@ -650,29 +436,8 @@ func (m *GetCurrentUserReply) validate(all bool) error {
 
 	// no validation rules for NotificationNumber
 
-	if len(errors) > 0 {
-		return GetCurrentUserReplyMultiError(errors)
-	}
-
 	return nil
 }
-
-// GetCurrentUserReplyMultiError is an error wrapping multiple validation
-// errors returned by GetCurrentUserReply.ValidateAll() if the designated
-// constraints aren't met.
-type GetCurrentUserReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetCurrentUserReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetCurrentUserReplyMultiError) AllErrors() []error { return m }
 
 // GetCurrentUserReplyValidationError is the validation error returned by
 // GetCurrentUserReply.Validate if the designated constraints aren't met.
@@ -732,82 +497,35 @@ var _ interface {
 
 // Validate checks the field values on ChangePasswordRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *ChangePasswordRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ChangePasswordRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ChangePasswordRequestMultiError, or nil if none found.
-func (m *ChangePasswordRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ChangePasswordRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetUsername()) < 3 {
-		err := ChangePasswordRequestValidationError{
+		return ChangePasswordRequestValidationError{
 			field:  "Username",
 			reason: "value length must be at least 3 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetCurrentPassword()) < 8 {
-		err := ChangePasswordRequestValidationError{
+		return ChangePasswordRequestValidationError{
 			field:  "CurrentPassword",
 			reason: "value length must be at least 8 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetNewPassword()) < 8 {
-		err := ChangePasswordRequestValidationError{
+		return ChangePasswordRequestValidationError{
 			field:  "NewPassword",
 			reason: "value length must be at least 8 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return ChangePasswordRequestMultiError(errors)
 	}
 
 	return nil
 }
-
-// ChangePasswordRequestMultiError is an error wrapping multiple validation
-// errors returned by ChangePasswordRequest.ValidateAll() if the designated
-// constraints aren't met.
-type ChangePasswordRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ChangePasswordRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ChangePasswordRequestMultiError) AllErrors() []error { return m }
 
 // ChangePasswordRequestValidationError is the validation error returned by
 // ChangePasswordRequest.Validate if the designated constraints aren't met.
@@ -867,60 +585,21 @@ var _ interface {
 
 // Validate checks the field values on GetUserByUsernameRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetUserByUsernameRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetUserByUsernameRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetUserByUsernameRequestMultiError, or nil if none found.
-func (m *GetUserByUsernameRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetUserByUsernameRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if utf8.RuneCountInString(m.GetUsername()) < 3 {
-		err := GetUserByUsernameRequestValidationError{
+		return GetUserByUsernameRequestValidationError{
 			field:  "Username",
 			reason: "value length must be at least 3 runes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return GetUserByUsernameRequestMultiError(errors)
 	}
 
 	return nil
 }
-
-// GetUserByUsernameRequestMultiError is an error wrapping multiple validation
-// errors returned by GetUserByUsernameRequest.ValidateAll() if the designated
-// constraints aren't met.
-type GetUserByUsernameRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetUserByUsernameRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetUserByUsernameRequestMultiError) AllErrors() []error { return m }
 
 // GetUserByUsernameRequestValidationError is the validation error returned by
 // GetUserByUsernameRequest.Validate if the designated constraints aren't met.
@@ -979,49 +658,15 @@ var _ interface {
 } = GetUserByUsernameRequestValidationError{}
 
 // Validate checks the field values on EmptyRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *EmptyRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on EmptyRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in EmptyRequestMultiError, or
-// nil if none found.
-func (m *EmptyRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *EmptyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if len(errors) > 0 {
-		return EmptyRequestMultiError(errors)
-	}
-
 	return nil
 }
-
-// EmptyRequestMultiError is an error wrapping multiple validation errors
-// returned by EmptyRequest.ValidateAll() if the designated constraints aren't met.
-type EmptyRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m EmptyRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m EmptyRequestMultiError) AllErrors() []error { return m }
 
 // EmptyRequestValidationError is the validation error returned by
 // EmptyRequest.Validate if the designated constraints aren't met.
@@ -1078,49 +723,14 @@ var _ interface {
 } = EmptyRequestValidationError{}
 
 // Validate checks the field values on EmptyReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *EmptyReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on EmptyReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in EmptyReplyMultiError, or
-// nil if none found.
-func (m *EmptyReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *EmptyReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
-	if len(errors) > 0 {
-		return EmptyReplyMultiError(errors)
-	}
-
 	return nil
 }
-
-// EmptyReplyMultiError is an error wrapping multiple validation errors
-// returned by EmptyReply.ValidateAll() if the designated constraints aren't met.
-type EmptyReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m EmptyReplyMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m EmptyReplyMultiError) AllErrors() []error { return m }
 
 // EmptyReplyValidationError is the validation error returned by
 // EmptyReply.Validate if the designated constraints aren't met.

@@ -11,3 +11,5 @@ message pageInfo {
   int64 pageSize = 2;
   int64 total = 3;
 }
+
+message emptyResponse {}

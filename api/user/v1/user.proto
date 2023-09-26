@@ -64,6 +64,7 @@ message User {
   string email = 4;
   string phoneNumber = 5;
   bool enabled = 7;
+  string desc = 8;
   google.protobuf.Struct extraInfo = 6;
 }
 

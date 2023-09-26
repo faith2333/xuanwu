@@ -17,8 +17,8 @@ type Application struct {
 	Code    string        `json:"code"`
 	Name    string        `json:"name"`
 	AppType types.AppType `json:"appType"`
-	// the category of the application, it is used for the organization.proto of the application.
-	Category          string                    `json:"category"`
+	// the organization of the application, it is used for the organization.proto of the application.
+	Organization      string                    `json:"organization"`
 	Labels            []string                  `json:"labels"`
 	Desc              string                    `json:"desc"`
 	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
@@ -44,7 +44,7 @@ type CreateAppReq struct {
 	Code              string                    `json:"code"`
 	AppType           types.AppType             `json:"appType"`
 	Labels            []string                  `json:"labels"`
-	Category          string                    `json:"category"`
+	Organization      string                    `json:"Organization"`
 	DevelopmentInfo   DevelopmentInfo           `json:"developmentInfo"`
 	TestInfo          TestInfo                  `json:"testInfo"`
 	NotificationInfos []*types.NotificationInfo `json:"notificationInfos"`
@@ -65,7 +65,7 @@ func (biz *Biz) CreateApp(ctx context.Context, req *CreateAppReq) (*Application,
 		Code:              req.Code,
 		AppType:           req.AppType,
 		Labels:            req.Labels,
-		Category:          req.Category,
+		Organization:      req.Organization,
 		DevelopmentInfo:   req.DevelopmentInfo,
 		TestInfo:          req.TestInfo,
 		NotificationInfos: req.NotificationInfos,
