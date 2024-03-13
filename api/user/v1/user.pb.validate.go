@@ -44,7 +44,9 @@ func (m *User) Validate() error {
 
 	// no validation rules for Username
 
-	// no validation rules for Password
+	// no validation rules for DisplayName
+
+	// no validation rules for AvatarURL
 
 	// no validation rules for Email
 

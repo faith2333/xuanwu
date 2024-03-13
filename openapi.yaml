@@ -654,7 +654,9 @@ components:
                     type: string
                 username:
                     type: string
-                password:
+                displayName:
+                    type: string
+                avatarURL:
                     type: string
                 email:
                     type: string

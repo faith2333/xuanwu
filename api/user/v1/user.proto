@@ -60,7 +60,8 @@ service UserServer {
 message User {
   int64 id = 1;
   string username = 2;
-  string password = 3;
+  string displayName = 9;
+  string avatarURL = 3;
   string email = 4;
   string phoneNumber = 5;
   string enabled = 7;
