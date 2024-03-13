@@ -63,7 +63,7 @@ message User {
   string password = 3;
   string email = 4;
   string phoneNumber = 5;
-  bool enabled = 7;
+  string enabled = 7;
   string desc = 8;
   google.protobuf.Struct extraInfo = 6;
 }
@@ -87,9 +87,8 @@ message LoginReply {
 
 message GetCurrentUserReply {
   string username = 1;
-  string email = 2;
-  string phoneNumber = 3;
-  int64 notificationNumber = 4;
+  string displayName = 2;
+  string avatarURL = 3;
 }
 
 message ChangePasswordRequest {

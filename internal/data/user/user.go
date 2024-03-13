@@ -2,9 +2,9 @@ package user
 
 import (
 	"context"
-	"fmt"
 	biz "github.com/faith2333/xuanwu/internal/biz/user"
 	"github.com/faith2333/xuanwu/internal/data/base"
+	"github.com/faith2333/xuanwu/pkg/xerrors"
 	"github.com/pkg/errors"
 	"sync"
 )
@@ -14,10 +14,11 @@ var userRunOnce = sync.Once{}
 type User struct {
 	ID          int64        `json:"id" gorm:"primaryKey"`
 	Username    string       `json:"username" gorm:"type:varchar(64);uniqueIndex:CODE_DELETED"`
+	DisplayName string       `json:"displayName" gorm:"type:varchar(128)"`
 	Password    string       `json:"password" gorm:"type:varchar(128)"`
 	Email       string       `json:"email" gorm:"type:varchar(128)"`
 	PhoneNumber string       `json:"phoneNumber" gorm:"type:varchar(128)"`
-	Enabled     bool         `json:"enabled"`
+	Enabled     string       `json:"enabled" gorm:"type:varchar(8)"` // "true" or "false"
 	Desc        string       `json:"desc" gorm:"type:varchar(400)"`
 	ExtraInfo   base.TypeMap `json:"extraInfo" gorm:"type:json"`
 	base.Model
@@ -108,7 +109,11 @@ func (repo *RepoUser) getUserByUsername(ctx context.Context, username string) (*
 	}
 
 	if len(users) == 0 {
-		return nil, errors.New(fmt.Sprintf("query by username %s not found", username))
+		return nil, xerrors.ErrNotFound
+	}
+
+	if len(users) > 1 {
+		return nil, xerrors.ErrMultipleValues
 	}
 
 	return users[0], nil
@@ -123,7 +128,11 @@ func (repo *RepoUser) getUserByID(ctx context.Context, id int64) (*User, error) 
 	}
 
 	if len(users) == 0 {
-		return nil, errors.New(fmt.Sprintf("query by id %s not found", id))
+		return nil, xerrors.ErrNotFound
+	}
+
+	if len(users) > 1 {
+		return nil, xerrors.ErrMultipleValues
 	}
 
 	return users[0], nil

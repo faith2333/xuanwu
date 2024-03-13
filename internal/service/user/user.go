@@ -49,8 +49,8 @@ func (svc *ServiceUser) GetCurrentUser(ctx context.Context, request *pb.EmptyReq
 
 	return &pb.GetCurrentUserReply{
 		Username:    user.Username,
-		Email:       user.Email,
-		PhoneNumber: user.PhoneNumber,
+		DisplayName: user.DisplayName,
+		AvatarURL:   user.AvatarURL,
 	}, nil
 }
 

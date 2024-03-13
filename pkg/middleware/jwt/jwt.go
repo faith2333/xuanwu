@@ -20,10 +20,9 @@ var (
 type ctxUser struct{}
 
 type CurrentUser struct {
-	Username    string                 `json:"username"`
-	Email       string                 `json:"email"`
-	PhoneNumber string                 `json:"phoneNumber"`
-	ExtraInfo   map[string]interface{} `json:"extraInfo"`
+	Username    string `json:"username"`
+	DisplayName string `json:"displayName"`
+	AvatarURL   string `json:"avatarURL"`
 }
 
 type CustomClaims struct {
@@ -41,14 +40,9 @@ func NewJWTFunc(secretKey []byte) func(token *jwtv4.Token) (interface{}, error) 
 	}
 }
 
-func CreateToken(secretKey []byte, username, email, phoneNumber string, extraInfo map[string]interface{}) (string, error) {
+func CreateToken(secretKey []byte, userInfo *CurrentUser) (string, error) {
 	token := jwtv4.NewWithClaims(SigningMethod, CustomClaims{
-		User: CurrentUser{
-			Username:    username,
-			Email:       email,
-			PhoneNumber: phoneNumber,
-			ExtraInfo:   extraInfo,
-		},
+		User: *userInfo,
 		RegisteredClaims: jwtv4.RegisteredClaims{
 			ExpiresAt: jwtv4.NewNumericDate(time.Now().Add(2 * time.Hour)),
 			IssuedAt:  jwtv4.NewNumericDate(time.Now()),

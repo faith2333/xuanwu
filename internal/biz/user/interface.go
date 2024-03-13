@@ -15,6 +15,7 @@ type Interface interface {
 	Login(ctx context.Context, username, password string) (string, error)
 	ChangePassword(ctx context.Context, req *ChangePasswordReq) error
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
+	CreateUser(ctx context.Context, user *User) (*User, error)
 }
 
 type IRepoUser interface {
@@ -28,30 +29,34 @@ type IRepoUser interface {
 type User struct {
 	ID          int64                  `json:"id"`
 	Username    string                 `json:"username"`
+	DisplayName string                 `json:"displayName"`
 	Password    string                 `json:"password"`
+	AvatarURL   string                 `json:"avatarURL"`
 	Email       string                 `json:"email"`
 	PhoneNumber string                 `json:"phoneNumber"`
+	Enabled     string                 `json:"enabled"`
 	ExtraInfo   map[string]interface{} `json:"extraInfo"`
 }
 
 type CurrentUser struct {
-	Username    string                 `json:"username"`
-	Email       string                 `json:"email"`
-	PhoneNumber string                 `json:"phoneNumber"`
-	ExtraInfo   map[string]interface{} `json:"extraInfo"`
+	Username    string `json:"username"`
+	DisplayName string `json:"displayName"`
+	AvatarURL   string `json:"avatarURL"`
 }
 
 type Config struct {
-	Type         Type   `json:"type"`
-	JWTSecretKey string `json:"jwtSecretKey"`
+	Type                 Type   `json:"type"`
+	JWTSecretKey         string `json:"jwtSecretKey"`
+	DefaultAdminPassword string `json:"defaultAdminPassword"`
 }
 
 type ChangePasswordReq pb.ChangePasswordRequest
 
-func NewUserFactory(userRepo IRepoUser, c *conf.Server) (Interface, error) {
+func NewUserFactory(userRepo IRepoUser, c *conf.Server, modelConfig *conf.ModelConfig) (Interface, error) {
 	config := &Config{
-		Type:         TypeDefault,
-		JWTSecretKey: c.Auth.JwtSecretKey,
+		Type:                 TypeDefault,
+		JWTSecretKey:         c.Auth.JwtSecretKey,
+		DefaultAdminPassword: modelConfig.User.DefaultAdminPassword,
 	}
 
 	switch config.Type {

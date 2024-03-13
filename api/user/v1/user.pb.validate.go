@@ -430,11 +430,9 @@ func (m *GetCurrentUserReply) Validate() error {
 
 	// no validation rules for Username
 
-	// no validation rules for Email
+	// no validation rules for DisplayName
 
-	// no validation rules for PhoneNumber
-
-	// no validation rules for NotificationNumber
+	// no validation rules for AvatarURL
 
 	return nil
 }

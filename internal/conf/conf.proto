@@ -8,7 +8,8 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Log log = 3;
+  ModelConfig modelConfig = 3;
+  Log log = 4;
 }
 
 message Server {
@@ -52,4 +53,12 @@ message Data {
 
 message Log {
   string level = 1;
+}
+
+message ModelConfig {
+  message User {
+    string defaultAdminPassword = 1;
+  }
+
+  User user = 1;
 }

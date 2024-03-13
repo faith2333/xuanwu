@@ -18,5 +18,8 @@ data:
   etcd:
     endpoint: 127.0.0.1:2379
     timeout: 0.2s
+modelConfig:
+  user:
+    defaultAdminPassword: "Xuanwu@123456"
 log:
   level: debug

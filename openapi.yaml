@@ -15,8 +15,7 @@ paths:
                 - name: id
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: code
                   in: query
                   schema:
@@ -46,13 +45,11 @@ paths:
                 - name: pageIndex
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: pageSize
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -123,18 +120,15 @@ paths:
                 - name: pageIndex
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: pageSize
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: id
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: name
                   in: query
                   schema:
@@ -198,8 +192,7 @@ paths:
                   in: path
                   required: true
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -217,13 +210,11 @@ paths:
                 - name: pageIndex
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: pageSize
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: name
                   in: query
                   schema:
@@ -270,13 +261,11 @@ paths:
                 - name: pageIndex
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: pageSize
                   in: query
                   schema:
-                    type: integer
-                    format: int64
+                    type: string
                 - name: name
                   in: query
                   schema:
@@ -420,8 +409,7 @@ components:
             type: object
             properties:
                 id:
-                    type: integer
-                    format: int64
+                    type: string
                 code:
                     type: string
                 name:
@@ -496,14 +484,11 @@ components:
             type: object
             properties:
                 pageIndex:
-                    type: integer
-                    format: int64
+                    type: string
                 pageSize:
-                    type: integer
-                    format: int64
+                    type: string
                 total:
-                    type: integer
-                    format: int64
+                    type: string
         api.organization.v1.CreateOrgRequest:
             type: object
             properties:
@@ -572,8 +557,7 @@ components:
             type: object
             properties:
                 id:
-                    type: integer
-                    format: int64
+                    type: string
                 name:
                     type: string
                 code:
@@ -594,8 +578,7 @@ components:
             type: object
             properties:
                 id:
-                    type: integer
-                    format: int64
+                    type: string
                 name:
                     type: string
                 code:
@@ -635,13 +618,10 @@ components:
             properties:
                 username:
                     type: string
-                email:
+                displayName:
                     type: string
-                phoneNumber:
+                avatarURL:
                     type: string
-                notificationNumber:
-                    type: integer
-                    format: int64
         api.user.v1.LoginReply:
             type: object
             properties:
@@ -671,8 +651,7 @@ components:
             type: object
             properties:
                 id:
-                    type: integer
-                    format: int64
+                    type: string
                 username:
                     type: string
                 password:
@@ -682,7 +661,7 @@ components:
                 phoneNumber:
                     type: string
                 enabled:
-                    type: boolean
+                    type: string
                 desc:
                     type: string
                 extraInfo:

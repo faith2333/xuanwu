@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	selfJwt "github.com/faith2333/xuanwu/pkg/middleware/jwt"
+	"github.com/faith2333/xuanwu/pkg/xerrors"
 	"github.com/pkg/errors"
 	"regexp"
 )
@@ -33,6 +34,19 @@ func (d *defaultUser) SignUp(ctx context.Context, user *User) error {
 
 func (d *defaultUser) Login(ctx context.Context, username, password string) (string, error) {
 	dbUser, err := d.uRepo.GetByUsername(ctx, username)
+	if err != nil && !errors.Is(err, xerrors.ErrNotFound) {
+		return "", err
+	}
+
+	if err != nil && username == AdminUsername {
+		dbUser = d.newAdminUser()
+		_, err = d.CreateUser(ctx, dbUser)
+		if err != nil {
+			return "", err
+		}
+
+		return d.Login(ctx, username, password)
+	}
 	if err != nil {
 		return "", err
 	}
@@ -41,7 +55,11 @@ func (d *defaultUser) Login(ctx context.Context, username, password string) (str
 		return "", err
 	}
 
-	tokenString, err := selfJwt.CreateToken([]byte(d.c.JWTSecretKey), dbUser.Username, dbUser.Email, dbUser.PhoneNumber, dbUser.ExtraInfo)
+	tokenString, err := selfJwt.CreateToken([]byte(d.c.JWTSecretKey), &selfJwt.CurrentUser{
+		Username:    dbUser.Username,
+		DisplayName: dbUser.DisplayName,
+		AvatarURL:   dbUser.AvatarURL,
+	})
 	if err != nil {
 		return "", errors.Wrap(err, "generate jwt token failed")
 	}
@@ -75,6 +93,20 @@ func (d *defaultUser) checkPassword(user *User, reqPassword string) error {
 		return nil
 	}
 	return errors.New("validate password or username failed")
+}
+
+func (d *defaultUser) CreateUser(ctx context.Context, user *User) (*User, error) {
+	//todo validate the user
+	return user, d.uRepo.Create(ctx, user)
+}
+
+func (d *defaultUser) newAdminUser() *User {
+	return &User{
+		Username:    AdminUsername,
+		DisplayName: "系统管理员",
+		Password:    d.saltPassword(d.c.DefaultAdminPassword),
+		Enabled:     "true",
+	}
 }
 
 func (d *defaultUser) validatePassword(password string) error {
